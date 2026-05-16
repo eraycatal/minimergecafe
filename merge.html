@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Merge Cafe</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #ffe6c7, #ffd6e8);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .game-container {
+      width: 900px;
+      max-width: 95%;
+      background: #fffaf4;
+      border-radius: 25px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      color: #7b3f00;
+      font-size: 36px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      color: #8b5e34;
+      font-size: 16px;
+    }
+
+    .main {
+      display: flex;
+      gap: 25px;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(4, 90px);
+      grid-template-rows: repeat(4, 90px);
+      gap: 12px;
+      background: #f5c38b;
+      padding: 15px;
+      border-radius: 20px;
+    }
+
+    .cell {
+      width: 90px;
+      height: 90px;
+      background: #fff3df;
+      border: 3px dashed #d99b5c;
+      border-radius: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 42px;
+      cursor: pointer;
+      transition: 0.2s;
+      position: relative;
+    }
+
+    .cell:hover {
+      transform: scale(1.05);
+      background: #fff8ed;
+    }
+
+    .cell.selected {
+      border: 4px solid #ff6f61;
+      background: #ffe0d8;
+    }
+
+    .item-name {
+      position: absolute;
+      bottom: 5px;
+      font-size: 10px;
+      color: #6b3e1e;
+      font-weight: bold;
+    }
+
+    .side-panel {
+      width: 300px;
+      background: #fff0d6;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.08);
+    }
+
+    .score-box, .order-box, .info-box {
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #7b3f00;
+      font-size: 22px;
+    }
+
+    .score {
+      font-size: 28px;
+      font-weight: bold;
+      color: #e76f51;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: #ff914d;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #e76f2e;
+      transform: scale(1.03);
+    }
+
+    .complete-btn {
+      background: #2a9d8f;
+    }
+
+    .complete-btn:hover {
+      background: #21867a;
+    }
+
+    .reset-btn {
+      background: #b56576;
+    }
+
+    .reset-btn:hover {
+      background: #944d5e;
+    }
+
+    .order-item {
+      font-size: 20px;
+      margin: 10px 0;
+      color: #5c3d2e;
+      font-weight: bold;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #7b3f00;
+      min-height: 20px;
+    }
+
+    .level-list {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #5c3d2e;
+    }
+
+    @media (max-width: 750px) {
+      .main {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .board {
+        grid-template-columns: repeat(4, 70px);
+        grid-template-rows: repeat(4, 70px);
+      }
+
+      .cell {
+        width: 70px;
+        height: 70px;
+        font-size: 32px;
+      }
+
+      .side-panel {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game-container">
+    <header>
+      <h1>☕ Mini Merge Cafe</h1>
+      <p>Merge items, complete orders, and grow your little cafe!</p>
+    </header>
+
+    <div class="main">
+      <div class="board" id="board"></div>
+
+      <div class="side-panel">
+        <div class="score-box">
+          <h2>Score</h2>
+          <div class="score" id="score">0</div>
+        </div>
+
+        <div class="order-box">
+          <h2>Customer Order</h2>
+          <div class="order-item" id="orderText">Loading...</div>
+          <button class="complete-btn" onclick="completeOrder()">Complete Order</button>
+          <div class="message" id="message"></div>
+        </div>
+
+        <button onclick="generateItem()">Generate Item</button>
+        <button class="reset-btn" onclick="resetGame()">Reset Game</button>
+
+        <div class="info-box">
+          <h2>Merge Levels</h2>
+          <div class="level-list">
+            🍪 Cookie<br>
+            ☕ Coffee<br>
+            🥐 Croissant<br>
+            🧁 Cupcake<br>
+            🍰 Cake<br>
+            🎂 Special Cake
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      { name: "Cookie", emoji: "🍪" },
+      { name: "Coffee", emoji: "☕" },
+      { name: "Croissant", emoji: "🥐" },
+      { name: "Cupcake", emoji: "🧁" },
+      { name: "Cake", emoji: "🍰" },
+      { name: "Special Cake", emoji: "🎂" }
+    ];
+
+    let board = Array(16).fill(null);
+    let selectedIndex = null;
+    let score = 0;
+    let currentOrder = null;
+
+    const boardElement = document.getElementById("board");
+    const scoreElement = document.getElementById("score");
+    const orderText = document.getElementById("orderText");
+    const message = document.getElementById("message");
+
+    function createBoard() {
+      boardElement.innerHTML = "";
+
+      board.forEach((item, index) => {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+
+        if (selectedIndex === index) {
+          cell.classList.add("selected");
+        }
+
+        if (item !== null) {
+          cell.innerHTML = `
+            <div>${items[item].emoji}</div>
+            <div class="item-name">${items[item].name}</div>
+          `;
+        }
+
+        cell.onclick = () => selectCell(index);
+        boardElement.appendChild(cell);
+      });
+    }
+
+    function selectCell(index) {
+      message.textContent = "";
+
+      if (board[index] === null) {
+        selectedIndex = null;
+        createBoard();
+        return;
+      }
+
+      if (selectedIndex === null) {
+        selectedIndex = index;
+      } else {
+        if (selectedIndex !== index && board[selectedIndex] === board[index]) {
+          mergeItems(selectedIndex, index);
+        } else {
+          selectedIndex = index;
+        }
+      }
+
+      createBoard();
+    }
+
+    function mergeItems(firstIndex, secondIndex) {
+      const currentLevel = board[firstIndex];
+
+      if (currentLevel < items.length - 1) {
+        board[secondIndex] = currentLevel + 1;
+        board[firstIndex] = null;
+        score += (currentLevel + 1) * 10;
+        message.textContent = "Nice merge!";
+      } else {
+        message.textContent = "This item is already max level!";
+      }
+
+      selectedIndex = null;
+      updateScore();
+    }
+
+    function generateItem() {
+      const emptyCells = board
+        .map((item, index) => item === null ? index : null)
+        .filter(index => index !== null);
+
+      if (emptyCells.length === 0) {
+        message.textContent = "Board is full! Merge items first.";
+        return;
+      }
+
+      const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+
+      // Mostly gives low-level items
+      const randomItem = Math.random() < 0.8 ? 0 : 1;
+
+      board[randomCell] = randomItem;
+      message.textContent = "New item generated!";
+      createBoard();
+    }
+
+    function createOrder() {
+      const orderLevel = Math.floor(Math.random() * 4) + 1;
+      currentOrder = orderLevel;
+      orderText.textContent = `${items[orderLevel].emoji} ${items[orderLevel].name}`;
+    }
+
+    function completeOrder() {
+      const itemIndex = board.findIndex(item => item === currentOrder);
+
+      if (itemIndex !== -1) {
+        board[itemIndex] = null;
+        score += (currentOrder + 1) * 50;
+        message.textContent = "Order completed! Great job!";
+        createOrder();
+        updateScore();
+        createBoard();
+      } else {
+        message.textContent = "You don't have this item yet.";
+      }
+    }
+
+    function updateScore() {
+      scoreElement.textContent = score;
+    }
+
+    function resetGame() {
+      board = Array(16).fill(null);
+      selectedIndex = null;
+      score = 0;
+      updateScore();
+      createOrder();
+      message.textContent = "Game restarted!";
+      createBoard();
+    }
+
+    // Start game
+    createBoard();
+    createOrder();
+
+    // Add a few starting items
+    generateItem();
+    generateItem();
+    generateItem();
+  </script>
+</body>
+</html>
