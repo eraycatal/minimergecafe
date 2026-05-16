@@ -121,6 +121,9 @@
       padding: 12px;
       transition: 0.2s;
       min-height: 130px;
+    }
+
+    .customer-card.new-customer {
       animation: customerIn 0.35s ease-out;
     }
 
@@ -161,16 +164,10 @@
       flex-shrink: 0;
     }
 
-    .customer-name {
-      font-weight: bold;
-      color: #5c3d2e;
-      font-size: 17px;
-    }
-
     .customer-text {
       color: #7b3f00;
       font-size: 13px;
-      margin-top: 2px;
+      font-weight: bold;
     }
 
     .order-item {
@@ -310,9 +307,19 @@
       animation: machineShake 0.25s ease;
     }
 
-    .machine.upgraded-machine {
+    .machine.level-2 {
       border-color: #ffd166;
-      box-shadow: 0 0 20px rgba(255, 209, 102, 0.8);
+      box-shadow: 0 0 16px rgba(255, 209, 102, 0.7);
+    }
+
+    .machine.level-3 {
+      border-color: #90be6d;
+      box-shadow: 0 0 18px rgba(144, 190, 109, 0.8);
+    }
+
+    .machine.level-4 {
+      border-color: #2a9d8f;
+      box-shadow: 0 0 22px rgba(42, 157, 143, 0.9);
     }
 
     @keyframes machineShake {
@@ -502,6 +509,14 @@
       background: #40576b;
     }
 
+    .dessert-upgrade-btn {
+      background: #b56576;
+    }
+
+    .dessert-upgrade-btn:hover {
+      background: #944d5e;
+    }
+
     .reset-btn {
       background: #b56576;
       margin-top: 8px;
@@ -590,7 +605,7 @@
 
     .day-card,
     .info-card {
-      width: 390px;
+      width: 430px;
       max-width: 92%;
       background: #fffaf4;
       border-radius: 24px;
@@ -691,7 +706,7 @@
   <div class="info-modal" id="infoModal">
     <div class="info-card">
       <h2>⚙️ Machine Levels</h2>
-      <p>Higher levels create better items more often.</p>
+      <p>Drink and Dessert Machines upgrade separately.</p>
 
       <div class="machine-levels" id="machineLevels"></div>
 
@@ -702,7 +717,7 @@
   <div class="game-container">
     <header>
       <h1>☕ Mini Merge Cafe</h1>
-      <p>Use two machines, merge items, serve customers, and complete each day!</p>
+      <p>Use two machines, merge items, serve customers, and upgrade machines separately!</p>
     </header>
 
     <div class="top-stats">
@@ -730,7 +745,7 @@
     <div class="customers-top-box">
       <div class="customers-title">
         <h2>Customers</h2>
-        <span>Serve an order to replace the customer with a new one</span>
+        <span>Only the served customer leaves and a new one arrives</span>
       </div>
       <div class="customers-row" id="customers"></div>
     </div>
@@ -759,13 +774,19 @@
         <div class="panel-box">
           <h2>Upgrade</h2>
           <div class="level-list">
-            Upgrade improves both machines and changes their look.
+            Upgrade one machine at a time. Each machine has its own level.
           </div>
-          <button class="upgrade-btn" onclick="upgradeMachine()" id="upgradeBtn">
-            Upgrade - 120 🪙
+
+          <button class="upgrade-btn" onclick="upgradeMachine('drink')" id="drinkUpgradeBtn">
+            Upgrade Drink Machine
           </button>
+
+          <button class="upgrade-btn dessert-upgrade-btn" onclick="upgradeMachine('dessert')" id="dessertUpgradeBtn">
+            Upgrade Dessert Machine
+          </button>
+
           <div class="upgrade-message" id="upgradeMessage">
-            Upgrade completed! Machines are stronger now.
+            Upgrade completed!
           </div>
         </div>
 
@@ -808,14 +829,16 @@
     };
 
     const customerPool = [
-      { name: "Ayşe", avatar: "👩", waiting: "I want something sweet!" },
-      { name: "Mehmet", avatar: "👨", waiting: "Can I get a fresh drink?" },
-      { name: "Zeynep", avatar: "👧", waiting: "I am waiting for dessert!" },
-      { name: "Ali", avatar: "🧑", waiting: "I need a quick cafe order!" },
-      { name: "Elif", avatar: "👱‍♀️", waiting: "Something tasty, please!" },
-      { name: "Mert", avatar: "🧔", waiting: "I want something fresh." },
-      { name: "Can", avatar: "👦", waiting: "I love cafe snacks!" },
-      { name: "Ece", avatar: "👩‍🦰", waiting: "Surprise me with a good order!" }
+      { avatar: "👩", waiting: "I want something sweet!" },
+      { avatar: "👨", waiting: "Can I get a fresh drink?" },
+      { avatar: "👧", waiting: "I am waiting for dessert!" },
+      { avatar: "🧑", waiting: "I need a quick cafe order!" },
+      { avatar: "👱‍♀️", waiting: "Something tasty, please!" },
+      { avatar: "🧔", waiting: "I want something fresh." },
+      { avatar: "👦", waiting: "I love cafe snacks!" },
+      { avatar: "👩‍🦰", waiting: "Surprise me with a good order!" },
+      { avatar: "👴", waiting: "I would like a cafe treat." },
+      { avatar: "👵", waiting: "Something warm and nice, please." }
     ];
 
     let board = Array(20).fill(null);
@@ -823,7 +846,8 @@
     let dayCoins = 0;
     let energy = 20;
     let maxEnergy = 20;
-    let machineLevel = 1;
+    let drinkMachineLevel = 1;
+    let dessertMachineLevel = 1;
     let day = 1;
     let dayGoal = 300;
     let combo = 1;
@@ -831,6 +855,7 @@
     let draggedIndex = null;
     let newItemIndex = null;
     let mergedItemIndex = null;
+    let lastChangedCustomerIndex = null;
     let customers = [];
 
     const drinkMachineIndex = 0;
@@ -849,7 +874,8 @@
     const comboPop = document.getElementById("comboPop");
     const dayComplete = document.getElementById("dayComplete");
     const dayCompleteText = document.getElementById("dayCompleteText");
-    const upgradeBtn = document.getElementById("upgradeBtn");
+    const drinkUpgradeBtn = document.getElementById("drinkUpgradeBtn");
+    const dessertUpgradeBtn = document.getElementById("dessertUpgradeBtn");
     const upgradeMessage = document.getElementById("upgradeMessage");
     const machineInfoButton = document.getElementById("machineInfoButton");
     const infoModal = document.getElementById("infoModal");
@@ -934,6 +960,8 @@
     }
 
     function createMachineCell(cell, type) {
+      const level = getMachineLevel(type);
+
       cell.classList.add("machine");
 
       if (type === "drink") {
@@ -942,16 +970,16 @@
         cell.classList.add("dessert-machine");
       }
 
-      if (machineLevel >= 2) {
-        cell.classList.add("upgraded-machine");
-      }
+      cell.classList.add("level-" + level);
 
       if (energy <= 0) {
         cell.classList.add("machine-cooldown");
       }
 
       const emoji = getMachineEmoji(type);
-      const label = type === "drink" ? "Drink Machine" : "Dessert Machine";
+      const label = type === "drink"
+        ? "Drink Lv." + level
+        : "Dessert Lv." + level;
 
       cell.innerHTML = `
         <div>${emoji}</div>
@@ -961,17 +989,23 @@
       cell.onclick = () => generateItem(type);
     }
 
+    function getMachineLevel(type) {
+      return type === "drink" ? drinkMachineLevel : dessertMachineLevel;
+    }
+
     function getMachineEmoji(type) {
+      const level = getMachineLevel(type);
+
       if (type === "drink") {
-        if (machineLevel === 1) return "☕";
-        if (machineLevel === 2) return "🥤";
-        if (machineLevel === 3) return "🍹";
+        if (level === 1) return "☕";
+        if (level === 2) return "🥤";
+        if (level === 3) return "🍹";
         return "🧋";
       }
 
-      if (machineLevel === 1) return "🍪";
-      if (machineLevel === 2) return "🧁";
-      if (machineLevel === 3) return "🍰";
+      if (level === 1) return "🍪";
+      if (level === 2) return "🧁";
+      if (level === 3) return "🍰";
       return "🎂";
     }
 
@@ -1124,15 +1158,16 @@
 
     function getMachineItem(type) {
       const chance = Math.random();
+      const level = getMachineLevel(type);
 
       if (type === "dessert") {
-        if (machineLevel === 1) return 0;
+        if (level === 1) return 0;
 
-        if (machineLevel === 2) {
+        if (level === 2) {
           return chance < 0.82 ? 0 : 1;
         }
 
-        if (machineLevel === 3) {
+        if (level === 3) {
           if (chance < 0.65) return 0;
           if (chance < 0.92) return 1;
           return 2;
@@ -1144,13 +1179,13 @@
         return 3;
       }
 
-      if (machineLevel === 1) return 4;
+      if (level === 1) return 4;
 
-      if (machineLevel === 2) {
+      if (level === 2) {
         return chance < 0.82 ? 4 : 5;
       }
 
-      if (machineLevel === 3) {
+      if (level === 3) {
         if (chance < 0.65) return 4;
         if (chance < 0.92) return 5;
         return 6;
@@ -1169,11 +1204,14 @@
         const customerCard = document.createElement("div");
         customerCard.classList.add("customer-card");
 
+        if (lastChangedCustomerIndex === index) {
+          customerCard.classList.add("new-customer");
+        }
+
         customerCard.innerHTML = `
           <div class="customer-top">
             <div class="avatar">${customer.avatar}</div>
             <div>
-              <div class="customer-name">${customer.name}</div>
               <div class="customer-text">${customer.waiting}</div>
             </div>
           </div>
@@ -1189,6 +1227,10 @@
 
         customersElement.appendChild(customerCard);
       });
+
+      setTimeout(() => {
+        lastChangedCustomerIndex = null;
+      }, 400);
     }
 
     function completeCustomerOrder(customerIndex) {
@@ -1218,13 +1260,14 @@
 
         energy = Math.min(maxEnergy, energy + 4);
 
-        message.textContent = customer.name + " served! +" + totalReward + " 🪙, +4 ⚡";
+        message.textContent = "Customer served! +" + totalReward + " 🪙, +4 ⚡";
 
         if (combo > 1) {
           showCombo();
         }
 
         customers[customerIndex] = createRandomCustomer();
+        lastChangedCustomerIndex = customerIndex;
 
         playSound("order");
         updateStats();
@@ -1232,7 +1275,7 @@
         createBoard();
         checkDayGoal();
       } else {
-        message.textContent = "You don't have this item for " + customer.name + " yet.";
+        message.textContent = "You don't have this order item yet.";
         playSound("error");
       }
     }
@@ -1273,11 +1316,14 @@
       ];
     }
 
-    function upgradeMachine() {
-      const cost = getUpgradeCost();
+    function upgradeMachine(type) {
+      const currentLevel = getMachineLevel(type);
+      const cost = getUpgradeCost(type);
 
-      if (machineLevel >= 4) {
-        message.textContent = "Max upgrade reached.";
+      if (currentLevel >= 4) {
+        message.textContent = type === "drink"
+          ? "Drink Machine is already max level."
+          : "Dessert Machine is already max level.";
         return;
       }
 
@@ -1288,16 +1334,23 @@
       }
 
       coins -= cost;
-      machineLevel++;
 
-      maxEnergy += 5;
+      if (type === "drink") {
+        drinkMachineLevel++;
+        message.textContent = "Drink Machine upgraded to Level " + drinkMachineLevel + "!";
+        upgradeMessage.textContent = "Drink Machine upgraded to Level " + drinkMachineLevel + ".";
+      } else {
+        dessertMachineLevel++;
+        message.textContent = "Dessert Machine upgraded to Level " + dessertMachineLevel + "!";
+        upgradeMessage.textContent = "Dessert Machine upgraded to Level " + dessertMachineLevel + ".";
+      }
+
+      maxEnergy += 3;
       energy = maxEnergy;
 
-      message.textContent = "Upgrade completed! Machines changed visually.";
       machineInfoButton.classList.add("show");
 
       upgradeMessage.classList.add("show");
-      upgradeMessage.textContent = "Upgrade completed! Machines reached Level " + machineLevel + ".";
 
       setTimeout(() => {
         upgradeMessage.classList.remove("show");
@@ -1308,8 +1361,9 @@
       createBoard();
     }
 
-    function getUpgradeCost() {
-      return 120 + (machineLevel - 1) * 130;
+    function getUpgradeCost(type) {
+      const level = getMachineLevel(type);
+      return 120 + (level - 1) * 130;
     }
 
     function updateStats() {
@@ -1324,10 +1378,16 @@
       const percent = Math.min(100, (dayCoins / dayGoal) * 100);
       goalProgress.style.width = percent + "%";
 
-      if (machineLevel >= 4) {
-        upgradeBtn.textContent = "Max Upgrade";
+      if (drinkMachineLevel >= 4) {
+        drinkUpgradeBtn.textContent = "Drink Machine Max";
       } else {
-        upgradeBtn.textContent = "Upgrade - " + getUpgradeCost() + " 🪙";
+        drinkUpgradeBtn.textContent = "Upgrade Drink - " + getUpgradeCost("drink") + " 🪙";
+      }
+
+      if (dessertMachineLevel >= 4) {
+        dessertUpgradeBtn.textContent = "Dessert Machine Max";
+      } else {
+        dessertUpgradeBtn.textContent = "Upgrade Dessert - " + getUpgradeCost("dessert") + " 🪙";
       }
     }
 
@@ -1343,36 +1403,26 @@
     function createMachineLevelInfo() {
       const data = [
         {
-          title: "Level 1",
-          text: "Drink Machine creates 🫘 Bean. Dessert Machine creates 🍪 Cookie."
+          title: "Drink Machine",
+          level: drinkMachineLevel,
+          text: "Creates drink items: 🫘 Bean → ☕ Coffee → 🥤 Latte → 🍹 Fancy Drink."
         },
         {
-          title: "Level 2",
-          text: "Small chance to create ☕ Coffee and 🧁 Cupcake."
-        },
-        {
-          title: "Level 3",
-          text: "Better chance for upgraded items like 🥤 Latte and 🍰 Cake."
-        },
-        {
-          title: "Level 4",
-          text: "Best machines. Rare chance to create 🍹 Fancy Drink and 🎂 Special Cake."
+          title: "Dessert Machine",
+          level: dessertMachineLevel,
+          text: "Creates dessert items: 🍪 Cookie → 🧁 Cupcake → 🍰 Cake → 🎂 Special Cake."
         }
       ];
 
       machineLevels.innerHTML = "";
 
-      data.forEach((level, index) => {
+      data.forEach(machine => {
         const div = document.createElement("div");
         div.classList.add("machine-level-card");
 
-        if (machineLevel === index + 1) {
-          div.classList.add("active");
-        }
-
         div.innerHTML = `
-          <b>${level.title}</b><br>
-          ${level.text}
+          <b>${machine.title} - Level ${machine.level}</b><br>
+          ${machine.text}
         `;
 
         machineLevels.appendChild(div);
@@ -1393,6 +1443,7 @@
       energy = maxEnergy;
       combo = 1;
       lastOrderTime = 0;
+      lastChangedCustomerIndex = null;
 
       setupCustomers();
 
@@ -1410,7 +1461,8 @@
       dayCoins = 0;
       energy = 20;
       maxEnergy = 20;
-      machineLevel = 1;
+      drinkMachineLevel = 1;
+      dessertMachineLevel = 1;
       day = 1;
       dayGoal = 300;
       combo = 1;
@@ -1418,6 +1470,7 @@
       draggedIndex = null;
       newItemIndex = null;
       mergedItemIndex = null;
+      lastChangedCustomerIndex = null;
 
       machineInfoButton.classList.remove("show");
       upgradeMessage.classList.remove("show");
