@@ -21,7 +21,7 @@
     }
 
     .game-container {
-      width: 900px;
+      width: 980px;
       max-width: 95%;
       background: #fffaf4;
       border-radius: 25px;
@@ -76,16 +76,114 @@
       cursor: pointer;
       transition: 0.2s;
       position: relative;
+      text-align: center;
+      overflow: hidden;
     }
 
     .cell:hover {
-      transform: scale(1.05);
+      transform: scale(1.04);
       background: #fff8ed;
     }
 
-    .cell.selected {
-      border: 4px solid #ff6f61;
-      background: #ffe0d8;
+    .cell.drag-over {
+      border: 4px solid #2a9d8f;
+      background: #e0fff7;
+      transform: scale(1.08);
+    }
+
+    .cell.invalid-drop {
+      border: 4px solid #e63946;
+      background: #ffe0e0;
+    }
+
+    .generator {
+      background: linear-gradient(145deg, #ffb703, #fb8500);
+      border: 4px solid #8b5e34;
+      color: white;
+      font-size: 34px;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+    }
+
+    .generator:hover {
+      background: linear-gradient(145deg, #ffc83d, #ff8c00);
+      transform: scale(1.07);
+    }
+
+    .generator:active {
+      animation: machineShake 0.25s ease;
+    }
+
+    @keyframes machineShake {
+      0% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(-4deg) scale(1.05); }
+      50% { transform: rotate(4deg) scale(1.05); }
+      75% { transform: rotate(-3deg) scale(1.05); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+
+    .item {
+      user-select: none;
+      cursor: grab;
+      animation: itemIdle 2s infinite ease-in-out;
+    }
+
+    .item:active {
+      cursor: grabbing;
+    }
+
+    @keyframes itemIdle {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+      100% { transform: translateY(0); }
+    }
+
+    .new-item {
+      animation: popIn 0.45s ease-out, glow 0.9s ease-out;
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.1) rotate(-20deg);
+      }
+      60% {
+        opacity: 1;
+        transform: scale(1.25) rotate(8deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 0 rgba(255, 183, 3, 0);
+      }
+      40% {
+        box-shadow: 0 0 25px rgba(255, 183, 3, 0.9);
+      }
+      100% {
+        box-shadow: 0 0 0 rgba(255, 183, 3, 0);
+      }
+    }
+
+    .merge-effect {
+      animation: mergePop 0.45s ease-out;
+    }
+
+    @keyframes mergePop {
+      0% {
+        transform: scale(0.7);
+        opacity: 0.5;
+      }
+      60% {
+        transform: scale(1.3);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+      }
     }
 
     .item-name {
@@ -94,17 +192,29 @@
       font-size: 10px;
       color: #6b3e1e;
       font-weight: bold;
+      width: 100%;
+      left: 0;
+    }
+
+    .generator-label {
+      position: absolute;
+      bottom: 5px;
+      font-size: 10px;
+      color: white;
+      font-weight: bold;
+      width: 100%;
+      left: 0;
     }
 
     .side-panel {
-      width: 300px;
+      width: 360px;
       background: #fff0d6;
       padding: 20px;
       border-radius: 20px;
       box-shadow: inset 0 0 10px rgba(0,0,0,0.08);
     }
 
-    .score-box, .order-box, .info-box {
+    .score-box, .customers-box, .info-box {
       background: white;
       padding: 15px;
       border-radius: 15px;
@@ -124,46 +234,78 @@
       color: #e76f51;
     }
 
+    .customer-card {
+      background: #fff7ec;
+      border: 2px solid #f1c27d;
+      border-radius: 15px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .customer-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #ffd6a5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 25px;
+    }
+
+    .customer-name {
+      font-weight: bold;
+      color: #5c3d2e;
+      font-size: 17px;
+    }
+
+    .customer-text {
+      color: #7b3f00;
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .order-item {
+      font-size: 17px;
+      color: #5c3d2e;
+      font-weight: bold;
+      margin: 8px 0;
+    }
+
     button {
       width: 100%;
-      padding: 14px;
+      padding: 10px;
       border: none;
-      border-radius: 14px;
-      background: #ff914d;
+      border-radius: 12px;
+      background: #2a9d8f;
       color: white;
-      font-size: 17px;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
       transition: 0.2s;
     }
 
     button:hover {
-      background: #e76f2e;
-      transform: scale(1.03);
-    }
-
-    .complete-btn {
-      background: #2a9d8f;
-    }
-
-    .complete-btn:hover {
       background: #21867a;
+      transform: scale(1.03);
     }
 
     .reset-btn {
       background: #b56576;
+      margin-top: 10px;
+      padding: 14px;
+      font-size: 16px;
     }
 
     .reset-btn:hover {
       background: #944d5e;
-    }
-
-    .order-item {
-      font-size: 20px;
-      margin: 10px 0;
-      color: #5c3d2e;
-      font-weight: bold;
     }
 
     .message {
@@ -171,6 +313,7 @@
       font-size: 14px;
       color: #7b3f00;
       min-height: 20px;
+      font-weight: bold;
     }
 
     .level-list {
@@ -179,7 +322,7 @@
       color: #5c3d2e;
     }
 
-    @media (max-width: 750px) {
+    @media (max-width: 850px) {
       .main {
         flex-direction: column;
         align-items: center;
@@ -207,7 +350,7 @@
   <div class="game-container">
     <header>
       <h1>☕ Mini Merge Cafe</h1>
-      <p>Merge items, complete orders, and grow your little cafe!</p>
+      <p>Drag items together, use the cafe machine, and serve your customers!</p>
     </header>
 
     <div class="main">
@@ -217,16 +360,14 @@
         <div class="score-box">
           <h2>Score</h2>
           <div class="score" id="score">0</div>
-        </div>
-
-        <div class="order-box">
-          <h2>Customer Order</h2>
-          <div class="order-item" id="orderText">Loading...</div>
-          <button class="complete-btn" onclick="completeOrder()">Complete Order</button>
           <div class="message" id="message"></div>
         </div>
 
-        <button onclick="generateItem()">Generate Item</button>
+        <div class="customers-box">
+          <h2>Customers</h2>
+          <div id="customers"></div>
+        </div>
+
         <button class="reset-btn" onclick="resetGame()">Reset Game</button>
 
         <div class="info-box">
@@ -254,15 +395,39 @@
       { name: "Special Cake", emoji: "🎂" }
     ];
 
+    const customers = [
+      {
+        name: "Ayşe",
+        avatar: "👩",
+        text: "I want something sweet!",
+        order: 1
+      },
+      {
+        name: "Mehmet",
+        avatar: "👨",
+        text: "Can I get a fresh order?",
+        order: 2
+      },
+      {
+        name: "Zeynep",
+        avatar: "👧",
+        text: "I am waiting for my dessert!",
+        order: 3
+      }
+    ];
+
     let board = Array(16).fill(null);
-    let selectedIndex = null;
     let score = 0;
-    let currentOrder = null;
+    let draggedIndex = null;
+    let newItemIndex = null;
+    let mergedItemIndex = null;
+
+    const generatorIndex = 0;
 
     const boardElement = document.getElementById("board");
     const scoreElement = document.getElementById("score");
-    const orderText = document.getElementById("orderText");
     const message = document.getElementById("message");
+    const customersElement = document.getElementById("customers");
 
     function createBoard() {
       boardElement.innerHTML = "";
@@ -271,41 +436,117 @@
         const cell = document.createElement("div");
         cell.classList.add("cell");
 
-        if (selectedIndex === index) {
-          cell.classList.add("selected");
-        }
+        cell.dataset.index = index;
 
-        if (item !== null) {
+        cell.ondragover = allowDrop;
+        cell.ondragleave = dragLeave;
+        cell.ondrop = dropItem;
+
+        if (index === generatorIndex) {
+          cell.classList.add("generator");
           cell.innerHTML = `
-            <div>${items[item].emoji}</div>
-            <div class="item-name">${items[item].name}</div>
+            <div>☕</div>
+            <div class="generator-label">Cafe Machine</div>
           `;
+          cell.onclick = () => generateItem();
+        } else {
+          if (index === newItemIndex) {
+            cell.classList.add("new-item");
+          }
+
+          if (index === mergedItemIndex) {
+            cell.classList.add("merge-effect");
+          }
+
+          if (item !== null) {
+            cell.innerHTML = `
+              <div 
+                class="item" 
+                draggable="true" 
+                ondragstart="dragStart(event, ${index})"
+              >
+                ${items[item].emoji}
+              </div>
+              <div class="item-name">${items[item].name}</div>
+            `;
+          }
         }
 
-        cell.onclick = () => selectCell(index);
         boardElement.appendChild(cell);
       });
+
+      setTimeout(() => {
+        newItemIndex = null;
+        mergedItemIndex = null;
+      }, 500);
     }
 
-    function selectCell(index) {
+    function dragStart(event, index) {
+      draggedIndex = index;
+      event.dataTransfer.setData("text/plain", index);
       message.textContent = "";
+    }
 
-      if (board[index] === null) {
-        selectedIndex = null;
-        createBoard();
+    function allowDrop(event) {
+      event.preventDefault();
+
+      const targetIndex = Number(event.currentTarget.dataset.index);
+
+      if (
+        targetIndex !== generatorIndex &&
+        draggedIndex !== null &&
+        draggedIndex !== targetIndex
+      ) {
+        event.currentTarget.classList.add("drag-over");
+      }
+    }
+
+    function dragLeave(event) {
+      event.currentTarget.classList.remove("drag-over");
+      event.currentTarget.classList.remove("invalid-drop");
+    }
+
+    function dropItem(event) {
+      event.preventDefault();
+
+      const targetCell = event.currentTarget;
+      const targetIndex = Number(targetCell.dataset.index);
+
+      targetCell.classList.remove("drag-over");
+
+      if (targetIndex === generatorIndex) {
+        draggedIndex = null;
         return;
       }
 
-      if (selectedIndex === null) {
-        selectedIndex = index;
-      } else {
-        if (selectedIndex !== index && board[selectedIndex] === board[index]) {
-          mergeItems(selectedIndex, index);
-        } else {
-          selectedIndex = index;
-        }
+      if (draggedIndex === null || draggedIndex === targetIndex) {
+        draggedIndex = null;
+        return;
       }
 
+      const draggedItem = board[draggedIndex];
+      const targetItem = board[targetIndex];
+
+      if (draggedItem === null) {
+        draggedIndex = null;
+        return;
+      }
+
+      if (targetItem === null) {
+        board[targetIndex] = draggedItem;
+        board[draggedIndex] = null;
+        message.textContent = "Item moved!";
+      } else if (draggedItem === targetItem) {
+        mergeItems(draggedIndex, targetIndex);
+      } else {
+        targetCell.classList.add("invalid-drop");
+        message.textContent = "Only same items can be merged!";
+        setTimeout(() => {
+          targetCell.classList.remove("invalid-drop");
+        }, 350);
+      }
+
+      draggedIndex = null;
       createBoard();
     }
 
@@ -315,19 +556,26 @@
       if (currentLevel < items.length - 1) {
         board[secondIndex] = currentLevel + 1;
         board[firstIndex] = null;
+
+        mergedItemIndex = secondIndex;
+
         score += (currentLevel + 1) * 10;
         message.textContent = "Nice merge!";
       } else {
         message.textContent = "This item is already max level!";
       }
 
-      selectedIndex = null;
       updateScore();
     }
 
     function generateItem() {
       const emptyCells = board
-        .map((item, index) => item === null ? index : null)
+        .map((item, index) => {
+          if (index !== generatorIndex && item === null) {
+            return index;
+          }
+          return null;
+        })
         .filter(index => index !== null);
 
       if (emptyCells.length === 0) {
@@ -336,34 +584,67 @@
       }
 
       const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-
-      // Mostly gives low-level items
       const randomItem = Math.random() < 0.8 ? 0 : 1;
 
       board[randomCell] = randomItem;
-      message.textContent = "New item generated!";
+      newItemIndex = randomCell;
+
+      message.textContent = "Cafe Machine created a new item!";
       createBoard();
     }
 
-    function createOrder() {
-      const orderLevel = Math.floor(Math.random() * 4) + 1;
-      currentOrder = orderLevel;
-      orderText.textContent = `${items[orderLevel].emoji} ${items[orderLevel].name}`;
+    function createCustomers() {
+      customersElement.innerHTML = "";
+
+      customers.forEach((customer, index) => {
+        const customerCard = document.createElement("div");
+        customerCard.classList.add("customer-card");
+
+        customerCard.innerHTML = `
+          <div class="customer-top">
+            <div class="avatar">${customer.avatar}</div>
+            <div>
+              <div class="customer-name">${customer.name}</div>
+              <div class="customer-text">${customer.text}</div>
+            </div>
+          </div>
+
+          <div class="order-item">
+            Order: ${items[customer.order].emoji} ${items[customer.order].name}
+          </div>
+
+          <button onclick="completeCustomerOrder(${index})">
+            Serve Customer
+          </button>
+        `;
+
+        customersElement.appendChild(customerCard);
+      });
     }
 
-    function completeOrder() {
-      const itemIndex = board.findIndex(item => item === currentOrder);
+    function completeCustomerOrder(customerIndex) {
+      const wantedItem = customers[customerIndex].order;
+      const itemIndex = board.findIndex(item => item === wantedItem);
 
       if (itemIndex !== -1) {
         board[itemIndex] = null;
-        score += (currentOrder + 1) * 50;
-        message.textContent = "Order completed! Great job!";
-        createOrder();
+
+        score += (wantedItem + 1) * 50;
+
+        message.textContent = customers[customerIndex].name + " is happy! Order completed.";
+
+        customers[customerIndex].order = createRandomOrder();
+
         updateScore();
+        createCustomers();
         createBoard();
       } else {
-        message.textContent = "You don't have this item yet.";
+        message.textContent = "You don't have this item for " + customers[customerIndex].name + " yet.";
       }
+    }
+
+    function createRandomOrder() {
+      return Math.floor(Math.random() * 4) + 1;
     }
 
     function updateScore() {
@@ -372,19 +653,25 @@
 
     function resetGame() {
       board = Array(16).fill(null);
-      selectedIndex = null;
       score = 0;
+      draggedIndex = null;
+      newItemIndex = null;
+      mergedItemIndex = null;
+
+      customers[0].order = 1;
+      customers[1].order = 2;
+      customers[2].order = 3;
+
       updateScore();
-      createOrder();
-      message.textContent = "Game restarted!";
+      createCustomers();
       createBoard();
+
+      message.textContent = "Game restarted!";
     }
 
-    // Start game
     createBoard();
-    createOrder();
+    createCustomers();
 
-    // Add a few starting items
     generateItem();
     generateItem();
     generateItem();
