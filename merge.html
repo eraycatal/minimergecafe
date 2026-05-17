@@ -2,654 +2,596 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Mini Merge Cafe</title>
 
   <style>
     * {
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at top left, #fff3c4 0, transparent 35%),
-        radial-gradient(circle at bottom right, #ffd6e8 0, transparent 35%),
-        linear-gradient(135deg, #ffe6c7, #ffd6e8);
+        radial-gradient(circle at top left, #fff7d7 0, transparent 35%),
+        radial-gradient(circle at bottom right, #ffd2dc 0, transparent 35%),
+        linear-gradient(180deg, #fff3e8, #ffe2c7);
+      color: #5a3825;
       display: flex;
       justify-content: center;
-      align-items: center;
-      color: #4b2e18;
-    }
-
-    .game-container {
-      width: 1200px;
-      max-width: 96%;
-      background: rgba(255, 250, 244, 0.96);
-      border-radius: 28px;
-      padding: 24px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.22);
-      border: 4px solid rgba(255, 255, 255, 0.7);
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 18px;
-    }
-
-    header h1 {
-      margin: 0;
-      color: #7b3f00;
-      font-size: 38px;
-    }
-
-    header p {
-      margin: 7px 0 0;
-      color: #8b5e34;
-      font-size: 16px;
-    }
-
-    .top-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .stat-card {
-      background: white;
-      border-radius: 17px;
-      padding: 12px;
-      text-align: center;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.09);
-      border: 2px solid #ffe0ad;
-    }
-
-    .stat-title {
-      font-size: 13px;
-      color: #8b5e34;
-      font-weight: bold;
-    }
-
-    .stat-value {
-      margin-top: 4px;
-      font-size: 21px;
-      color: #e76f51;
-      font-weight: bold;
-    }
-
-    .customers-top-box {
-      background: white;
-      border-radius: 20px;
-      padding: 14px;
-      margin-bottom: 16px;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.08);
-      border: 2px solid #f1c27d;
-    }
-
-    .customers-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .customers-title h2 {
-      margin: 0;
-      color: #7b3f00;
-      font-size: 22px;
-    }
-
-    .customers-title span {
-      color: #8b5e34;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .customers-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    .customer-card {
-      background: #fff7ec;
-      border: 2px solid #f1c27d;
-      border-radius: 16px;
-      padding: 12px;
-      transition: 0.2s;
-      min-height: 148px;
-    }
-
-    .customer-card.new-customer {
-      animation: customerIn 0.35s ease-out;
-    }
-
-    @keyframes customerIn {
-      0% { opacity: 0; transform: translateY(-10px) scale(0.95); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .customer-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 12px rgba(0,0,0,0.08);
-    }
-
-    .customer-top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #ffd6a5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 26px;
-      border: 2px solid white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      flex-shrink: 0;
-    }
-
-    .customer-text {
-      color: #7b3f00;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .order-item {
-      font-size: 16px;
-      color: #5c3d2e;
-      font-weight: bold;
-      margin: 8px 0;
-    }
-
-    .reward-line {
-      background: #fff3df;
-      border: 1px solid #f1c27d;
-      border-radius: 10px;
-      padding: 6px 8px;
-      color: #7b3f00;
-      font-weight: bold;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .main {
-      display: flex;
-      gap: 22px;
-      justify-content: space-between;
       align-items: flex-start;
     }
 
-    .left-area {
-      flex: 1;
-    }
-
-    .cafe-progress-box {
-      background: #fff;
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.08);
-      border: 2px solid #f1c27d;
-    }
-
-    .goal-row {
-      display: flex;
-      justify-content: space-between;
-      font-weight: bold;
-      color: #7b3f00;
-      margin-bottom: 8px;
-    }
-
-    .progress-bar {
+    .app {
       width: 100%;
-      height: 17px;
-      background: #ffe8c7;
-      border-radius: 999px;
-      overflow: hidden;
-      border: 1px solid #e9b872;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #2a9d8f, #90be6d);
-      transition: 0.3s;
-    }
-
-    .board-wrap {
-      background: linear-gradient(145deg, #f6b66d, #e99552);
-      border-radius: 24px;
-      padding: 16px;
-      box-shadow: inset 0 0 12px rgba(0,0,0,0.12);
+      max-width: 480px;
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(255, 243, 232, 0.88), rgba(255, 243, 232, 0.94)),
+        radial-gradient(circle at 10% 15%, rgba(76, 175, 122, 0.12), transparent 24%),
+        radial-gradient(circle at 90% 50%, rgba(255, 159, 67, 0.14), transparent 25%);
+      padding: 12px 12px 92px;
       position: relative;
+      overflow-x: hidden;
     }
 
-    .board-title {
-      text-align: center;
-      color: white;
-      font-weight: bold;
+    .topbar {
+      background: rgba(255,255,255,0.82);
+      border: 2px solid #f4cf9c;
+      border-radius: 26px;
+      padding: 12px;
+      box-shadow: 0 8px 18px rgba(90,56,37,0.12);
+      margin-bottom: 12px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
       margin-bottom: 10px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff3e8;
+      border: 3px solid #d69456;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 29px;
+      box-shadow: inset 0 2px 8px rgba(90,56,37,0.12);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: 1px;
+      color: #653719;
+      flex: 1;
+      text-align: center;
+    }
+
+    .gear {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #fff8ef;
+      border: 2px solid #f1c27d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+      box-shadow: 0 4px 10px rgba(90,56,37,0.12);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .stat-pill {
+      background: #fff8ef;
+      border: 2px solid #f1c27d;
+      border-radius: 18px;
+      padding: 8px 6px;
+      font-size: 15px;
+      font-weight: 900;
+      text-align: center;
+      box-shadow: inset 0 2px 6px rgba(90,56,37,0.06);
+    }
+
+    .orders-section {
+      background: rgba(255,255,255,0.86);
+      border: 2px solid #f4cf9c;
+      border-radius: 24px;
+      padding: 12px;
+      box-shadow: 0 8px 18px rgba(90,56,37,0.1);
+      margin-bottom: 13px;
+    }
+
+    .section-ribbon {
+      width: fit-content;
+      margin: -25px auto 10px;
+      background: linear-gradient(180deg, #ff8fa8, #ef5d7a);
+      color: white;
+      padding: 8px 28px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 17px;
+      box-shadow: 0 5px 12px rgba(90,56,37,0.18);
+      border: 2px solid rgba(255,255,255,0.55);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .customers {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 3px 2px 4px;
+      scroll-snap-type: x mandatory;
+    }
+
+    .customers::-webkit-scrollbar {
+      display: none;
+    }
+
+    .customer-card {
+      min-width: 138px;
+      background: #fff7e8;
+      border: 2px solid #f1c27d;
+      border-radius: 19px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(90,56,37,0.1);
+      scroll-snap-align: start;
+      position: relative;
+      transition: 0.2s;
+    }
+
+    .customer-card.ready {
+      border-color: #4caf7a;
+      box-shadow: 0 0 0 3px rgba(76,175,122,0.18), 0 5px 12px rgba(90,56,37,0.12);
+    }
+
+    .ready-check {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #4caf7a;
+      color: white;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid white;
+    }
+
+    .avatar {
+      font-size: 36px;
+      height: 38px;
+      margin-bottom: 3px;
+    }
+
+    .order-emoji {
+      font-size: 34px;
+      margin: 2px 0;
+    }
+
+    .order-name {
+      font-weight: 900;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .reward {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .serve-btn {
+      background: linear-gradient(180deg, #78c943, #43a92c);
+      border: 2px solid #328c1f;
+      box-shadow: 0 4px 0 #2c761d;
+      color: white;
+      padding: 8px 10px;
+      border-radius: 13px;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .serve-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #2c761d;
+    }
+
+    .board-frame {
+      background: linear-gradient(180deg, #bc7337, #8c4d27);
+      border-radius: 28px;
+      padding: 12px;
+      border: 4px solid #6f391b;
+      box-shadow:
+        inset 0 4px 8px rgba(255,255,255,0.25),
+        inset 0 -8px 12px rgba(0,0,0,0.18),
+        0 10px 22px rgba(90,56,37,0.25);
+      margin-bottom: 12px;
+    }
+
+    .board-label {
+      width: fit-content;
+      margin: -2px auto 10px;
+      background: linear-gradient(180deg, #9a552b, #713717);
+      color: white;
+      padding: 8px 38px;
+      border-radius: 12px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.18);
     }
 
     .board {
       display: grid;
-      grid-template-columns: repeat(5, 86px);
-      grid-template-rows: repeat(4, 86px);
-      gap: 11px;
-      justify-content: center;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 7px;
+      background: rgba(90,56,37,0.13);
+      border-radius: 20px;
+      padding: 8px;
     }
 
     .cell {
-      width: 86px;
-      height: 86px;
-      background: #fff3df;
-      border: 3px dashed #d99b5c;
-      border-radius: 18px;
+      aspect-ratio: 1 / 1;
+      background: linear-gradient(180deg, #fff1d9, #f7d5aa);
+      border: 2px solid #e4af74;
+      border-radius: 14px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-size: 40px;
-      cursor: pointer;
-      transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+      justify-content: center;
       position: relative;
-      text-align: center;
-      overflow: visible;
-      touch-action: manipulation;
+      font-size: 30px;
+      box-shadow:
+        inset 0 3px 5px rgba(255,255,255,0.6),
+        inset 0 -3px 6px rgba(90,56,37,0.09);
+      cursor: pointer;
+      transition: 0.16s;
     }
 
     .cell:hover {
-      background: #fff8ed;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+
+    .cell.selected {
+      outline: 4px solid #ffb703;
+      box-shadow: 0 0 16px rgba(255,183,3,0.75);
     }
 
     .cell.drag-over {
-      border: 4px solid #2a9d8f;
-      background: #e0fff7;
-    }
-
-    .cell.invalid-drop {
-      border: 4px solid #e63946;
-      background: #ffe0e0;
-    }
-
-    .cell.mobile-selected {
-      border: 4px solid #ffb703;
-      background: #fff1c7;
-      box-shadow: 0 0 15px rgba(255, 183, 3, 0.85);
+      outline: 4px solid #4caf7a;
     }
 
     .machine {
-      border: 4px solid #8b5e34;
       color: white;
-      font-size: 34px;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.23);
-      transition: 0.2s;
+      border: 3px solid #5a3825;
+      box-shadow: 0 5px 12px rgba(90,56,37,0.25);
     }
 
     .drink-machine {
-      background: linear-gradient(145deg, #4cc9f0, #277da1);
+      background: linear-gradient(180deg, #79c7e8, #2e8ebb);
     }
 
     .dessert-machine {
-      background: linear-gradient(145deg, #ffafcc, #ff6b9a);
+      background: linear-gradient(180deg, #ffb6c8, #e6789a);
     }
 
-    .machine:hover {
-      filter: brightness(1.06);
-      box-shadow: 0 7px 16px rgba(0,0,0,0.24);
+    .machine-label,
+    .item-name {
+      position: absolute;
+      bottom: 2px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 6.5px;
+      font-weight: 900;
+      color: #5a3825;
+      pointer-events: none;
     }
 
-    .machine.machine-cooldown {
-      opacity: 0.55;
-      filter: grayscale(0.4);
-    }
-
-    .machine.level-2 {
-      border-color: #ffd166;
-      box-shadow: 0 0 16px rgba(255, 209, 102, 0.7);
-    }
-
-    .machine.level-3 {
-      border-color: #90be6d;
-      box-shadow: 0 0 18px rgba(144, 190, 109, 0.8);
-    }
-
-    .machine.level-4 {
-      border-color: #2a9d8f;
-      box-shadow: 0 0 22px rgba(42, 157, 143, 0.9);
+    .machine-label {
+      color: white;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.35);
     }
 
     .item {
       user-select: none;
-      cursor: grab;
-      animation: itemIdle 2s infinite ease-in-out;
-      transition: transform 0.18s, filter 0.18s;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
+      animation: itemFloat 2s infinite ease-in-out;
     }
 
-    .item:hover {
-      transform: scale(1.12) translateY(-2px);
-      filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
-    }
-
-    @keyframes itemIdle {
-      0% { transform: translateY(0); }
+    @keyframes itemFloat {
+      0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-2px); }
-      100% { transform: translateY(0); }
     }
 
-    .new-item {
-      animation: popIn 0.45s ease-out, glow 0.9s ease-out;
+    .pop {
+      animation: pop 0.35s ease-out;
     }
 
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.1) rotate(-20deg); }
-      60% { opacity: 1; transform: scale(1.25) rotate(8deg); }
-      100% { opacity: 1; transform: scale(1) rotate(0deg); }
-    }
-
-    @keyframes glow {
-      0% { box-shadow: 0 0 0 rgba(255, 183, 3, 0); }
-      40% { box-shadow: 0 0 28px rgba(255, 183, 3, 0.95); }
-      100% { box-shadow: 0 0 0 rgba(255, 183, 3, 0); }
-    }
-
-    .merge-effect {
-      animation: mergePop 0.45s ease-out;
-    }
-
-    @keyframes mergePop {
-      0% { transform: scale(0.7); opacity: 0.5; }
-      60% { transform: scale(1.18); opacity: 1; }
+    @keyframes pop {
+      0% { transform: scale(0.2) rotate(-12deg); opacity: 0; }
+      65% { transform: scale(1.18) rotate(5deg); opacity: 1; }
       100% { transform: scale(1); }
     }
 
     .lucky-cell {
-      border: 4px solid #ffb703 !important;
-      box-shadow: 0 0 18px rgba(255, 183, 3, 0.95);
-      background: #fff1c7;
+      border-color: #ffb703;
+      box-shadow: 0 0 16px rgba(255,183,3,0.8);
+      background: linear-gradient(180deg, #fff5bd, #ffd36e);
     }
 
-    .lucky-badge {
-      position: absolute;
-      top: -9px;
-      left: -9px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: #ffb703;
-      color: white;
-      font-size: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 2px solid white;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
-      z-index: 6;
-    }
-
-    .chain-badge {
-      position: absolute;
-      top: -9px;
-      left: 22px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: #8338ec;
-      color: white;
-      font-size: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 2px solid white;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
-      z-index: 6;
-    }
-
-    .order-check {
+    .mini-badge {
       position: absolute;
       top: -8px;
-      right: -8px;
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      background: #2a9d8f;
       color: white;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-size: 18px;
-      font-weight: bold;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
-      z-index: 5;
-      border: 2px solid white;
-    }
-
-    .item-name {
-      position: absolute;
-      bottom: 5px;
-      font-size: 9px;
-      color: #6b3e1e;
-      font-weight: bold;
-      width: 100%;
-      left: 0;
-    }
-
-    .machine-label {
-      position: absolute;
-      bottom: 5px;
-      font-size: 8px;
-      color: white;
-      font-weight: bold;
-      width: 100%;
-      left: 0;
-    }
-
-    .side-panel {
-      width: 385px;
-      background: #fff0d6;
-      padding: 18px;
-      border-radius: 22px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.08);
-      border: 2px solid #ffe0ad;
-    }
-
-    .panel-box {
-      background: white;
-      padding: 14px;
-      border-radius: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-      border: 1px solid #ffe2b8;
-    }
-
-    h2 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      color: #7b3f00;
-      font-size: 21px;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 12px;
-      background: #2a9d8f;
-      color: white;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
-      touch-action: manipulation;
-    }
-
-    button:hover {
-      background: #21867a;
-      transform: scale(1.03);
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .upgrade-btn {
-      background: #577590;
-      margin-top: 8px;
-    }
-
-    .dessert-upgrade-btn {
-      background: #b56576;
-    }
-
-    .task-btn, .renovation-btn {
-      background: #f77f00;
-      margin-top: 8px;
-    }
-
-    .recycle-btn {
-      background: #6a994e;
-      margin-top: 8px;
-    }
-
-    .message-line {
-      text-align: center;
-      margin-top: 12px;
-      min-height: 24px;
-      color: #7b3f00;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .level-list {
+      justify-content: center;
       font-size: 13px;
-      line-height: 1.7;
-      color: #5c3d2e;
+      border: 2px solid white;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      z-index: 3;
     }
 
-    .task-card {
-      background: #fff7ec;
-      border: 2px solid #f1c27d;
-      border-radius: 14px;
-      padding: 10px;
-      margin-bottom: 10px;
+    .badge-lucky {
+      left: -8px;
+      background: #ffb703;
     }
 
-    .task-title {
-      font-weight: bold;
-      color: #5c3d2e;
-      margin-bottom: 5px;
+    .badge-star {
+      left: 16px;
+      background: #8338ec;
     }
 
-    .task-cost {
-      color: #7b3f00;
-      font-size: 14px;
-      font-weight: bold;
+    .badge-ready {
+      right: -8px;
+      background: #4caf7a;
     }
 
-    .upgrade-message {
-      display: none;
-      background: #edfff9;
-      border: 2px solid #2a9d8f;
-      color: #23695f;
-      padding: 10px;
-      border-radius: 14px;
-      font-size: 14px;
-      font-weight: bold;
-      margin-top: 10px;
-      animation: upgradePop 0.45s ease-out;
-    }
-
-    .upgrade-message.show {
-      display: block;
-    }
-
-    @keyframes upgradePop {
-      0% { opacity: 0; transform: scale(0.9); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    .level-up-modal,
-    .info-modal,
-    .renovation-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      display: none;
-      justify-content: center;
+    .hint-bubble {
+      display: flex;
       align-items: center;
-      z-index: 10;
-      padding: 15px;
+      gap: 10px;
+      background: rgba(255,255,255,0.92);
+      border: 2px solid #f4cf9c;
+      border-radius: 22px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 14px rgba(90,56,37,0.12);
     }
 
-    .level-card,
-    .info-card,
-    .renovation-card {
-      width: 920px;
-      max-width: 96%;
-      max-height: 92vh;
-      overflow: auto;
-      background: #fffaf4;
-      border-radius: 24px;
-      padding: 22px;
-      text-align: center;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-      border: 4px solid #ffd166;
-      animation: popIn 0.35s ease-out;
+    .helper {
+      font-size: 34px;
     }
 
-    .level-card,
-    .info-card {
-      width: 430px;
+    .message {
+      flex: 1;
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1.35;
     }
 
-    .renovation-header {
+    .bulb {
+      font-size: 27px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      width: min(456px, calc(100% - 18px));
+      background: rgba(255,248,239,0.96);
+      border: 2px solid #f1c27d;
+      border-radius: 26px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 7px;
+      box-shadow: 0 -8px 24px rgba(90,56,37,0.18);
+      z-index: 50;
+    }
+
+    .nav-btn {
+      background: transparent;
+      color: #5a3825;
+      border: none;
+      box-shadow: none;
+      padding: 7px 4px;
+      border-radius: 18px;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(180deg, #ffb6c8, #ff8fa8);
+      color: #7b2b42;
+    }
+
+    .nav-btn span {
+      display: block;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .sheet {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -100%;
+      width: min(456px, 100%);
+      max-height: 72vh;
+      background: #fff8ef;
+      border-radius: 28px 28px 0 0;
+      border: 3px solid #f1c27d;
+      box-shadow: 0 -14px 35px rgba(90,56,37,0.28);
+      padding: 16px;
+      z-index: 80;
+      overflow-y: auto;
+      transition: bottom 0.28s ease;
+    }
+
+    .sheet.show {
+      bottom: 0;
+    }
+
+    .sheet-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 13px;
     }
 
-    .renovation-header h2 {
+    .sheet-header h2 {
       margin: 0;
+      font-size: 22px;
+      color: #653719;
     }
 
-    .close-small {
+    .close-btn {
       width: auto;
-      padding: 8px 14px;
-      background: #b56576;
+      background: #ff8fa8;
+      border: 2px solid #d95776;
+      padding: 8px 13px;
+      border-radius: 14px;
+      color: white;
+      font-weight: 900;
     }
 
-    .renovation-layout {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 16px;
-      align-items: start;
+    .panel-card {
+      background: white;
+      border: 2px solid #f1c27d;
+      border-radius: 20px;
+      padding: 13px;
+      margin-bottom: 11px;
+      box-shadow: 0 5px 13px rgba(90,56,37,0.09);
+    }
+
+    .panel-card h3 {
+      margin: 0 0 8px;
+      color: #653719;
+      font-size: 18px;
+    }
+
+    .panel-card p {
+      margin: 5px 0;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    button {
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+    }
+
+    .green-btn {
+      background: linear-gradient(180deg, #78c943, #43a92c);
+      color: white;
+      border: 2px solid #328c1f;
+      border-radius: 14px;
+      padding: 10px;
+      width: 100%;
+      margin-top: 7px;
+    }
+
+    .orange-btn {
+      background: linear-gradient(180deg, #ffb24a, #ff8c1a);
+      color: white;
+      border: 2px solid #d96e00;
+      border-radius: 14px;
+      padding: 10px;
+      width: 100%;
+      margin-top: 7px;
+    }
+
+    .blue-btn {
+      background: linear-gradient(180deg, #79c7e8, #2e8ebb);
+      color: white;
+      border: 2px solid #1c6f97;
+      border-radius: 14px;
+      padding: 10px;
+      width: 100%;
+      margin-top: 7px;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .renovation-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.42);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 12px;
+    }
+
+    .renovation-modal.show {
+      display: flex;
+    }
+
+    .renovation-card {
+      width: min(456px, 100%);
+      max-height: 92vh;
+      overflow-y: auto;
+      background: #fff8ef;
+      border-radius: 28px;
+      border: 3px solid #f1c27d;
+      padding: 14px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.3);
+    }
+
+    .renovation-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .renovation-top h2 {
+      margin: 0;
+      color: #653719;
     }
 
     .cafe-scene {
-      min-height: 360px;
-      background: linear-gradient(#fff1d6, #ffe3b3);
-      border: 3px solid #d99b5c;
+      height: 320px;
+      background:
+        linear-gradient(rgba(255,246,232,0.82), rgba(255,226,199,0.86)),
+        radial-gradient(circle at 80% 18%, rgba(121,199,232,0.25), transparent 22%);
+      border: 3px solid #d69456;
       border-radius: 22px;
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 18px rgba(0,0,0,0.08);
+      box-shadow: inset 0 0 20px rgba(90,56,37,0.1);
+      margin-bottom: 12px;
     }
 
     .floor {
@@ -657,176 +599,131 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: 105px;
-      background: repeating-linear-gradient(
-        90deg,
-        #d99b5c,
-        #d99b5c 35px,
-        #c98a4a 35px,
-        #c98a4a 70px
-      );
+      height: 86px;
+      background: repeating-linear-gradient(90deg, #c9824a, #c9824a 34px, #a96538 34px, #a96538 68px);
       opacity: 0.75;
     }
 
     .cafe-sign {
       position: absolute;
-      top: 15px;
+      top: 14px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 8px 24px;
-      border-radius: 14px;
-      background: #a97142;
+      background: #8c4d27;
       color: white;
-      font-weight: bold;
-      border: 3px dashed #5c3d2e;
-      cursor: pointer;
+      border: 3px dashed #ffe0ad;
+      border-radius: 13px;
+      padding: 8px 22px;
+      font-weight: 900;
     }
 
     .cafe-sign.fixed {
-      background: linear-gradient(145deg, #ffb703, #fb8500);
-      border: 3px solid #fff3df;
-      box-shadow: 0 0 18px rgba(255,183,3,0.8);
-      animation: signGlow 2s infinite ease-in-out;
-    }
-
-    @keyframes signGlow {
-      0% { filter: brightness(1); }
-      50% { filter: brightness(1.15); }
-      100% { filter: brightness(1); }
+      background: linear-gradient(180deg, #ffb24a, #ff8c1a);
+      box-shadow: 0 0 18px rgba(255,178,74,0.8);
+      border-style: solid;
     }
 
     .counter {
       position: absolute;
-      left: 55px;
-      bottom: 85px;
-      width: 220px;
-      height: 80px;
+      left: 28px;
+      bottom: 78px;
+      width: 160px;
+      height: 70px;
       background: #9c6644;
+      border: 4px solid #5a3825;
       border-radius: 16px 16px 8px 8px;
-      border: 4px solid #5c3d2e;
-      color: white;
-      font-weight: bold;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 900;
     }
 
     .counter.clean {
-      background: linear-gradient(145deg, #bc8a5f, #8d5a3b);
-      box-shadow: 0 0 14px rgba(255,255,255,0.65);
-    }
-
-    .counter::before {
-      content: "☕";
-      position: absolute;
-      top: -28px;
-      right: 25px;
-      font-size: 27px;
-      animation: steamFloat 1.7s infinite ease-in-out;
-    }
-
-    @keyframes steamFloat {
-      0% { transform: translateY(0); opacity: 0.7; }
-      50% { transform: translateY(-5px); opacity: 1; }
-      100% { transform: translateY(0); opacity: 0.7; }
+      background: linear-gradient(180deg, #bc8a5f, #8d5a3b);
+      box-shadow: 0 0 14px rgba(255,255,255,0.7);
     }
 
     .stain {
       position: absolute;
-      width: 30px;
-      height: 20px;
+      width: 28px;
+      height: 18px;
       border-radius: 50%;
-      background: rgba(80, 48, 25, 0.45);
+      background: rgba(82,45,20,0.48);
+      border: 2px solid rgba(255,255,255,0.5);
       cursor: pointer;
-      border: 2px solid rgba(255,255,255,0.4);
     }
 
-    .stain:hover {
-      transform: scale(1.1);
-    }
-
-    .stain.one { left: 82px; bottom: 140px; }
-    .stain.two { left: 170px; bottom: 118px; }
-    .stain.three { left: 235px; bottom: 148px; }
-
-    .table {
-      position: absolute;
-      bottom: 54px;
-      right: 75px;
-      width: 105px;
-      height: 45px;
-      background: #a97142;
-      border-radius: 50%;
-      border: 4px solid #5c3d2e;
-      display: none;
-    }
-
-    .chairs-visible .table {
-      display: block;
-    }
-
-    .chair {
-      position: absolute;
-      width: 38px;
-      height: 42px;
-      border-radius: 12px;
-      background: #8d6e63;
-      border: 3px solid #5c3d2e;
-      display: none;
-    }
-
-    .chairs-visible .chair {
-      display: block;
-    }
-
-    .chair.c1 { right: 110px; bottom: 105px; }
-    .chair.c2 { right: 110px; bottom: 18px; }
-    .chair.c3 { right: 32px; bottom: 62px; }
-
-    .chair.wood { background: #8d6e63; }
-    .chair.blue { background: #4cc9f0; }
-    .chair.pink { background: #ffafcc; }
+    .stain.s1 { left: 52px; bottom: 128px; }
+    .stain.s2 { left: 112px; bottom: 105px; }
+    .stain.s3 { left: 165px; bottom: 132px; }
 
     .display-case {
       position: absolute;
-      left: 312px;
-      bottom: 92px;
-      width: 130px;
-      height: 75px;
-      background: rgba(255,255,255,0.55);
+      left: 210px;
+      bottom: 88px;
+      width: 100px;
+      height: 64px;
+      background: rgba(255,255,255,0.65);
       border: 4px solid #7b3f00;
       border-radius: 14px;
       display: none;
-      font-size: 28px;
-      justify-content: center;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      font-size: 27px;
     }
 
     .display-visible .display-case {
       display: flex;
-      animation: glowCase 2s infinite ease-in-out;
     }
 
-    @keyframes glowCase {
-      0% { box-shadow: 0 0 0 rgba(255,255,255,0.3); }
-      50% { box-shadow: 0 0 16px rgba(255,255,255,0.9); }
-      100% { box-shadow: 0 0 0 rgba(255,255,255,0.3); }
+    .table {
+      position: absolute;
+      right: 35px;
+      bottom: 48px;
+      width: 90px;
+      height: 42px;
+      background: #a96538;
+      border: 4px solid #5a3825;
+      border-radius: 50%;
+      display: none;
     }
+
+    .chair {
+      position: absolute;
+      width: 34px;
+      height: 38px;
+      border-radius: 12px;
+      border: 3px solid #5a3825;
+      display: none;
+    }
+
+    .chairs-visible .table,
+    .chairs-visible .chair {
+      display: block;
+    }
+
+    .chair.c1 { right: 65px; bottom: 94px; }
+    .chair.c2 { right: 65px; bottom: 14px; }
+    .chair.c3 { right: 8px; bottom: 52px; }
+
+    .chair.wood { background: #8d6e63; }
+    .chair.blue { background: #79c7e8; }
+    .chair.pink { background: #ffb6c8; }
 
     .wall-decor {
       position: absolute;
-      right: 48px;
-      top: 78px;
-      width: 95px;
-      height: 55px;
+      right: 24px;
+      top: 70px;
+      width: 72px;
+      height: 48px;
       border-radius: 12px;
       background: white;
       border: 3px solid #7b3f00;
       display: none;
-      justify-content: center;
       align-items: center;
-      font-size: 28px;
+      justify-content: center;
+      font-size: 25px;
     }
 
     .decor-visible .wall-decor {
@@ -835,9 +732,9 @@
 
     .plant {
       position: absolute;
-      left: 330px;
-      bottom: 45px;
-      font-size: 50px;
+      left: 240px;
+      bottom: 32px;
+      font-size: 45px;
       display: none;
       animation: plantMove 2.4s infinite ease-in-out;
     }
@@ -847,385 +744,136 @@
     }
 
     @keyframes plantMove {
-      0% { transform: rotate(-2deg); }
+      0%, 100% { transform: rotate(-2deg); }
       50% { transform: rotate(2deg); }
-      100% { transform: rotate(-2deg); }
     }
 
-    .living-customer {
-      position: absolute;
-      right: 105px;
-      bottom: 88px;
-      font-size: 36px;
-      display: none;
-      animation: customerSit 2.2s infinite ease-in-out;
-    }
-
-    .chairs-visible .living-customer {
-      display: block;
-    }
-
-    @keyframes customerSit {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
-      100% { transform: translateY(0); }
-    }
-
-    .task-panel {
+    .task-box {
       background: white;
       border: 2px solid #f1c27d;
-      border-radius: 18px;
-      padding: 14px;
-      text-align: left;
+      border-radius: 20px;
+      padding: 13px;
     }
 
-    .task-panel h3 {
-      margin: 0 0 8px;
-      color: #7b3f00;
+    .task-box h3 {
+      margin: 0 0 6px;
+      color: #653719;
     }
 
-    .task-requirements {
-      background: #fff3df;
-      border: 1px solid #f1c27d;
-      border-radius: 12px;
-      padding: 10px;
-      margin: 10px 0;
-      font-weight: bold;
-      color: #5c3d2e;
+    .task-box p {
+      margin: 5px 0;
+      line-height: 1.35;
     }
 
-    .action-area {
-      background: #fffaf4;
-      border: 2px dashed #d99b5c;
-      border-radius: 14px;
-      padding: 12px;
-      min-height: 120px;
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .action-row {
+    .choice-row {
       display: flex;
       gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
       margin-top: 10px;
     }
 
-    .small-action-btn {
-      width: auto;
-      min-width: 90px;
-      background: #2a9d8f;
-    }
-
-    .choice-card {
-      width: 100px;
-      background: #fff7ec;
+    .choice {
+      flex: 1;
+      background: #fff3e8;
       border: 2px solid #f1c27d;
-      border-radius: 14px;
-      padding: 10px;
+      border-radius: 15px;
+      padding: 9px 6px;
+      text-align: center;
+      font-weight: 900;
       cursor: pointer;
-      text-align: center;
-      font-weight: bold;
-      color: #5c3d2e;
-      transition: 0.2s;
     }
 
-    .choice-card:hover {
-      transform: translateY(-3px);
-      border-color: #2a9d8f;
-      background: #edfff9;
+    .choice div {
+      font-size: 28px;
     }
 
-    .choice-icon {
-      font-size: 36px;
-      margin-bottom: 4px;
-    }
-
-    .mini-progress {
-      margin-top: 8px;
-      font-weight: bold;
-      color: #7b3f00;
-      text-align: center;
-    }
-
-    @media (max-width: 980px) {
-      body { align-items: flex-start; }
-
-      .game-container {
-        margin: 10px 0;
-        padding: 14px;
+    @media (min-width: 760px) {
+      .app {
+        max-width: 520px;
+        margin: 20px 0;
+        border-radius: 30px;
+        min-height: auto;
+        box-shadow: 0 15px 40px rgba(90,56,37,0.2);
       }
-
-      .main {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .side-panel {
-        width: 100%;
-      }
-
-      .top-stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .customers-row {
-        grid-template-columns: 1fr;
-      }
-
-      .renovation-layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .board {
-        grid-template-columns: repeat(5, 62px);
-        grid-template-rows: repeat(4, 62px);
-        gap: 8px;
-      }
-
-      .cell {
-        width: 62px;
-        height: 62px;
-        font-size: 28px;
-      }
-
-      header h1 {
-        font-size: 28px;
-      }
-
-      header p {
-        font-size: 13px;
-      }
-
-      .item-name, .machine-label {
-        font-size: 7px;
-      }
-
-      .customers-title {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-      }
-
-      .cafe-scene {
-        min-height: 320px;
-      }
-
-      .counter {
-        left: 20px;
-        width: 170px;
-      }
-
-      .display-case {
-        left: 205px;
-        width: 100px;
-      }
-
-      .plant {
-        left: 225px;
-      }
-
-      .table {
-        right: 40px;
-      }
-
-      .chair.c1 { right: 75px; }
-      .chair.c2 { right: 75px; }
-      .chair.c3 { right: 5px; }
-      .living-customer { right: 72px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="level-up-modal" id="levelUpModal">
-    <div class="level-card">
-      <h2>🎉 Cafe Level Up!</h2>
-      <p id="levelUpText">Great job!</p>
-      <button onclick="nextCafeLevel()">Continue</button>
+  <div class="app">
+    <div class="topbar">
+      <div class="title-row">
+        <div class="logo">☕</div>
+        <h1>Mini Merge Cafe</h1>
+        <div class="gear">⚙️</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-pill" id="coinsText">🪙 0</div>
+        <div class="stat-pill" id="partsText">🔧 0</div>
+        <div class="stat-pill" id="energyText">⚡ 30/75</div>
+      </div>
+    </div>
+
+    <div class="orders-section">
+      <div class="section-ribbon">Today's Orders</div>
+      <div class="customers" id="customers"></div>
+    </div>
+
+    <div class="board-frame">
+      <div class="board-label">MERGE BOARD</div>
+      <div class="board" id="board"></div>
+    </div>
+
+    <div class="hint-bubble">
+      <div class="helper">🐱</div>
+      <div class="message" id="message">Merge matching items to serve customers!</div>
+      <div class="bulb">💡</div>
     </div>
   </div>
 
-  <div class="info-modal" id="infoModal">
-    <div class="info-card">
-      <h2>⚙️ Machine Levels</h2>
-      <p>Use 🔧 Machine Parts to upgrade machines separately.</p>
-      <div class="machine-levels" id="machineLevels"></div>
-      <button class="close-small" onclick="closeMachineInfo()">Close</button>
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="openSheet('orders', this)">📋<span>Orders</span></button>
+    <button class="nav-btn" onclick="openSheet('cafe', this)">🏡<span>Cafe</span></button>
+    <button class="nav-btn" onclick="openSheet('gift', this)">🎁<span>Gift</span></button>
+    <button class="nav-btn" onclick="openSheet('shop', this)">🛒<span>Shop</span></button>
+  </div>
+
+  <div class="sheet" id="sheet">
+    <div class="sheet-header">
+      <h2 id="sheetTitle">Panel</h2>
+      <button class="close-btn" onclick="closeSheet()">Close</button>
     </div>
+    <div id="sheetContent"></div>
   </div>
 
   <div class="renovation-modal" id="renovationModal">
     <div class="renovation-card">
-      <div class="renovation-header">
+      <div class="renovation-top">
         <h2>🏡 Cafe Renovation</h2>
-        <button class="close-small" onclick="closeRenovation()">Close</button>
+        <button class="close-btn" onclick="closeRenovation()">Close</button>
       </div>
 
-      <div class="renovation-layout">
-        <div>
-          <div class="cafe-scene" id="cafeScene">
-            <div class="cafe-sign" id="cafeSign">Mini Cafe</div>
-            <div class="wall-decor" id="wallDecor">🖼️</div>
-            <div class="counter" id="counter">Counter</div>
-            <div class="stain one" id="stain1" onclick="cleanStain(1)"></div>
-            <div class="stain two" id="stain2" onclick="cleanStain(2)"></div>
-            <div class="stain three" id="stain3" onclick="cleanStain(3)"></div>
-            <div class="display-case">🧁 🍰</div>
-            <div class="table"></div>
-            <div class="chair c1" id="chair1"></div>
-            <div class="chair c2" id="chair2"></div>
-            <div class="chair c3" id="chair3"></div>
-            <div class="living-customer">🙂</div>
-            <div class="plant">🪴</div>
-            <div class="floor"></div>
-          </div>
-        </div>
-
-        <div class="task-panel">
-          <h3 id="renovationTaskTitle">Current Task</h3>
-          <div id="renovationTaskDescription"></div>
-          <div class="task-requirements" id="renovationRequirements"></div>
-          <div class="action-area" id="renovationActionArea"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="game-container">
-    <header>
-      <h1>☕ Mini Merge Cafe</h1>
-      <p>Serve orders, collect gifts, recycle items, and build a living cafe!</p>
-    </header>
-
-    <div class="top-stats">
-      <div class="stat-card">
-        <div class="stat-title">Cafe Level</div>
-        <div class="stat-value" id="cafeLevelText">1</div>
+      <div class="cafe-scene" id="cafeScene">
+        <div class="cafe-sign" id="cafeSign">Mini Cafe</div>
+        <div class="wall-decor" id="wallDecor">🖼️</div>
+        <div class="counter" id="counter">Counter</div>
+        <div class="stain s1" id="stain1" onclick="cleanStain(1)"></div>
+        <div class="stain s2" id="stain2" onclick="cleanStain(2)"></div>
+        <div class="stain s3" id="stain3" onclick="cleanStain(3)"></div>
+        <div class="display-case">🧁 🍰</div>
+        <div class="table"></div>
+        <div class="chair c1" id="chair1"></div>
+        <div class="chair c2" id="chair2"></div>
+        <div class="chair c3" id="chair3"></div>
+        <div class="plant">🪴</div>
+        <div class="floor"></div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-title">Coins</div>
-        <div class="stat-value" id="coinsText">🪙 0</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-title">Parts</div>
-        <div class="stat-value" id="partsText">🔧 0</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-title">Energy</div>
-        <div class="stat-value" id="energyText">⚡ 30/75</div>
-      </div>
-    </div>
-
-    <div class="customers-top-box">
-      <div class="customers-title">
-        <h2>Customers</h2>
-        <span>Lucky items give bonus rewards ✨</span>
-      </div>
-      <div class="customers-row" id="customers"></div>
-    </div>
-
-    <div class="main">
-      <div class="left-area">
-        <div class="cafe-progress-box">
-          <div class="goal-row">
-            <span id="progressText">Cafe Tasks: 0 / 3</span>
-            <span id="progressLevelText">Level 1</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="taskProgress"></div>
-          </div>
-        </div>
-
-        <div class="board-wrap">
-          <div class="board-title">Cafe Board</div>
-          <div class="board" id="board"></div>
-          <button class="machine-info-button" id="machineInfoButton" onclick="openMachineInfo()">i</button>
-          <div class="message-line" id="message">Welcome to Mini Merge Cafe!</div>
-        </div>
-      </div>
-
-      <div class="side-panel">
-        <div class="panel-box">
-          <h2>🎁 Gift Box</h2>
-          <div class="level-list" id="giftText">
-            Serve 0/3 customers to unlock +8 ⚡
-          </div>
-          <button class="task-btn" id="giftBtn" onclick="claimGift()" disabled>
-            Gift Locked
-          </button>
-        </div>
-
-        <div class="panel-box">
-          <h2>♻️ Recycle</h2>
-          <div class="level-list" id="recycleText">
-            Select an item, then recycle it for energy.
-          </div>
-          <button class="recycle-btn" onclick="recycleSelectedItem()">
-            Recycle Selected Item
-          </button>
-        </div>
-
-        <div class="panel-box">
-          <h2>Cafe Renovation</h2>
-          <div id="taskSummaryBox"></div>
-          <button class="renovation-btn" onclick="openRenovation()">
-            Open Cafe Renovation
-          </button>
-        </div>
-
-        <div class="panel-box">
-          <h2>Machine Upgrades</h2>
-          <div class="level-list">
-            Use 🔧 Machine Parts. Coins are for cafe tasks.
-          </div>
-
-          <button class="upgrade-btn" onclick="upgradeMachine('drink')" id="drinkUpgradeBtn">
-            Upgrade Drink Machine
-          </button>
-
-          <button class="upgrade-btn dessert-upgrade-btn" onclick="upgradeMachine('dessert')" id="dessertUpgradeBtn">
-            Upgrade Dessert Machine
-          </button>
-
-          <div class="upgrade-message" id="upgradeMessage">
-            Upgrade completed!
-          </div>
-        </div>
-
-        <div class="panel-box">
-          <h2>Energy Boost</h2>
-          <div class="level-list">
-            Watch a short ad break to get extra energy.
-          </div>
-
-          <button class="task-btn" onclick="watchAdForEnergy()" id="adEnergyBtn">
-            Watch Ad +15 ⚡
-          </button>
-
-          <div class="upgrade-message" id="adMessage">
-            Ad reward received!
-          </div>
-        </div>
-
-        <div class="panel-box">
-          <h2>Merge Levels</h2>
-          <div class="level-list">
-            <b>Dessert Machine</b><br>
-            🍪 Cookie → 🧁 Cupcake → 🍰 Cake → 🎂 Special Cake<br><br>
-
-            <b>Drink Machine</b><br>
-            🫘 Bean → ☕ Coffee → 🥤 Latte → 🍹 Fancy Drink<br><br>
-
-            ⭐ Complete Bean → Fancy Drink to earn a badge.
-          </div>
-        </div>
+      <div class="task-box">
+        <h3 id="taskTitle">Current Task</h3>
+        <p id="taskDesc"></p>
+        <p id="taskReq"></p>
+        <div id="taskAction"></div>
       </div>
     </div>
   </div>
@@ -1236,381 +884,195 @@
       { name: "Cupcake", emoji: "🧁", chain: "dessert", level: 2 },
       { name: "Cake", emoji: "🍰", chain: "dessert", level: 3 },
       { name: "Special Cake", emoji: "🎂", chain: "dessert", level: 4 },
-
       { name: "Bean", emoji: "🫘", chain: "drink", level: 1 },
       { name: "Coffee", emoji: "☕", chain: "drink", level: 2 },
       { name: "Latte", emoji: "🥤", chain: "drink", level: 3 },
       { name: "Fancy Drink", emoji: "🍹", chain: "drink", level: 4 }
     ];
 
-    const mergeMap = {
-      0: 1,
-      1: 2,
-      2: 3,
-      4: 5,
-      5: 6,
-      6: 7
-    };
+    const mergeMap = { 0: 1, 1: 2, 2: 3, 4: 5, 5: 6, 6: 7 };
 
-    const customerPool = [
-      { avatar: "👩", waiting: "I want something sweet!" },
-      { avatar: "👨", waiting: "Can I get a fresh drink?" },
-      { avatar: "👧", waiting: "I am waiting for dessert!" },
-      { avatar: "🧑", waiting: "I need a quick cafe order!" },
-      { avatar: "👱‍♀️", waiting: "Something tasty, please!" },
-      { avatar: "🧔", waiting: "I want something fresh." },
-      { avatar: "👦", waiting: "I love cafe snacks!" },
-      { avatar: "👩‍🦰", waiting: "Surprise me with a good order!" },
-      { avatar: "👴", waiting: "I would like a cafe treat." },
-      { avatar: "👵", waiting: "Something warm and nice, please." }
-    ];
+    const customerPool = ["👩", "👨", "👵", "🧑", "👱‍♀️", "🧔", "👦", "👩‍🦰"];
 
     const cafeTasks = [
-      {
-        title: "Clean the Counter",
-        cost: 60,
-        type: "clean",
-        description: "Tap the stains directly on the cafe counter to clean them.",
-        rewardEnergy: 3
-      },
-      {
-        title: "Fix the Cafe Sign",
-        cost: 110,
-        type: "repair",
-        description: "Attach the missing sign pieces to make the cafe visible.",
-        rewardEnergy: 4
-      },
-      {
-        title: "Buy New Chairs",
-        cost: 180,
-        type: "chooseChairs",
-        description: "Choose a chair style and place seating in your cafe.",
-        rewardEnergy: 0
-      },
-      {
-        title: "Add Dessert Display",
-        cost: 160,
-        type: "itemDisplay",
-        itemRequired: 1,
-        description: "Use a Cupcake from your board and place it into the dessert display.",
-        rewardEnergy: 5
-      },
-      {
-        title: "Decorate the Wall",
-        cost: 190,
-        type: "chooseDecor",
-        description: "Choose a wall decoration to give the cafe personality.",
-        rewardEnergy: 2
-      },
-      {
-        title: "Place a Plant",
-        cost: 150,
-        type: "placePlant",
-        description: "Place a plant near the window to make the cafe feel alive.",
-        rewardEnergy: 3
-      }
+      { title: "Clean the Counter", cost: 60, type: "clean", desc: "Tap all stains on the counter.", energy: 3 },
+      { title: "Fix the Cafe Sign", cost: 110, type: "repair", desc: "Attach 3 sign pieces.", energy: 4 },
+      { title: "Buy New Chairs", cost: 180, type: "chairs", desc: "Choose and place chairs.", energy: 0 },
+      { title: "Add Dessert Display", cost: 160, type: "item", itemRequired: 1, desc: "Place a Cupcake in the display.", energy: 5 },
+      { title: "Decorate the Wall", cost: 190, type: "decor", desc: "Choose a wall decoration.", energy: 2 },
+      { title: "Place a Plant", cost: 150, type: "plant", desc: "Place a plant in the cafe.", energy: 3 }
     ];
 
-    function makeItem(itemIndex, options = {}) {
+    function makeItem(item, opts = {}) {
       return {
-        item: itemIndex,
-        lucky: options.lucky || false,
-        chainBadge: options.chainBadge || false
+        item,
+        lucky: opts.lucky || false,
+        chainBadge: opts.chainBadge || false
       };
     }
 
-    let board = Array(20).fill(null);
+    const boardSize = 30;
+    const drinkMachineIndex = 5;
+    const dessertMachineIndex = 24;
+
+    let board = Array(boardSize).fill(null);
     let coins = 0;
     let parts = 0;
     let energy = 30;
     let maxEnergy = 75;
-    let adCooldown = false;
-    let adCooldownSeconds = 0;
-    let adTimer = null;
-
     let drinkMachineLevel = 1;
     let dessertMachineLevel = 1;
     let cafeLevel = 1;
     let completedTasks = 0;
-    let draggedIndex = null;
     let selectedIndex = null;
+    let draggedIndex = null;
     let newItemIndex = null;
     let mergedItemIndex = null;
-    let lastChangedCustomerIndex = null;
     let customers = [];
-
     let giftProgress = 0;
     let giftReady = false;
     let ordersSinceLastPart = 0;
-
-    let cleanStains = {
-      1: false,
-      2: false,
-      3: false
-    };
-
+    let adCooldown = false;
+    let adCooldownSeconds = 0;
+    let adTimer = null;
     let repairClicks = 0;
-    let chairPlacementClicks = 0;
-    let generalActionClicks = 0;
+    let chairStyle = null;
+    let chairSteps = 0;
+    let plantSteps = 0;
+
+    let cleanStains = { 1: false, 2: false, 3: false };
 
     let cafeState = {
-      counterClean: false,
-      signFixed: false,
+      clean: false,
+      sign: false,
       chairs: null,
       display: false,
       decor: null,
       plant: false
     };
 
-    const drinkMachineIndex = 0;
-    const dessertMachineIndex = 1;
-
-    const boardElement = document.getElementById("board");
-    const coinsText = document.getElementById("coinsText");
-    const partsText = document.getElementById("partsText");
-    const energyText = document.getElementById("energyText");
-    const cafeLevelText = document.getElementById("cafeLevelText");
-    const progressText = document.getElementById("progressText");
-    const progressLevelText = document.getElementById("progressLevelText");
-    const taskProgress = document.getElementById("taskProgress");
-    const message = document.getElementById("message");
-    const customersElement = document.getElementById("customers");
-    const taskSummaryBox = document.getElementById("taskSummaryBox");
-    const levelUpModal = document.getElementById("levelUpModal");
-    const levelUpText = document.getElementById("levelUpText");
-    const drinkUpgradeBtn = document.getElementById("drinkUpgradeBtn");
-    const dessertUpgradeBtn = document.getElementById("dessertUpgradeBtn");
-    const upgradeMessage = document.getElementById("upgradeMessage");
-    const machineInfoButton = document.getElementById("machineInfoButton");
-    const infoModal = document.getElementById("infoModal");
-    const machineLevels = document.getElementById("machineLevels");
-    const renovationModal = document.getElementById("renovationModal");
-    const cafeScene = document.getElementById("cafeScene");
-    const renovationTaskTitle = document.getElementById("renovationTaskTitle");
-    const renovationTaskDescription = document.getElementById("renovationTaskDescription");
-    const renovationRequirements = document.getElementById("renovationRequirements");
-    const renovationActionArea = document.getElementById("renovationActionArea");
-    const adEnergyBtn = document.getElementById("adEnergyBtn");
-    const adMessage = document.getElementById("adMessage");
-    const giftText = document.getElementById("giftText");
-    const giftBtn = document.getElementById("giftBtn");
-    const recycleText = document.getElementById("recycleText");
+    const boardEl = document.getElementById("board");
+    const customersEl = document.getElementById("customers");
+    const messageEl = document.getElementById("message");
 
     function playSound(type) {
       try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = type === "error" ? 180 : type === "order" ? 760 : type === "merge" ? 520 : 900;
+        gain.gain.setValueAtTime(0.06, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.12);
+      } catch(e) {}
+    }
 
-        oscillator.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        if (type === "merge") oscillator.frequency.value = 520;
-        else if (type === "order") oscillator.frequency.value = 760;
-        else if (type === "error") oscillator.frequency.value = 180;
-        else if (type === "upgrade") oscillator.frequency.value = 900;
-        else oscillator.frequency.value = 360;
-
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
-
-        oscillator.start(audioCtx.currentTime);
-        oscillator.stop(audioCtx.currentTime + 0.12);
-      } catch (e) {}
+    function setMsg(text) {
+      messageEl.textContent = text;
     }
 
     function createBoard() {
-      boardElement.innerHTML = "";
+      boardEl.innerHTML = "";
 
-      board.forEach((cellItem, index) => {
+      for (let i = 0; i < boardSize; i++) {
         const cell = document.createElement("div");
-        cell.classList.add("cell");
-        cell.dataset.index = index;
+        cell.className = "cell";
+        cell.dataset.index = i;
 
-        if (index === selectedIndex) {
-          cell.classList.add("mobile-selected");
-        }
-
-        if (cellItem && cellItem.lucky) {
-          cell.classList.add("lucky-cell");
-        }
+        if (i === selectedIndex) cell.classList.add("selected");
+        if (i === newItemIndex || i === mergedItemIndex) cell.classList.add("pop");
 
         cell.ondragover = allowDrop;
-        cell.ondragleave = dragLeave;
+        cell.ondragleave = e => e.currentTarget.classList.remove("drag-over");
         cell.ondrop = dropItem;
 
-        if (index === drinkMachineIndex) {
-          createMachineCell(cell, "drink");
-        } else if (index === dessertMachineIndex) {
-          createMachineCell(cell, "dessert");
+        if (i === drinkMachineIndex) {
+          cell.classList.add("machine", "drink-machine");
+          cell.innerHTML = `<div>${getMachineEmoji("drink")}</div><div class="machine-label">Drink Lv.${drinkMachineLevel}</div>`;
+          cell.onclick = () => generateItem("drink");
+        } else if (i === dessertMachineIndex) {
+          cell.classList.add("machine", "dessert-machine");
+          cell.innerHTML = `<div>${getMachineEmoji("dessert")}</div><div class="machine-label">Dessert Lv.${dessertMachineLevel}</div>`;
+          cell.onclick = () => generateItem("dessert");
         } else {
-          cell.onclick = () => handleMobileTap(index);
+          const data = board[i];
 
-          if (index === newItemIndex) {
-            cell.classList.add("new-item");
-          }
+          if (data) {
+            if (data.lucky) cell.classList.add("lucky-cell");
 
-          if (index === mergedItemIndex) {
-            cell.classList.add("merge-effect");
-          }
-
-          if (cellItem !== null) {
-            const itemData = items[cellItem.item];
-
+            const item = items[data.item];
             cell.innerHTML = `
-              <div 
-                class="item" 
-                draggable="true" 
-                ondragstart="dragStart(event, ${index})"
-              >
-                ${itemData.emoji}
-              </div>
-              <div class="item-name">${itemData.name}</div>
+              <div class="item" draggable="true" ondragstart="dragStart(event, ${i})">${item.emoji}</div>
+              <div class="item-name">${item.name}</div>
             `;
 
-            if (cellItem.lucky) {
-              const lucky = document.createElement("div");
-              lucky.classList.add("lucky-badge");
-              lucky.textContent = "✨";
-              cell.appendChild(lucky);
-            }
-
-            if (cellItem.chainBadge) {
-              const badge = document.createElement("div");
-              badge.classList.add("chain-badge");
-              badge.textContent = "⭐";
-              cell.appendChild(badge);
-            }
-
-            if (isItemNeededForOrder(cellItem.item)) {
-              const check = document.createElement("div");
-              check.classList.add("order-check");
-              check.textContent = "✓";
-              cell.appendChild(check);
-            }
+            if (data.lucky) addBadge(cell, "✨", "badge-lucky");
+            if (data.chainBadge) addBadge(cell, "⭐", "badge-star");
+            if (isOrderReady(data.item)) addBadge(cell, "✓", "badge-ready");
           }
+
+          cell.onclick = () => tapCell(i);
         }
 
-        boardElement.appendChild(cell);
-      });
+        boardEl.appendChild(cell);
+      }
 
       setTimeout(() => {
         newItemIndex = null;
         mergedItemIndex = null;
-      }, 500);
+      }, 400);
     }
 
-    function createMachineCell(cell, type) {
-      const level = getMachineLevel(type);
-
-      cell.classList.add("machine");
-
-      if (type === "drink") {
-        cell.classList.add("drink-machine");
-      } else {
-        cell.classList.add("dessert-machine");
-      }
-
-      cell.classList.add("level-" + level);
-
-      if (energy <= 0) {
-        cell.classList.add("machine-cooldown");
-      }
-
-      const emoji = getMachineEmoji(type);
-      const label = type === "drink" ? "Drink Lv." + level : "Dessert Lv." + level;
-
-      cell.innerHTML = `
-        <div>${emoji}</div>
-        <div class="machine-label">${label}</div>
-      `;
-
-      cell.onclick = () => {
-        selectedIndex = null;
-        generateItem(type);
-      };
-    }
-
-    function getMachineLevel(type) {
-      return type === "drink" ? drinkMachineLevel : dessertMachineLevel;
+    function addBadge(cell, text, cls) {
+      const b = document.createElement("div");
+      b.className = "mini-badge " + cls;
+      b.textContent = text;
+      cell.appendChild(b);
     }
 
     function getMachineEmoji(type) {
-      const level = getMachineLevel(type);
+      const lvl = type === "drink" ? drinkMachineLevel : dessertMachineLevel;
 
       if (type === "drink") {
-        if (level === 1) return "☕";
-        if (level === 2) return "🥤";
-        if (level === 3) return "🍹";
-        return "🧋";
+        return lvl === 1 ? "☕" : lvl === 2 ? "🥤" : lvl === 3 ? "🍹" : "🧋";
       }
 
-      if (level === 1) return "🍪";
-      if (level === 2) return "🧁";
-      if (level === 3) return "🍰";
-      return "🎂";
+      return lvl === 1 ? "🍪" : lvl === 2 ? "🧁" : lvl === 3 ? "🍰" : "🎂";
     }
 
-    function dragStart(event, index) {
+    function dragStart(e, index) {
       draggedIndex = index;
       selectedIndex = null;
-      event.dataTransfer.setData("text/plain", index);
-      message.textContent = "";
+      e.dataTransfer.setData("text/plain", index);
     }
 
-    function allowDrop(event) {
-      event.preventDefault();
-
-      const targetIndex = Number(event.currentTarget.dataset.index);
-
-      if (
-        targetIndex !== drinkMachineIndex &&
-        targetIndex !== dessertMachineIndex &&
-        draggedIndex !== null &&
-        draggedIndex !== targetIndex
-      ) {
-        event.currentTarget.classList.add("drag-over");
+    function allowDrop(e) {
+      e.preventDefault();
+      const target = Number(e.currentTarget.dataset.index);
+      if (target !== drinkMachineIndex && target !== dessertMachineIndex) {
+        e.currentTarget.classList.add("drag-over");
       }
     }
 
-    function dragLeave(event) {
-      event.currentTarget.classList.remove("drag-over");
-      event.currentTarget.classList.remove("invalid-drop");
-    }
+    function dropItem(e) {
+      e.preventDefault();
+      const target = Number(e.currentTarget.dataset.index);
+      e.currentTarget.classList.remove("drag-over");
 
-    function dropItem(event) {
-      event.preventDefault();
-
-      const targetCell = event.currentTarget;
-      const targetIndex = Number(targetCell.dataset.index);
-
-      targetCell.classList.remove("drag-over");
-
-      if (targetIndex === drinkMachineIndex || targetIndex === dessertMachineIndex) {
-        draggedIndex = null;
-        return;
-      }
-
-      if (draggedIndex === null || draggedIndex === targetIndex) {
-        draggedIndex = null;
-        return;
-      }
-
-      performMoveOrMerge(draggedIndex, targetIndex);
-
+      if (draggedIndex === null || draggedIndex === target) return;
+      moveOrMerge(draggedIndex, target);
       draggedIndex = null;
       createBoard();
     }
 
-    function handleMobileTap(index) {
-      if (index === drinkMachineIndex || index === dessertMachineIndex) {
-        return;
-      }
-
+    function tapCell(index) {
       if (selectedIndex === null) {
-        if (board[index] !== null) {
+        if (board[index]) {
           selectedIndex = index;
-          message.textContent = "Item selected. Tap another item to merge or an empty cell to move.";
+          setMsg("Selected! Tap target.");
           createBoard();
         }
         return;
@@ -1618,465 +1080,497 @@
 
       if (selectedIndex === index) {
         selectedIndex = null;
-        message.textContent = "Selection cancelled.";
+        setMsg("Selection cancelled.");
         createBoard();
         return;
       }
 
-      performMoveOrMerge(selectedIndex, index);
+      moveOrMerge(selectedIndex, index);
       selectedIndex = null;
       createBoard();
     }
 
-    function performMoveOrMerge(fromIndex, toIndex) {
-      const selectedItem = board[fromIndex];
-      const targetItem = board[toIndex];
+    function moveOrMerge(from, to) {
+      if (to === drinkMachineIndex || to === dessertMachineIndex) return;
+      const a = board[from];
+      const b = board[to];
 
-      if (selectedItem === null) return;
+      if (!a) return;
 
-      if (targetItem === null) {
-        board[toIndex] = selectedItem;
-        board[fromIndex] = null;
-        message.textContent = "Item moved!";
+      if (!b) {
+        board[to] = a;
+        board[from] = null;
+        setMsg("Item moved.");
         return;
       }
 
-      if (canMerge(selectedItem, targetItem)) {
-        mergeItems(fromIndex, toIndex);
+      if (a.item === b.item && mergeMap[a.item] !== undefined) {
+        const newItem = mergeMap[a.item];
+        board[to] = makeItem(newItem, {
+          lucky: a.lucky || b.lucky,
+          chainBadge: newItem === 7 || a.chainBadge || b.chainBadge
+        });
+        board[from] = null;
+        mergedItemIndex = to;
+
+        if (newItem === 7) setMsg("Fancy Drink completed! ⭐");
+        else setMsg((a.lucky || b.lucky) ? "Lucky merge! ✨" : "Nice merge!");
+        playSound("merge");
         return;
       }
 
-      message.textContent = "Only same items can be merged!";
+      setMsg("Only same items merge.");
       playSound("error");
     }
 
-    function canMerge(a, b) {
-      return a.item === b.item && mergeMap[a.item] !== undefined;
-    }
-
-    function isItemNeededForOrder(itemIndex) {
-      return customers.some(customer => customer.order === itemIndex);
-    }
-
-    function mergeItems(firstIndex, secondIndex) {
-      const first = board[firstIndex];
-      const second = board[secondIndex];
-      const newItemIndexValue = mergeMap[first.item];
-
-      const lucky = first.lucky || second.lucky;
-      const chainBadge = newItemIndexValue === 7 || first.chainBadge || second.chainBadge;
-
-      board[secondIndex] = makeItem(newItemIndexValue, {
-        lucky,
-        chainBadge
-      });
-
-      board[firstIndex] = null;
-      mergedItemIndex = secondIndex;
-
-      if (newItemIndexValue === 7) {
-        message.textContent = "Drink chain completed! Fancy Drink earned ⭐ badge!";
-      } else if (isItemNeededForOrder(newItemIndexValue)) {
-        message.textContent = "Order item is ready!";
-      } else {
-        message.textContent = lucky ? "Lucky merge completed! ✨" : "Nice merge!";
-      }
-
-      playSound("merge");
-      updateStats();
-    }
-
     function generateItem(type) {
-      machineInfoButton.style.display = "block";
-
       if (energy <= 0) {
-        message.textContent = "No energy left! Use Gift Box, Recycle, or Energy Boost.";
+        setMsg("No energy. Use Gift, Recycle or Boost.");
         playSound("error");
         return;
       }
 
-      const emptyCells = board
-        .map((cellItem, index) => {
-          if (
-            index !== drinkMachineIndex &&
-            index !== dessertMachineIndex &&
-            cellItem === null
-          ) {
-            return index;
-          }
-          return null;
-        })
-        .filter(index => index !== null);
+      const empty = [];
+      for (let i = 0; i < boardSize; i++) {
+        if (i !== drinkMachineIndex && i !== dessertMachineIndex && board[i] === null) empty.push(i);
+      }
 
-      if (emptyCells.length === 0) {
-        message.textContent = "Board is full! Merge or recycle items first.";
+      if (empty.length === 0) {
+        setMsg("Board full. Merge or recycle.");
         playSound("error");
         return;
       }
 
       energy--;
 
-      const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-      const randomItem = getMachineItem(type);
+      const slot = empty[Math.floor(Math.random() * empty.length)];
+      const item = getMachineItem(type);
       const lucky = Math.random() < 0.08;
 
-      board[randomCell] = makeItem(randomItem, { lucky });
-      newItemIndex = randomCell;
+      board[slot] = makeItem(item, { lucky });
+      newItemIndex = slot;
 
-      if (lucky) {
-        message.textContent = "Lucky item created! ✨";
-      } else if (isItemNeededForOrder(randomItem)) {
-        message.textContent = "Order item created!";
-      } else {
-        message.textContent = type === "drink"
-          ? "Drink Machine created a new item!"
-          : "Dessert Machine created a new item!";
-      }
-
-      playSound("generate");
-      updateStats();
-      createBoard();
+      setMsg(lucky ? "Lucky item! ✨" : "New item!");
+      playSound("upgrade");
+      updateAll();
     }
 
     function getMachineItem(type) {
-      const chance = Math.random();
-      const level = getMachineLevel(type);
+      const level = type === "drink" ? drinkMachineLevel : dessertMachineLevel;
+      const r = Math.random();
 
       if (type === "dessert") {
         if (level === 1) return 0;
-        if (level === 2) return chance < 0.82 ? 0 : 1;
-
-        if (level === 3) {
-          if (chance < 0.65) return 0;
-          if (chance < 0.92) return 1;
-          return 2;
-        }
-
-        if (chance < 0.50) return 0;
-        if (chance < 0.80) return 1;
-        if (chance < 0.96) return 2;
-        return 3;
+        if (level === 2) return r < 0.82 ? 0 : 1;
+        if (level === 3) return r < 0.65 ? 0 : r < 0.92 ? 1 : 2;
+        return r < 0.5 ? 0 : r < 0.8 ? 1 : r < 0.96 ? 2 : 3;
       }
 
       if (level === 1) return 4;
-      if (level === 2) return chance < 0.82 ? 4 : 5;
-
-      if (level === 3) {
-        if (chance < 0.65) return 4;
-        if (chance < 0.92) return 5;
-        return 6;
-      }
-
-      if (chance < 0.50) return 4;
-      if (chance < 0.80) return 5;
-      if (chance < 0.96) return 6;
-      return 7;
-    }
-
-    function getOrderReward(itemIndex) {
-      const item = items[itemIndex];
-      const baseRewards = {
-        1: 20,
-        2: 45,
-        3: 85,
-        4: 150
-      };
-
-      return baseRewards[item.level] + ((cafeLevel - 1) * 5);
-    }
-
-    function orderGivesPart() {
-      if (ordersSinceLastPart >= 4) {
-        return true;
-      }
-
-      return Math.random() < 0.25;
-    }
-
-    function getAvailableOrders() {
-      let possibleOrders = [1, 2, 5, 6];
-
-      if (cafeLevel >= 2) possibleOrders.push(3);
-      if (cafeLevel >= 3) possibleOrders.push(7);
-
-      return possibleOrders;
+      if (level === 2) return r < 0.82 ? 4 : 5;
+      if (level === 3) return r < 0.65 ? 4 : r < 0.92 ? 5 : 6;
+      return r < 0.5 ? 4 : r < 0.8 ? 5 : r < 0.96 ? 6 : 7;
     }
 
     function createCustomers() {
-      customersElement.innerHTML = "";
+      customersEl.innerHTML = "";
 
-      customers.forEach((customer, index) => {
-        const customerCard = document.createElement("div");
-        customerCard.classList.add("customer-card");
+      customers.forEach((c, index) => {
+        const ready = board.some(x => x && x.item === c.order);
+        const card = document.createElement("div");
+        card.className = "customer-card" + (ready ? " ready" : "");
 
-        if (lastChangedCustomerIndex === index) {
-          customerCard.classList.add("new-customer");
-        }
-
-        const reward = getOrderReward(customer.order);
-        const partText = customer.givesPart ? " + 1 🔧" : "";
-
-        customerCard.innerHTML = `
-          <div class="customer-top">
-            <div class="avatar">${customer.avatar}</div>
-            <div>
-              <div class="customer-text">${customer.waiting}</div>
-            </div>
+        card.innerHTML = `
+          ${ready ? `<div class="ready-check">✓</div>` : ""}
+          <div class="avatar">${c.avatar}</div>
+          <div class="order-emoji">${items[c.order].emoji}</div>
+          <div class="order-name">${items[c.order].name}</div>
+          <div class="reward">
+            <span>🪙 ${getReward(c.order)}</span>
+            ${c.givesPart ? `<span>🔧 +1</span>` : ""}
           </div>
-
-          <div class="order-item">
-            Order: ${items[customer.order].emoji} ${items[customer.order].name}
-          </div>
-
-          <div class="reward-line">
-            Reward: ${reward} 🪙${partText}
-          </div>
-
-          <button onclick="completeCustomerOrder(${index})">
-            Serve Customer
-          </button>
+          <button class="serve-btn" onclick="serveCustomer(${index})">Serve</button>
         `;
 
-        customersElement.appendChild(customerCard);
+        customersEl.appendChild(card);
       });
-
-      setTimeout(() => {
-        lastChangedCustomerIndex = null;
-      }, 400);
-    }
-
-    function completeCustomerOrder(customerIndex) {
-      const customer = customers[customerIndex];
-      const wantedItem = customer.order;
-      const itemIndex = board.findIndex(cellItem => cellItem && cellItem.item === wantedItem);
-
-      if (itemIndex !== -1) {
-        const servedItem = board[itemIndex];
-        board[itemIndex] = null;
-
-        let reward = getOrderReward(wantedItem);
-
-        if (servedItem.lucky) {
-          reward += 25;
-        }
-
-        coins += reward;
-
-        let partMessage = "";
-
-        if (customer.givesPart) {
-          parts++;
-          partMessage = ", +1 🔧";
-          ordersSinceLastPart = 0;
-        } else {
-          ordersSinceLastPart++;
-        }
-
-        message.textContent = servedItem.lucky
-          ? "Lucky order served! +" + reward + " 🪙" + partMessage
-          : "Customer served! +" + reward + " 🪙" + partMessage;
-
-        giftProgress++;
-        updateGiftBox();
-
-        customers[customerIndex] = createRandomCustomer(customerIndex);
-        lastChangedCustomerIndex = customerIndex;
-
-        playSound("order");
-        updateStats();
-        createCustomers();
-        createBoard();
-      } else {
-        message.textContent = "You don't have this order item yet.";
-        playSound("error");
-      }
-    }
-
-    function createRandomCustomer(replaceIndex = -1) {
-      const person = customerPool[Math.floor(Math.random() * customerPool.length)];
-      const usedOrders = customers
-        .map((customer, index) => index !== replaceIndex ? customer.order : null)
-        .filter(order => order !== null);
-
-      let possibleOrders = getAvailableOrders().filter(order => !usedOrders.includes(order));
-
-      if (possibleOrders.length === 0) possibleOrders = getAvailableOrders();
-
-      const order = possibleOrders[Math.floor(Math.random() * possibleOrders.length)];
-
-      return {
-        ...person,
-        order,
-        givesPart: orderGivesPart()
-      };
     }
 
     function setupCustomers() {
       customers = [];
-      customers.push(createRandomCustomer());
-      customers.push(createRandomCustomer());
-      customers.push(createRandomCustomer());
+      customers.push(newCustomer());
+      customers.push(newCustomer());
+      customers.push(newCustomer());
     }
 
-    function updateGiftBox() {
-      if (giftProgress >= 3) {
-        giftReady = true;
-        giftBtn.disabled = false;
-        giftBtn.textContent = "Claim Gift +8 ⚡";
-        giftText.textContent = "Gift ready! Claim +8 energy.";
-      } else {
-        giftReady = false;
-        giftBtn.disabled = true;
-        giftBtn.textContent = "Gift Locked";
-        giftText.textContent = "Serve " + giftProgress + "/3 customers to unlock +8 ⚡";
+    function newCustomer(replaceIndex = -1) {
+      const used = customers.map((c, i) => i !== replaceIndex ? c.order : null).filter(x => x !== null);
+      let pool = availableOrders().filter(x => !used.includes(x));
+      if (pool.length === 0) pool = availableOrders();
+
+      return {
+        avatar: customerPool[Math.floor(Math.random() * customerPool.length)],
+        order: pool[Math.floor(Math.random() * pool.length)],
+        givesPart: orderGivesPart()
+      };
+    }
+
+    function availableOrders() {
+      let arr = [1, 2, 5, 6];
+      if (cafeLevel >= 2) arr.push(3);
+      if (cafeLevel >= 3) arr.push(7);
+      return arr;
+    }
+
+    function orderGivesPart() {
+      if (ordersSinceLastPart >= 4) return true;
+      return Math.random() < 0.25;
+    }
+
+    function getReward(itemIndex) {
+      const base = { 1: 20, 2: 45, 3: 85, 4: 150 };
+      return base[items[itemIndex].level] + (cafeLevel - 1) * 5;
+    }
+
+    function isOrderReady(itemIndex) {
+      return customers.some(c => c.order === itemIndex);
+    }
+
+    function serveCustomer(index) {
+      const c = customers[index];
+      const boardIndex = board.findIndex(x => x && x.item === c.order);
+
+      if (boardIndex === -1) {
+        setMsg("Order item not ready.");
+        playSound("error");
+        return;
       }
+
+      const served = board[boardIndex];
+      board[boardIndex] = null;
+
+      let reward = getReward(c.order);
+      if (served.lucky) reward += 25;
+
+      coins += reward;
+
+      let partMsg = "";
+      if (c.givesPart) {
+        parts++;
+        ordersSinceLastPart = 0;
+        partMsg = " +1 🔧";
+      } else {
+        ordersSinceLastPart++;
+      }
+
+      giftProgress++;
+      customers[index] = newCustomer(index);
+
+      setMsg((served.lucky ? "Lucky order! " : "Served! ") + "+" + reward + " 🪙" + partMsg);
+      playSound("order");
+
+      updateAll();
+    }
+
+    function openSheet(type, btn) {
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+
+      const sheet = document.getElementById("sheet");
+      const title = document.getElementById("sheetTitle");
+      const content = document.getElementById("sheetContent");
+
+      if (type === "orders") {
+        title.textContent = "📋 Orders";
+        content.innerHTML = `
+          <div class="panel-card">
+            <h3>Today’s Orders</h3>
+            <p>Serve customers from the cards above. Green cards mean the item is ready.</p>
+            <p>Lucky items ✨ give +25 bonus coins.</p>
+          </div>
+        `;
+      }
+
+      if (type === "cafe") {
+        const task = cafeTasks[completedTasks];
+        title.textContent = "🏡 Cafe";
+        content.innerHTML = `
+          <div class="panel-card">
+            <h3>${task ? task.title : "All tasks completed ✅"}</h3>
+            <p>${task ? task.desc : "Your cafe looks great."}</p>
+            <p>${task ? "Need: " + task.cost + " 🪙" : ""}</p>
+            <button class="orange-btn" onclick="closeSheet(); openRenovation();">Open Renovation</button>
+          </div>
+          <div class="panel-card">
+            <h3>Cafe Progress</h3>
+            <p>Level: ${cafeLevel}</p>
+            <p>Tasks: ${completedTasks % 3}/3</p>
+          </div>
+        `;
+      }
+
+      if (type === "gift") {
+        title.textContent = "🎁 Gift";
+        content.innerHTML = `
+          <div class="panel-card">
+            <h3>Gift Box</h3>
+            <p>${giftReady ? "Gift ready! Claim +8 energy." : "Serve " + giftProgress + "/3 customers to unlock."}</p>
+            <button class="green-btn" onclick="claimGift(); openSheet('gift')" ${giftReady ? "" : "disabled"}>
+              ${giftReady ? "Claim +8 ⚡" : "Locked"}
+            </button>
+          </div>
+
+          <div class="panel-card">
+            <h3>Recycle</h3>
+            <p>Select an item on the board. Recycle it for energy.</p>
+            <button class="green-btn" onclick="recycleSelected(); openSheet('gift')">Recycle Selected Item</button>
+          </div>
+
+          <div class="panel-card">
+            <h3>Energy Boost</h3>
+            <p>Watch a short ad break to get +15 energy.</p>
+            <button class="blue-btn" onclick="watchAd(); openSheet('gift')" ${adCooldown ? "disabled" : ""}>
+              ${adCooldown ? "Available in " + adCooldownSeconds + "s" : "Watch Ad +15 ⚡"}
+            </button>
+          </div>
+        `;
+      }
+
+      if (type === "shop") {
+        title.textContent = "🛒 Shop";
+        content.innerHTML = `
+          <div class="panel-card">
+            <h3>Drink Machine</h3>
+            <p>Level: ${drinkMachineLevel}</p>
+            <p>${drinkMachineLevel >= 4 ? "Max Level" : "Cost: " + upgradeCost("drink") + " 🔧"}</p>
+            <button class="blue-btn" onclick="upgradeMachine('drink'); openSheet('shop')" ${drinkMachineLevel >= 4 ? "disabled" : ""}>
+              ${drinkMachineLevel >= 4 ? "Max Level" : "Upgrade Drink"}
+            </button>
+          </div>
+
+          <div class="panel-card">
+            <h3>Dessert Machine</h3>
+            <p>Level: ${dessertMachineLevel}</p>
+            <p>${dessertMachineLevel >= 4 ? "Max Level" : "Cost: " + upgradeCost("dessert") + " 🔧"}</p>
+            <button class="orange-btn" onclick="upgradeMachine('dessert'); openSheet('shop')" ${dessertMachineLevel >= 4 ? "disabled" : ""}>
+              ${dessertMachineLevel >= 4 ? "Max Level" : "Upgrade Dessert"}
+            </button>
+          </div>
+        `;
+      }
+
+      sheet.classList.add("show");
+    }
+
+    function closeSheet() {
+      document.getElementById("sheet").classList.remove("show");
     }
 
     function claimGift() {
-      if (!giftReady) {
-        message.textContent = "Gift is not ready yet.";
-        playSound("error");
-        return;
-      }
-
+      if (!giftReady) return;
       energy = Math.min(maxEnergy, energy + 8);
       giftProgress = 0;
       giftReady = false;
-
-      message.textContent = "Gift claimed! +8 ⚡";
+      setMsg("Gift claimed! +8 ⚡");
       playSound("upgrade");
-
-      updateGiftBox();
-      updateStats();
-      createBoard();
+      updateAll();
     }
 
-    function recycleSelectedItem() {
-      if (selectedIndex === null || board[selectedIndex] === null) {
-        message.textContent = "Select an item first, then recycle it.";
+    function recycleSelected() {
+      if (selectedIndex === null || !board[selectedIndex]) {
+        setMsg("Select an item first.");
         playSound("error");
         return;
       }
 
-      const cellItem = board[selectedIndex];
-      const itemLevel = items[cellItem.item].level;
-      const energyGain = Math.min(6, itemLevel + (cellItem.lucky ? 1 : 0));
-
+      const obj = board[selectedIndex];
+      const gain = Math.min(6, items[obj.item].level + (obj.lucky ? 1 : 0));
       board[selectedIndex] = null;
       selectedIndex = null;
-      energy = Math.min(maxEnergy, energy + energyGain);
+      energy = Math.min(maxEnergy, energy + gain);
 
-      message.textContent = "Item recycled! +" + energyGain + " ⚡";
+      setMsg("Recycled! +" + gain + " ⚡");
       playSound("upgrade");
-
-      updateStats();
-      createBoard();
+      updateAll();
     }
 
-    function createTaskSummary() {
-      const task = cafeTasks[completedTasks];
+    function watchAd() {
+      if (adCooldown) return;
 
-      if (!task) {
-        taskSummaryBox.innerHTML = `
-          <div class="task-card">
-            <div class="task-title">All renovation tasks completed ✅</div>
-            <div class="task-cost">Your cafe looks amazing.</div>
-          </div>
-        `;
+      let seconds = 5;
+      setMsg("Ad break... 5s");
+      adCooldown = true;
+
+      const countdown = setInterval(() => {
+        seconds--;
+        setMsg("Ad break... " + seconds + "s");
+
+        if (seconds <= 0) {
+          clearInterval(countdown);
+          energy = Math.min(maxEnergy, energy + 15);
+          setMsg("Ad reward! +15 ⚡");
+          playSound("upgrade");
+          startAdCooldown();
+          updateAll();
+        }
+      }, 1000);
+    }
+
+    function startAdCooldown() {
+      adCooldownSeconds = 60;
+      if (adTimer) clearInterval(adTimer);
+
+      adTimer = setInterval(() => {
+        adCooldownSeconds--;
+        if (adCooldownSeconds <= 0) {
+          clearInterval(adTimer);
+          adCooldown = false;
+        }
+      }, 1000);
+    }
+
+    function upgradeMachine(type) {
+      const lvl = type === "drink" ? drinkMachineLevel : dessertMachineLevel;
+
+      if (lvl >= 4) {
+        setMsg("Machine already max.");
         return;
       }
 
-      taskSummaryBox.innerHTML = `
-        <div class="task-card">
-          <div class="task-title">${completedTasks + 1}. ${task.title}</div>
-          <div class="task-cost">Cost: ${task.cost} 🪙</div>
-          <div class="task-cost">Reward: ${task.rewardEnergy > 0 ? "+" + task.rewardEnergy + " ⚡" : "Cafe improvement"}</div>
-        </div>
-      `;
+      const cost = upgradeCost(type);
+
+      if (parts < cost) {
+        setMsg("Need " + cost + " 🔧.");
+        playSound("error");
+        return;
+      }
+
+      parts -= cost;
+
+      if (type === "drink") drinkMachineLevel++;
+      else dessertMachineLevel++;
+
+      energy = Math.min(maxEnergy, energy + 10);
+      setMsg("Machine upgraded! +10 ⚡");
+      playSound("upgrade");
+      updateAll();
+    }
+
+    function upgradeCost(type) {
+      const lvl = type === "drink" ? drinkMachineLevel : dessertMachineLevel;
+      return lvl === 1 ? 3 : lvl === 2 ? 6 : lvl === 3 ? 10 : 999;
     }
 
     function openRenovation() {
-      renovationModal.style.display = "flex";
-      renderCafeScene();
-      renderRenovationTask();
+      document.getElementById("renovationModal").classList.add("show");
+      renderCafe();
+      renderTask();
     }
 
     function closeRenovation() {
-      renovationModal.style.display = "none";
+      document.getElementById("renovationModal").classList.remove("show");
     }
 
-    function renderCafeScene() {
-      cafeScene.classList.toggle("chairs-visible", cafeState.chairs !== null);
-      cafeScene.classList.toggle("display-visible", cafeState.display);
-      cafeScene.classList.toggle("decor-visible", cafeState.decor !== null);
-      cafeScene.classList.toggle("plant-visible", cafeState.plant);
+    function renderCafe() {
+      const scene = document.getElementById("cafeScene");
+      scene.classList.toggle("display-visible", cafeState.display);
+      scene.classList.toggle("chairs-visible", cafeState.chairs !== null);
+      scene.classList.toggle("decor-visible", cafeState.decor !== null);
+      scene.classList.toggle("plant-visible", cafeState.plant);
 
-      document.getElementById("counter").classList.toggle("clean", cafeState.counterClean);
-      document.getElementById("cafeSign").classList.toggle("fixed", cafeState.signFixed);
+      document.getElementById("counter").classList.toggle("clean", cafeState.clean);
+      document.getElementById("cafeSign").classList.toggle("fixed", cafeState.sign);
 
-      document.getElementById("stain1").style.display = cafeState.counterClean || cleanStains[1] ? "none" : "block";
-      document.getElementById("stain2").style.display = cafeState.counterClean || cleanStains[2] ? "none" : "block";
-      document.getElementById("stain3").style.display = cafeState.counterClean || cleanStains[3] ? "none" : "block";
+      document.getElementById("stain1").style.display = cafeState.clean || cleanStains[1] ? "none" : "block";
+      document.getElementById("stain2").style.display = cafeState.clean || cleanStains[2] ? "none" : "block";
+      document.getElementById("stain3").style.display = cafeState.clean || cleanStains[3] ? "none" : "block";
 
-      const chairs = [
-        document.getElementById("chair1"),
-        document.getElementById("chair2"),
-        document.getElementById("chair3")
-      ];
-
-      chairs.forEach(chair => {
-        chair.classList.remove("wood", "blue", "pink");
-        if (cafeState.chairs) chair.classList.add(cafeState.chairs);
+      ["chair1", "chair2", "chair3"].forEach(id => {
+        const el = document.getElementById(id);
+        el.className = el.className.replace(/\bwood\b|\bblue\b|\bpink\b/g, "");
+        if (cafeState.chairs) el.classList.add(cafeState.chairs);
       });
 
-      const wallDecor = document.getElementById("wallDecor");
-      if (cafeState.decor === "art") wallDecor.textContent = "🖼️";
-      else if (cafeState.decor === "clock") wallDecor.textContent = "🕒";
-      else if (cafeState.decor === "heart") wallDecor.textContent = "💖";
-      else wallDecor.textContent = "🖼️";
+      const decor = document.getElementById("wallDecor");
+      decor.textContent = cafeState.decor === "clock" ? "🕒" : cafeState.decor === "heart" ? "💖" : "🖼️";
     }
 
-    function renderRenovationTask() {
+    function renderTask() {
       const task = cafeTasks[completedTasks];
 
       if (!task) {
-        renovationTaskTitle.textContent = "All Tasks Completed ✅";
-        renovationTaskDescription.textContent = "Your cafe has been renovated beautifully.";
-        renovationRequirements.textContent = "No more tasks.";
-        renovationActionArea.innerHTML = "Enjoy your living cafe!";
+        document.getElementById("taskTitle").textContent = "All tasks completed ✅";
+        document.getElementById("taskDesc").textContent = "Your cafe looks amazing.";
+        document.getElementById("taskReq").textContent = "";
+        document.getElementById("taskAction").innerHTML = "";
         return;
       }
 
-      renovationTaskTitle.textContent = task.title;
-      renovationTaskDescription.textContent = task.description;
+      document.getElementById("taskTitle").textContent = task.title;
+      document.getElementById("taskDesc").textContent = task.desc;
 
-      let requirementText = "Need: " + task.cost + " 🪙";
+      let req = "Need: " + task.cost + " 🪙";
+      if (task.itemRequired !== undefined) req += " + " + items[task.itemRequired].emoji + " " + items[task.itemRequired].name;
+      req += " | Reward: " + (task.energy ? "+" + task.energy + " ⚡" : "Cafe upgrade");
 
-      if (task.itemRequired !== undefined) {
-        requirementText += " + " + items[task.itemRequired].emoji + " " + items[task.itemRequired].name;
+      document.getElementById("taskReq").textContent = req;
+
+      const action = document.getElementById("taskAction");
+
+      if (task.type === "clean") {
+        action.innerHTML = `<p>Tap the stains directly on the counter.</p>`;
       }
 
-      requirementText += " | Reward: " + (task.rewardEnergy > 0 ? "+" + task.rewardEnergy + " ⚡" : "Cafe improvement");
+      if (task.type === "repair") {
+        action.innerHTML = `
+          <p>Attach sign pieces: ${repairClicks}/3</p>
+          <button class="orange-btn" onclick="repairStep()">Attach Piece</button>
+        `;
+      }
 
-      renovationRequirements.textContent = requirementText;
+      if (task.type === "chairs") {
+        action.innerHTML = `
+          <p>Choose chair style.</p>
+          <div class="choice-row">
+            <div class="choice" onclick="chooseChair('wood')"><div>🪑</div>Wood</div>
+            <div class="choice" onclick="chooseChair('blue')"><div>🔵</div>Blue</div>
+            <div class="choice" onclick="chooseChair('pink')"><div>🌸</div>Pink</div>
+          </div>
+        `;
+      }
 
-      if (task.type === "clean") renderCleanAction(task);
-      else if (task.type === "repair") renderRepairAction(task);
-      else if (task.type === "chooseChairs") renderChairChoices(task);
-      else if (task.type === "itemDisplay") renderItemTask(task);
-      else if (task.type === "chooseDecor") renderDecorChoices(task);
-      else if (task.type === "placePlant") renderPlantAction(task);
+      if (task.type === "item") {
+        action.innerHTML = `<button class="orange-btn" onclick="completeItemTask()">Place Item</button>`;
+      }
+
+      if (task.type === "decor") {
+        action.innerHTML = `
+          <p>Choose decoration.</p>
+          <div class="choice-row">
+            <div class="choice" onclick="chooseDecor('art')"><div>🖼️</div>Art</div>
+            <div class="choice" onclick="chooseDecor('clock')"><div>🕒</div>Clock</div>
+            <div class="choice" onclick="chooseDecor('heart')"><div>💖</div>Cute</div>
+          </div>
+        `;
+      }
+
+      if (task.type === "plant") {
+        action.innerHTML = `
+          <p>Place plant: ${plantSteps}/2</p>
+          <button class="green-btn" onclick="plantStep()">Place Plant</button>
+        `;
+      }
     }
 
     function canPayTask(task) {
       if (coins < task.cost) {
-        message.textContent = "Not enough coins for this renovation task.";
+        setMsg("Not enough coins.");
         playSound("error");
         return false;
       }
 
-      if (task.itemRequired !== undefined && !board.some(cellItem => cellItem && cellItem.item === task.itemRequired)) {
-        message.textContent = "You need " + items[task.itemRequired].emoji + " " + items[task.itemRequired].name + " for this task.";
+      if (task.itemRequired !== undefined && !board.some(x => x && x.item === task.itemRequired)) {
+        setMsg("Need " + items[task.itemRequired].emoji + " " + items[task.itemRequired].name + ".");
         playSound("error");
         return false;
       }
@@ -2084,421 +1578,132 @@
       return true;
     }
 
-    function payTaskCost(task) {
+    function payTask(task) {
       coins -= task.cost;
 
       if (task.itemRequired !== undefined) {
-        const idx = board.findIndex(cellItem => cellItem && cellItem.item === task.itemRequired);
+        const idx = board.findIndex(x => x && x.item === task.itemRequired);
         if (idx !== -1) board[idx] = null;
       }
     }
 
-    function finishTask(extraCallback) {
+    function finishTask(callback) {
       const task = cafeTasks[completedTasks];
-
       if (!canPayTask(task)) return;
 
-      payTaskCost(task);
+      payTask(task);
+      if (callback) callback();
 
-      if (typeof extraCallback === "function") extraCallback(task);
-
-      if (task.rewardEnergy > 0) {
-        energy = Math.min(maxEnergy, energy + task.rewardEnergy);
-      }
+      if (task.energy) energy = Math.min(maxEnergy, energy + task.energy);
 
       completedTasks++;
       repairClicks = 0;
-      chairPlacementClicks = 0;
-      generalActionClicks = 0;
+      chairStyle = null;
+      chairSteps = 0;
+      plantSteps = 0;
 
-      message.textContent = "Renovation completed: " + task.title + "!";
-
+      setMsg("Task completed: " + task.title + "!");
       playSound("upgrade");
-      updateStats();
-      createTaskSummary();
-      createBoard();
-      renderCafeScene();
-      renderRenovationTask();
-      checkCafeLevelUp();
+
+      if (completedTasks > 0 && completedTasks % 3 === 0) {
+        cafeLevel++;
+        setMsg("Cafe Level Up! Level " + cafeLevel);
+      }
+
+      renderCafe();
+      renderTask();
+      updateAll();
     }
 
-    function renderCleanAction(task) {
-      renovationActionArea.innerHTML = `
-        <div>Tap the stains directly on the cafe counter.</div>
-        <div class="mini-progress">Cleaned stains: ${Object.values(cleanStains).filter(Boolean).length}/3</div>
-      `;
-    }
-
-    function cleanStain(number) {
+    function cleanStain(num) {
       const task = cafeTasks[completedTasks];
-
       if (!task || task.type !== "clean") {
-        message.textContent = "This stain is not part of the current task yet.";
+        setMsg("Not the current task.");
         return;
       }
 
       if (!canPayTask(task)) return;
 
-      cleanStains[number] = true;
-      renderCafeScene();
-      renderCleanAction(task);
+      cleanStains[num] = true;
+      renderCafe();
 
-      const cleaned = Object.values(cleanStains).filter(Boolean).length;
-
-      if (cleaned >= 3) {
-        finishTask(() => {
-          cafeState.counterClean = true;
-        });
+      if (Object.values(cleanStains).filter(Boolean).length >= 3) {
+        finishTask(() => cafeState.clean = true);
       }
-    }
-
-    function renderRepairAction(task) {
-      renovationActionArea.innerHTML = `
-        <div>Attach 3 sign pieces to repair the cafe sign.</div>
-        <div class="mini-progress">Repair progress: ${repairClicks}/3</div>
-        <div class="action-row">
-          <button class="small-action-btn" onclick="repairStep()">Piece 1</button>
-          <button class="small-action-btn" onclick="repairStep()">Piece 2</button>
-          <button class="small-action-btn" onclick="repairStep()">Piece 3</button>
-        </div>
-      `;
     }
 
     function repairStep() {
       const task = cafeTasks[completedTasks];
-
       if (!canPayTask(task)) return;
 
       repairClicks++;
-      renovationActionArea.querySelector(".mini-progress").textContent = "Repair progress: " + repairClicks + "/3";
-
-      if (repairClicks >= 3) {
-        finishTask(() => {
-          cafeState.signFixed = true;
-        });
-      }
+      if (repairClicks >= 3) finishTask(() => cafeState.sign = true);
+      else renderTask();
     }
 
-    function renderChairChoices(task) {
-      renovationActionArea.innerHTML = `
-        <div>Choose a chair style, then place 3 chairs.</div>
-        <div class="action-row">
-          <div class="choice-card" onclick="startChairPlacement('wood')">
-            <div class="choice-icon">🪑</div>
-            Wood
-          </div>
-          <div class="choice-card" onclick="startChairPlacement('blue')">
-            <div class="choice-icon">🔵</div>
-            Blue
-          </div>
-          <div class="choice-card" onclick="startChairPlacement('pink')">
-            <div class="choice-icon">🌸</div>
-            Pink
-          </div>
-        </div>
-      `;
-    }
-
-    function startChairPlacement(style) {
+    function chooseChair(style) {
       const task = cafeTasks[completedTasks];
-
       if (!canPayTask(task)) return;
 
+      chairStyle = style;
       cafeState.chairs = style;
-      chairPlacementClicks = 0;
-      renderCafeScene();
+      renderCafe();
 
-      renovationActionArea.innerHTML = `
-        <div>Place the chairs one by one.</div>
-        <div class="mini-progress">Placed chairs: ${chairPlacementClicks}/3</div>
-        <div class="action-row">
-          <button class="small-action-btn" onclick="placeChairStep()">Place Chair</button>
-        </div>
+      document.getElementById("taskAction").innerHTML = `
+        <p>Place chairs: ${chairSteps}/3</p>
+        <button class="green-btn" onclick="placeChair()">Place Chair</button>
       `;
     }
 
-    function placeChairStep() {
-      const task = cafeTasks[completedTasks];
-
-      chairPlacementClicks++;
-      renovationActionArea.querySelector(".mini-progress").textContent = "Placed chairs: " + chairPlacementClicks + "/3";
-
-      if (chairPlacementClicks >= 3) {
-        finishTask(() => {});
+    function placeChair() {
+      chairSteps++;
+      if (chairSteps >= 3) finishTask(() => {});
+      else {
+        document.getElementById("taskAction").innerHTML = `
+          <p>Place chairs: ${chairSteps}/3</p>
+          <button class="green-btn" onclick="placeChair()">Place Chair</button>
+        `;
       }
-    }
-
-    function renderItemTask(task) {
-      renovationActionArea.innerHTML = `
-        <div>This task needs a board item.</div>
-        <div class="mini-progress">
-          Required item: ${items[task.itemRequired].emoji} ${items[task.itemRequired].name}
-        </div>
-        <div class="action-row">
-          <button class="small-action-btn" onclick="completeItemTask()">Place Item</button>
-        </div>
-      `;
     }
 
     function completeItemTask() {
       const task = cafeTasks[completedTasks];
-
       finishTask(() => {
-        if (task.title.includes("Dessert Display")) cafeState.display = true;
+        if (task.title.includes("Dessert")) cafeState.display = true;
       });
-    }
-
-    function renderDecorChoices(task) {
-      renovationActionArea.innerHTML = `
-        <div>Choose a wall decoration.</div>
-        <div class="action-row">
-          <div class="choice-card" onclick="chooseDecor('art')">
-            <div class="choice-icon">🖼️</div>
-            Art
-          </div>
-          <div class="choice-card" onclick="chooseDecor('clock')">
-            <div class="choice-icon">🕒</div>
-            Clock
-          </div>
-          <div class="choice-card" onclick="chooseDecor('heart')">
-            <div class="choice-icon">💖</div>
-            Cute
-          </div>
-        </div>
-      `;
     }
 
     function chooseDecor(style) {
-      finishTask(() => {
-        cafeState.decor = style;
-      });
-    }
-
-    function renderPlantAction(task) {
-      renovationActionArea.innerHTML = `
-        <div>Place the plant near the window.</div>
-        <div class="mini-progress">Placement: ${generalActionClicks}/2</div>
-        <div class="action-row">
-          <button class="small-action-btn" onclick="plantStep()">🪴 Place</button>
-        </div>
-      `;
+      finishTask(() => cafeState.decor = style);
     }
 
     function plantStep() {
       const task = cafeTasks[completedTasks];
-
       if (!canPayTask(task)) return;
 
-      generalActionClicks++;
-      renovationActionArea.querySelector(".mini-progress").textContent = "Placement: " + generalActionClicks + "/2";
-
-      if (generalActionClicks >= 2) {
-        finishTask(() => {
-          cafeState.plant = true;
-        });
-      }
+      plantSteps++;
+      if (plantSteps >= 2) finishTask(() => cafeState.plant = true);
+      else renderTask();
     }
 
-    function checkCafeLevelUp() {
-      if (completedTasks > 0 && completedTasks % 3 === 0) {
-        levelUpText.textContent = "You completed 3 renovation tasks. Cafe Level " + (cafeLevel + 1) + " unlocked!";
-        levelUpModal.style.display = "flex";
-      }
-    }
+    function updateAll() {
+      document.getElementById("coinsText").textContent = "🪙 " + coins;
+      document.getElementById("partsText").textContent = "🔧 " + parts;
+      document.getElementById("energyText").textContent = "⚡ " + energy + "/" + maxEnergy;
 
-    function nextCafeLevel() {
-      cafeLevel++;
-      levelUpModal.style.display = "none";
-      message.textContent = "Cafe Level " + cafeLevel + " started! New orders may appear.";
+      giftReady = giftProgress >= 3;
 
-      updateStats();
-      setupCustomers();
+      createBoard();
       createCustomers();
-      createBoard();
-      createTaskSummary();
-    }
-
-    function upgradeMachine(type) {
-      const currentLevel = getMachineLevel(type);
-      const cost = getUpgradeCost(type);
-
-      if (currentLevel >= 4) {
-        message.textContent = type === "drink"
-          ? "Drink Machine is already max level."
-          : "Dessert Machine is already max level.";
-        return;
-      }
-
-      if (parts < cost) {
-        message.textContent = "Not enough parts. Need " + cost + " 🔧.";
-        playSound("error");
-        return;
-      }
-
-      parts -= cost;
-
-      if (type === "drink") {
-        drinkMachineLevel++;
-        message.textContent = "Drink Machine upgraded to Level " + drinkMachineLevel + "! +10 ⚡";
-        upgradeMessage.textContent = "Drink Machine upgraded to Level " + drinkMachineLevel + ". +10 energy added.";
-      } else {
-        dessertMachineLevel++;
-        message.textContent = "Dessert Machine upgraded to Level " + dessertMachineLevel + "! +10 ⚡";
-        upgradeMessage.textContent = "Dessert Machine upgraded to Level " + dessertMachineLevel + ". +10 energy added.";
-      }
-
-      energy = Math.min(maxEnergy, energy + 10);
-
-      upgradeMessage.classList.add("show");
-
-      setTimeout(() => {
-        upgradeMessage.classList.remove("show");
-      }, 2500);
-
-      playSound("upgrade");
-      updateStats();
-      createBoard();
-    }
-
-    function getUpgradeCost(type) {
-      const level = getMachineLevel(type);
-      if (level === 1) return 3;
-      if (level === 2) return 6;
-      if (level === 3) return 10;
-      return 999;
-    }
-
-    function watchAdForEnergy() {
-      if (adCooldown) {
-        message.textContent = "Energy ad is on cooldown. Please wait " + adCooldownSeconds + "s.";
-        playSound("error");
-        return;
-      }
-
-      adEnergyBtn.disabled = true;
-      adEnergyBtn.textContent = "Watching Ad... 5s";
-      message.textContent = "Ad break started. Please wait 5 seconds...";
-
-      let adSeconds = 5;
-
-      const adCountdown = setInterval(() => {
-        adSeconds--;
-        adEnergyBtn.textContent = "Watching Ad... " + adSeconds + "s";
-
-        if (adSeconds <= 0) {
-          clearInterval(adCountdown);
-
-          energy = Math.min(maxEnergy, energy + 15);
-
-          message.textContent = "Ad reward received! +15 ⚡";
-          adMessage.textContent = "Ad completed! +15 energy added.";
-          adMessage.classList.add("show");
-
-          setTimeout(() => {
-            adMessage.classList.remove("show");
-          }, 2500);
-
-          playSound("upgrade");
-          updateStats();
-          startAdCooldown();
-        }
-      }, 1000);
-    }
-
-    function startAdCooldown() {
-      adCooldown = true;
-      adCooldownSeconds = 60;
-
-      adEnergyBtn.disabled = true;
-      adEnergyBtn.textContent = "Available in " + adCooldownSeconds + "s";
-
-      adTimer = setInterval(() => {
-        adCooldownSeconds--;
-        adEnergyBtn.textContent = "Available in " + adCooldownSeconds + "s";
-
-        if (adCooldownSeconds <= 0) {
-          clearInterval(adTimer);
-          adCooldown = false;
-          adEnergyBtn.disabled = false;
-          adEnergyBtn.textContent = "Watch Ad +15 ⚡";
-        }
-      }, 1000);
-    }
-
-    function updateStats() {
-      coinsText.textContent = "🪙 " + coins;
-      partsText.textContent = "🔧 " + parts;
-      energyText.textContent = "⚡ " + energy + "/" + maxEnergy;
-      cafeLevelText.textContent = cafeLevel;
-
-      progressText.textContent = "Cafe Tasks: " + (completedTasks % 3) + " / 3";
-      progressLevelText.textContent = "Level " + cafeLevel;
-
-      const percent = ((completedTasks % 3) / 3) * 100;
-      taskProgress.style.width = percent + "%";
-
-      if (drinkMachineLevel >= 4) {
-        drinkUpgradeBtn.textContent = "Drink Machine Max";
-      } else {
-        drinkUpgradeBtn.textContent = "Upgrade Drink - " + getUpgradeCost("drink") + " 🔧";
-      }
-
-      if (dessertMachineLevel >= 4) {
-        dessertUpgradeBtn.textContent = "Dessert Machine Max";
-      } else {
-        dessertUpgradeBtn.textContent = "Upgrade Dessert - " + getUpgradeCost("dessert") + " 🔧";
-      }
-
-      updateGiftBox();
-    }
-
-    function openMachineInfo() {
-      createMachineLevelInfo();
-      infoModal.style.display = "flex";
-    }
-
-    function closeMachineInfo() {
-      infoModal.style.display = "none";
-    }
-
-    function createMachineLevelInfo() {
-      const data = [
-        {
-          title: "Drink Machine",
-          level: drinkMachineLevel,
-          text: "Creates drink items: 🫘 Bean → ☕ Coffee → 🥤 Latte → 🍹 Fancy Drink."
-        },
-        {
-          title: "Dessert Machine",
-          level: dessertMachineLevel,
-          text: "Creates dessert items: 🍪 Cookie → 🧁 Cupcake → 🍰 Cake → 🎂 Special Cake."
-        }
-      ];
-
-      machineLevels.innerHTML = "";
-
-      data.forEach(machine => {
-        const div = document.createElement("div");
-        div.classList.add("machine-level-card");
-
-        div.innerHTML = `
-          <b>${machine.title} - Level ${machine.level}</b><br>
-          ${machine.text}
-        `;
-
-        machineLevels.appendChild(div);
-      });
     }
 
     setupCustomers();
-    updateStats();
-    createTaskSummary();
-    createCustomers();
-    createBoard();
+    updateAll();
 
     generateItem("drink");
     generateItem("dessert");
     generateItem("drink");
+    setMsg("Merge matching items to serve customers!");
   </script>
 </body>
 </html>
