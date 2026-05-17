@@ -518,7 +518,7 @@
     .renovation-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.42);
+      background: rgba(0,0,0,0.48);
       display: none;
       justify-content: center;
       align-items: center;
@@ -554,9 +554,9 @@
 
     .cafe-scene {
       height: 350px;
-      background:
-        linear-gradient(rgba(255,246,232,0.80), rgba(255,226,199,0.88)),
-        radial-gradient(circle at 80% 18%, rgba(121,199,232,0.25), transparent 22%);
+      background-image: url("assets/renovation/cafe_bg.png");
+      background-size: cover;
+      background-position: center center;
       border: 3px solid #d69456;
       border-radius: 24px;
       position: relative;
@@ -565,333 +565,163 @@
       margin-bottom: 12px;
     }
 
-    .wall {
+    .scene-darken {
       position: absolute;
-      inset: 0 0 84px;
-      background:
-        radial-gradient(circle at 12% 12%, rgba(76,175,122,0.2), transparent 15%),
-        radial-gradient(circle at 90% 10%, rgba(121,199,232,0.2), transparent 19%);
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.06));
+      pointer-events: none;
     }
 
-    .floor {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 88px;
-      background: repeating-linear-gradient(90deg, #c9824a, #c9824a 34px, #a96538 34px, #a96538 68px);
-      opacity: 0.82;
-    }
-
-    .window {
-      position: absolute;
-      right: 18px;
-      top: 36px;
-      width: 82px;
-      height: 82px;
-      border: 5px solid #9a552b;
-      border-radius: 12px;
-      background: linear-gradient(180deg, #9bd6ff, #e9f8ff);
-      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.5);
-    }
-
-    .window::before,
-    .window::after {
-      content: "";
-      position: absolute;
-      background: #9a552b;
-    }
-
-    .window::before {
-      width: 5px;
-      height: 100%;
-      left: 50%;
-      top: 0;
-      transform: translateX(-50%);
-    }
-
-    .window::after {
-      height: 5px;
-      width: 100%;
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-    }
-
-    .lamp {
-      position: absolute;
-      left: 50%;
-      top: 8px;
-      width: 4px;
-      height: 50px;
-      background: #5a3825;
-    }
-
-    .lamp::after {
-      content: "";
-      position: absolute;
-      top: 45px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 46px;
-      height: 24px;
-      background: #2f2b27;
-      border-radius: 28px 28px 8px 8px;
-      box-shadow: 0 10px 25px rgba(255,184,77,0.8);
-    }
-
-    .lamp-glow {
-      position: absolute;
-      left: 50%;
-      top: 58px;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,211,110,0.45), transparent 70%);
-      animation: glowPulse 2s infinite ease-in-out;
-    }
-
-    @keyframes glowPulse {
-      0%,100% { opacity: 0.65; }
-      50% { opacity: 1; }
-    }
-
-    .cafe-sign {
-      position: absolute;
-      top: 24px;
-      left: 22px;
-      background: #402a1c;
-      color: #fff7d7;
-      border: 4px solid #9a552b;
-      border-radius: 10px;
-      width: 118px;
-      height: 78px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-weight: 900;
-      line-height: 1.2;
-      font-size: 14px;
-    }
-
-    .cafe-sign.fixed {
-      background: #2f1d12;
-      border-color: #ffb24a;
-      box-shadow: 0 0 18px rgba(255,178,74,0.8);
-    }
-
-    .counter {
-      position: absolute;
-      left: 22px;
-      bottom: 86px;
-      width: 190px;
-      height: 78px;
-      background: linear-gradient(180deg, #c78d64, #8c5634);
-      border: 4px solid #5a3825;
-      border-radius: 16px 16px 8px 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 900;
-    }
-
-    .counter.clean {
-      box-shadow: 0 0 18px rgba(255,255,255,0.85);
-      filter: brightness(1.08);
-    }
-
-    .espresso {
-      position: absolute;
-      left: 70px;
-      bottom: 154px;
-      width: 78px;
-      height: 56px;
-      background: linear-gradient(180deg, #82c5e0, #397f9d);
-      border: 4px solid #2e5262;
-      border-radius: 12px;
-      z-index: 2;
-    }
-
-    .espresso::after {
-      content: "";
-      position: absolute;
-      right: 8px;
-      bottom: -18px;
-      width: 28px;
-      height: 22px;
-      border-radius: 0 0 12px 12px;
-      background: white;
-      border: 3px solid #5a3825;
-    }
-
-    .display-case {
-      position: absolute;
-      left: 225px;
-      bottom: 94px;
-      width: 112px;
-      height: 70px;
-      background: rgba(255,255,255,0.72);
-      border: 4px solid #7b3f00;
-      border-radius: 16px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      font-size: 23px;
-      box-shadow: 0 0 16px rgba(255,255,255,0.65);
-    }
-
-    .display-visible .display-case { display: flex; }
-
-    .table {
-      position: absolute;
-      right: 34px;
-      bottom: 52px;
-      width: 88px;
-      height: 42px;
-      background: #a96538;
-      border: 4px solid #5a3825;
-      border-radius: 50%;
-      display: none;
-      z-index: 3;
-    }
-
-    .table::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 34px;
-      width: 18px;
-      height: 48px;
-      background: #5a3825;
-      transform: translateX(-50%);
-      border-radius: 9px;
-    }
-
-    .chair-scene {
+    .scene-chair {
       position: absolute;
       display: none;
-      z-index: 2;
-      width: 42px;
-      height: 50px;
-      border-radius: 12px;
-      border: 4px solid #5a3825;
-      background: #8d6e63;
+      width: 72px;
+      height: 72px;
+      background-image: url("assets/renovation/chairs.png");
+      background-repeat: no-repeat;
+      background-size: 300% 100%;
+      filter: drop-shadow(0 7px 6px rgba(0,0,0,0.28));
+      z-index: 5;
     }
 
-    .chair-scene::before {
-      content: "";
-      position: absolute;
-      left: 4px;
-      right: 4px;
-      bottom: -13px;
-      height: 18px;
-      background: inherit;
-      border: 4px solid #5a3825;
-      border-top: none;
-      border-radius: 0 0 12px 12px;
-    }
-
-    .chairs-visible .table,
-    .chairs-visible .chair-scene {
+    .chairs-visible .scene-chair {
       display: block;
     }
 
-    .chair-scene.c1 { right: 60px; bottom: 104px; }
-    .chair-scene.c2 { right: 60px; bottom: 16px; }
-    .chair-scene.c3 { right: 8px; bottom: 58px; }
+    .scene-chair.wood { background-position: 0% 50%; }
+    .scene-chair.blue { background-position: 50% 50%; }
+    .scene-chair.pink { background-position: 100% 50%; }
 
-    .chair-scene.wood { background: #a86b3c; }
-    .chair-scene.blue { background: #3f87a8; }
-    .chair-scene.pink { background: #ec8eab; }
-
-    .wall-decor {
-      position: absolute;
-      right: 122px;
-      top: 64px;
-      width: 66px;
-      height: 46px;
-      border-radius: 12px;
-      background: #fffaf4;
-      border: 4px solid #7b3f00;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: 23px;
+    .scene-chair.c1 {
+      right: 64px;
+      bottom: 72px;
+      transform: scale(0.82);
     }
 
-    .decor-visible .wall-decor { display: flex; }
-
-    .plant {
-      position: absolute;
-      left: 250px;
+    .scene-chair.c2 {
+      right: 30px;
       bottom: 30px;
-      width: 42px;
-      height: 54px;
-      display: none;
-      z-index: 4;
-      animation: plantMove 2.4s infinite ease-in-out;
+      transform: scale(0.72);
     }
 
-    .plant::before {
-      content: "";
+    .scene-chair.c3 {
+      right: 104px;
+      bottom: 30px;
+      transform: scale(0.68);
+    }
+
+    .scene-stain {
       position: absolute;
-      left: 11px;
-      bottom: 0;
-      width: 22px;
-      height: 22px;
-      background: #a96538;
-      border: 3px solid #5a3825;
-      border-radius: 4px 4px 10px 10px;
-    }
-
-    .plant::after {
-      content: "🌿";
-      position: absolute;
-      left: -4px;
-      bottom: 14px;
-      font-size: 42px;
-    }
-
-    .plant-visible .plant { display: block; }
-
-    @keyframes plantMove {
-      0%,100% { transform: rotate(-2deg); }
-      50% { transform: rotate(2deg); }
-    }
-
-    .stain {
-      position: absolute;
-      width: 46px;
-      height: 25px;
-      background:
-        radial-gradient(circle at 30% 40%, rgba(80,42,20,0.78), transparent 35%),
-        radial-gradient(circle at 62% 50%, rgba(90,45,22,0.68), transparent 45%),
-        rgba(92,45,20,0.48);
-      border-radius: 60% 40% 55% 45%;
-      border: 2px solid rgba(255,255,255,0.3);
-      box-shadow: 0 2px 5px rgba(90,56,37,0.2);
+      width: 76px;
+      height: 48px;
+      background-image: url("assets/renovation/stains.png");
+      background-repeat: no-repeat;
+      background-size: 300% 200%;
+      filter: drop-shadow(0 0 8px rgba(255,183,3,0.9));
       cursor: pointer;
-      z-index: 5;
+      z-index: 8;
       animation: stainPulse 1.8s infinite ease-in-out;
     }
 
-    .stain.cleanable {
-      outline: 3px solid rgba(255,183,3,0.75);
-      box-shadow: 0 0 18px rgba(255,183,3,0.8);
+    .scene-stain.cleanable {
+      outline: 3px solid rgba(255,183,3,0.85);
+      border-radius: 50%;
+    }
+
+    .stain1 {
+      left: 90px;
+      top: 178px;
+      background-position: 0% 0%;
+      transform: rotate(-8deg) scale(0.75);
+    }
+
+    .stain2 {
+      left: 154px;
+      top: 192px;
+      background-position: 50% 0%;
+      transform: rotate(6deg) scale(0.72);
+    }
+
+    .stain3 {
+      left: 220px;
+      top: 164px;
+      background-position: 100% 0%;
+      transform: rotate(-4deg) scale(0.72);
     }
 
     @keyframes stainPulse {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      0%,100% { opacity: 0.9; }
+      50% { opacity: 1; filter: drop-shadow(0 0 15px rgba(255,183,3,1)); }
     }
 
-    .stain.s1 { left: 40px; bottom: 142px; transform: rotate(-8deg); }
-    .stain.s2 { left: 122px; bottom: 112px; transform: rotate(8deg); }
-    .stain.s3 { left: 160px; bottom: 152px; transform: rotate(-3deg); }
+    .scene-hotspot {
+      position: absolute;
+      border: 3px dashed rgba(255,255,255,0.85);
+      border-radius: 18px;
+      box-shadow: 0 0 15px rgba(255,183,3,0.8);
+      display: none;
+      z-index: 7;
+      pointer-events: none;
+    }
+
+    .chairs-task .chair-zone {
+      display: block;
+    }
+
+    .chair-zone {
+      right: 36px;
+      bottom: 28px;
+      width: 150px;
+      height: 110px;
+    }
+
+    .sign-fixed-badge,
+    .display-badge,
+    .decor-badge,
+    .plant-badge {
+      position: absolute;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.82);
+      border: 3px solid #ffb24a;
+      box-shadow: 0 0 18px rgba(255,183,3,0.75);
+      z-index: 9;
+    }
+
+    .sign-fixed .sign-fixed-badge {
+      display: flex;
+      left: 74px;
+      top: 24px;
+      width: 48px;
+      height: 48px;
+    }
+
+    .display-visible .display-badge {
+      display: flex;
+      left: 22px;
+      top: 146px;
+      width: 48px;
+      height: 48px;
+    }
+
+    .decor-visible .decor-badge {
+      display: flex;
+      left: 202px;
+      top: 38px;
+      width: 48px;
+      height: 48px;
+    }
+
+    .plant-visible .plant-badge {
+      display: flex;
+      right: 118px;
+      top: 108px;
+      width: 48px;
+      height: 48px;
+    }
 
     .task-box {
       background: white;
@@ -929,6 +759,7 @@
       font-weight: 900;
       cursor: pointer;
       position: relative;
+      box-shadow: 0 4px 9px rgba(90,56,37,0.08);
     }
 
     .choice.selected {
@@ -937,41 +768,18 @@
     }
 
     .chair-preview {
-      height: 70px;
-      width: 54px;
+      height: 76px;
+      width: 76px;
       margin: 0 auto 7px;
-      border: 4px solid #5a3825;
-      border-radius: 14px 14px 10px 10px;
-      position: relative;
+      background-image: url("assets/renovation/chairs.png");
+      background-repeat: no-repeat;
+      background-size: 300% 100%;
+      filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
     }
 
-    .chair-preview::before {
-      content: "";
-      position: absolute;
-      left: 6px;
-      right: 6px;
-      bottom: -19px;
-      height: 24px;
-      border: 4px solid #5a3825;
-      border-top: none;
-      border-radius: 0 0 12px 12px;
-      background: inherit;
-    }
-
-    .chair-preview::after {
-      content: "";
-      position: absolute;
-      left: 9px;
-      right: 9px;
-      top: 12px;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.35);
-    }
-
-    .chair-wood { background: linear-gradient(180deg, #b97741, #8e512c); }
-    .chair-blue { background: linear-gradient(180deg, #6bb5d6, #3f87a8); }
-    .chair-pink { background: linear-gradient(180deg, #ffb6c8, #e6789a); }
+    .chair-wood { background-position: 0% 50%; }
+    .chair-blue { background-position: 50% 50%; }
+    .chair-pink { background-position: 100% 50%; }
 
     .choice small {
       display: block;
@@ -1048,24 +856,22 @@
       </div>
 
       <div class="cafe-scene" id="cafeScene">
-        <div class="wall"></div>
-        <div class="window"></div>
-        <div class="lamp"></div>
-        <div class="lamp-glow"></div>
-        <div class="cafe-sign" id="cafeSign">GOOD<br>COFFEE</div>
-        <div class="wall-decor" id="wallDecor">♡</div>
-        <div class="counter" id="counter">Counter</div>
-        <div class="espresso"></div>
-        <div class="display-case">🧁 🍰</div>
-        <div class="table"></div>
-        <div class="chair-scene c1" id="chair1"></div>
-        <div class="chair-scene c2" id="chair2"></div>
-        <div class="chair-scene c3" id="chair3"></div>
-        <div class="plant"></div>
-        <div class="stain s1" id="stain1" onclick="cleanStain(1)"></div>
-        <div class="stain s2" id="stain2" onclick="cleanStain(2)"></div>
-        <div class="stain s3" id="stain3" onclick="cleanStain(3)"></div>
-        <div class="floor"></div>
+        <div class="scene-darken"></div>
+
+        <div class="scene-hotspot chair-zone"></div>
+
+        <div class="scene-stain stain1" id="stain1" onclick="cleanStain(1)"></div>
+        <div class="scene-stain stain2" id="stain2" onclick="cleanStain(2)"></div>
+        <div class="scene-stain stain3" id="stain3" onclick="cleanStain(3)"></div>
+
+        <div class="scene-chair c1" id="chair1"></div>
+        <div class="scene-chair c2" id="chair2"></div>
+        <div class="scene-chair c3" id="chair3"></div>
+
+        <div class="sign-fixed-badge">✨</div>
+        <div class="display-badge">🧁</div>
+        <div class="decor-badge">🖼️</div>
+        <div class="plant-badge">🪴</div>
       </div>
 
       <div class="task-box">
@@ -1709,12 +1515,13 @@
       scene.classList.toggle("chairs-visible", cafeState.chairs !== null);
       scene.classList.toggle("decor-visible", cafeState.decor !== null);
       scene.classList.toggle("plant-visible", cafeState.plant);
-
-      document.getElementById("counter").classList.toggle("clean", cafeState.clean);
-      document.getElementById("cafeSign").classList.toggle("fixed", cafeState.sign);
+      scene.classList.toggle("sign-fixed", cafeState.sign);
 
       const task = cafeTasks[completedTasks];
       const isCleanTask = task && task.type === "clean";
+      const isChairTask = task && task.type === "chairs";
+
+      scene.classList.toggle("chairs-task", isChairTask);
 
       [1, 2, 3].forEach(num => {
         const stain = document.getElementById("stain" + num);
@@ -1726,18 +1533,10 @@
       ["chair1", "chair2", "chair3"].forEach(id => {
         const el = document.getElementById(id);
 
-        el.className = el.className
-          .replace(/\bwood\b|\bblue\b|\bpink\b/g, "")
-          .trim();
+        el.classList.remove("wood", "blue", "pink");
 
         if (cafeState.chairs) el.classList.add(cafeState.chairs);
       });
-
-      const decor = document.getElementById("wallDecor");
-
-      if (cafeState.decor === "clock") decor.textContent = "◷";
-      else if (cafeState.decor === "heart") decor.textContent = "♡";
-      else decor.textContent = "▧";
     }
 
     function renderTask() {
@@ -1808,8 +1607,8 @@
         action.innerHTML = `
           <p>Choose a wall decoration:</p>
           <div class="choice-row">
-            <div class="choice" onclick="chooseDecor('art')">▧<br>Art</div>
-            <div class="choice" onclick="chooseDecor('clock')">◷<br>Clock</div>
+            <div class="choice" onclick="chooseDecor('art')">🖼️<br>Art</div>
+            <div class="choice" onclick="chooseDecor('clock')">🕒<br>Clock</div>
             <div class="choice" onclick="chooseDecor('heart')">♡<br>Heart</div>
           </div>
         `;
