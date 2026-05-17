@@ -25,7 +25,7 @@
     }
 
     .game-container {
-      width: 1180px;
+      width: 1200px;
       max-width: 96%;
       background: rgba(255, 250, 244, 0.96);
       border-radius: 28px;
@@ -120,7 +120,7 @@
       border-radius: 16px;
       padding: 12px;
       transition: 0.2s;
-      min-height: 145px;
+      min-height: 148px;
     }
 
     .customer-card.new-customer {
@@ -315,10 +315,6 @@
       filter: grayscale(0.4);
     }
 
-    .machine:active {
-      animation: machineShake 0.25s ease;
-    }
-
     .machine.level-2 {
       border-color: #ffd166;
       box-shadow: 0 0 16px rgba(255, 209, 102, 0.7);
@@ -334,14 +330,6 @@
       box-shadow: 0 0 22px rgba(42, 157, 143, 0.9);
     }
 
-    @keyframes machineShake {
-      0% { transform: rotate(0deg) scale(1); }
-      25% { transform: rotate(-4deg) scale(1.03); }
-      50% { transform: rotate(4deg) scale(1.03); }
-      75% { transform: rotate(-3deg) scale(1.03); }
-      100% { transform: rotate(0deg) scale(1); }
-    }
-
     .item {
       user-select: none;
       cursor: grab;
@@ -354,10 +342,6 @@
     .item:hover {
       transform: scale(1.12) translateY(-2px);
       filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
-    }
-
-    .item:active {
-      cursor: grabbing;
     }
 
     @keyframes itemIdle {
@@ -390,6 +374,48 @@
       0% { transform: scale(0.7); opacity: 0.5; }
       60% { transform: scale(1.18); opacity: 1; }
       100% { transform: scale(1); }
+    }
+
+    .lucky-cell {
+      border: 4px solid #ffb703 !important;
+      box-shadow: 0 0 18px rgba(255, 183, 3, 0.95);
+      background: #fff1c7;
+    }
+
+    .lucky-badge {
+      position: absolute;
+      top: -9px;
+      left: -9px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ffb703;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid white;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+      z-index: 6;
+    }
+
+    .chain-badge {
+      position: absolute;
+      top: -9px;
+      left: 22px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #8338ec;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid white;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+      z-index: 6;
     }
 
     .order-check {
@@ -431,39 +457,8 @@
       left: 0;
     }
 
-    .machine-info-button {
-      display: none;
-      margin: 14px auto 0;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: none;
-      background: #577590;
-      color: white;
-      font-size: 21px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.22);
-      transition: 0.2s;
-    }
-
-    .machine-info-button.show {
-      display: block;
-      animation: infoPop 0.3s ease-out;
-    }
-
-    .machine-info-button:hover {
-      background: #40576b;
-      transform: scale(1.08);
-    }
-
-    @keyframes infoPop {
-      0% { opacity: 0; transform: scale(0.3); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
     .side-panel {
-      width: 375px;
+      width: 385px;
       background: #fff0d6;
       padding: 18px;
       border-radius: 22px;
@@ -517,16 +512,8 @@
       margin-top: 8px;
     }
 
-    .upgrade-btn:hover {
-      background: #40576b;
-    }
-
     .dessert-upgrade-btn {
       background: #b56576;
-    }
-
-    .dessert-upgrade-btn:hover {
-      background: #944d5e;
     }
 
     .task-btn, .renovation-btn {
@@ -534,8 +521,9 @@
       margin-top: 8px;
     }
 
-    .task-btn:hover, .renovation-btn:hover {
-      background: #d96e00;
+    .recycle-btn {
+      background: #6a994e;
+      margin-top: 8px;
     }
 
     .message-line {
@@ -624,10 +612,7 @@
       animation: popIn 0.35s ease-out;
     }
 
-    .level-card {
-      width: 430px;
-    }
-
+    .level-card,
     .info-card {
       width: 430px;
     }
@@ -694,6 +679,7 @@
       color: white;
       font-weight: bold;
       border: 3px dashed #5c3d2e;
+      cursor: pointer;
     }
 
     .cafe-sign.fixed {
@@ -747,10 +733,16 @@
 
     .stain {
       position: absolute;
-      width: 28px;
-      height: 18px;
+      width: 30px;
+      height: 20px;
       border-radius: 50%;
       background: rgba(80, 48, 25, 0.45);
+      cursor: pointer;
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+
+    .stain:hover {
+      transform: scale(1.1);
     }
 
     .stain.one { left: 82px; bottom: 140px; }
@@ -957,15 +949,8 @@
       text-align: center;
     }
 
-    .close-btn {
-      background: #b56576;
-      margin-top: 14px;
-    }
-
     @media (max-width: 980px) {
-      body {
-        align-items: flex-start;
-      }
+      body { align-items: flex-start; }
 
       .game-container {
         margin: 10px 0;
@@ -1068,10 +1053,8 @@
     <div class="info-card">
       <h2>⚙️ Machine Levels</h2>
       <p>Use 🔧 Machine Parts to upgrade machines separately.</p>
-
       <div class="machine-levels" id="machineLevels"></div>
-
-      <button class="close-btn" onclick="closeMachineInfo()">Close</button>
+      <button class="close-small" onclick="closeMachineInfo()">Close</button>
     </div>
   </div>
 
@@ -1088,9 +1071,9 @@
             <div class="cafe-sign" id="cafeSign">Mini Cafe</div>
             <div class="wall-decor" id="wallDecor">🖼️</div>
             <div class="counter" id="counter">Counter</div>
-            <div class="stain one" id="stain1"></div>
-            <div class="stain two" id="stain2"></div>
-            <div class="stain three" id="stain3"></div>
+            <div class="stain one" id="stain1" onclick="cleanStain(1)"></div>
+            <div class="stain two" id="stain2" onclick="cleanStain(2)"></div>
+            <div class="stain three" id="stain3" onclick="cleanStain(3)"></div>
             <div class="display-case">🧁 🍰</div>
             <div class="table"></div>
             <div class="chair c1" id="chair1"></div>
@@ -1115,7 +1098,7 @@
   <div class="game-container">
     <header>
       <h1>☕ Mini Merge Cafe</h1>
-      <p>Serve orders, earn coins, complete cafe actions, and build a living cafe!</p>
+      <p>Serve orders, collect gifts, recycle items, and build a living cafe!</p>
     </header>
 
     <div class="top-stats">
@@ -1143,7 +1126,7 @@
     <div class="customers-top-box">
       <div class="customers-title">
         <h2>Customers</h2>
-        <span>Some orders also give 🔧 parts</span>
+        <span>Lucky items give bonus rewards ✨</span>
       </div>
       <div class="customers-row" id="customers"></div>
     </div>
@@ -1169,6 +1152,26 @@
       </div>
 
       <div class="side-panel">
+        <div class="panel-box">
+          <h2>🎁 Gift Box</h2>
+          <div class="level-list" id="giftText">
+            Serve 0/3 customers to unlock +8 ⚡
+          </div>
+          <button class="task-btn" id="giftBtn" onclick="claimGift()" disabled>
+            Gift Locked
+          </button>
+        </div>
+
+        <div class="panel-box">
+          <h2>♻️ Recycle</h2>
+          <div class="level-list" id="recycleText">
+            Select an item, then recycle it for energy.
+          </div>
+          <button class="recycle-btn" onclick="recycleSelectedItem()">
+            Recycle Selected Item
+          </button>
+        </div>
+
         <div class="panel-box">
           <h2>Cafe Renovation</h2>
           <div id="taskSummaryBox"></div>
@@ -1218,7 +1221,9 @@
             🍪 Cookie → 🧁 Cupcake → 🍰 Cake → 🎂 Special Cake<br><br>
 
             <b>Drink Machine</b><br>
-            🫘 Bean → ☕ Coffee → 🥤 Latte → 🍹 Fancy Drink
+            🫘 Bean → ☕ Coffee → 🥤 Latte → 🍹 Fancy Drink<br><br>
+
+            ⭐ Complete Bean → Fancy Drink to earn a badge.
           </div>
         </div>
       </div>
@@ -1265,21 +1270,21 @@
         title: "Clean the Counter",
         cost: 60,
         type: "clean",
-        description: "The counter is dirty. Clean all stains to make the cafe look fresh.",
+        description: "Tap the stains directly on the cafe counter to clean them.",
         rewardEnergy: 3
       },
       {
         title: "Fix the Cafe Sign",
         cost: 110,
         type: "repair",
-        description: "The cafe sign is old and broken. Repair it step by step.",
+        description: "Attach the missing sign pieces to make the cafe visible.",
         rewardEnergy: 4
       },
       {
         title: "Buy New Chairs",
         cost: 180,
         type: "chooseChairs",
-        description: "Choose a chair style for your cafe seating area.",
+        description: "Choose a chair style and place seating in your cafe.",
         rewardEnergy: 0
       },
       {
@@ -1303,32 +1308,20 @@
         type: "placePlant",
         description: "Place a plant near the window to make the cafe feel alive.",
         rewardEnergy: 3
-      },
-      {
-        title: "Open VIP Table",
-        cost: 350,
-        type: "click",
-        clicksNeeded: 4,
-        description: "Prepare a VIP table for future valuable customers.",
-        rewardEnergy: 4
-      },
-      {
-        title: "Improve Dessert Corner",
-        cost: 420,
-        type: "itemDisplay",
-        itemRequired: 2,
-        description: "Use a Cake to improve your dessert corner.",
-        rewardEnergy: 5
-      },
-      {
-        title: "Polish the Cafe Floor",
-        cost: 300,
-        type: "click",
-        clicksNeeded: 5,
-        description: "Polish the floor to make the cafe shine.",
-        rewardEnergy: 4
       }
     ];
+
+    function emptyCell() {
+      return null;
+    }
+
+    function makeItem(itemIndex, options = {}) {
+      return {
+        item: itemIndex,
+        lucky: options.lucky || false,
+        chainBadge: options.chainBadge || false
+      };
+    }
 
     let board = Array(20).fill(null);
     let coins = 0;
@@ -1350,8 +1343,17 @@
     let lastChangedCustomerIndex = null;
     let customers = [];
 
-    let cleanClicks = 0;
+    let giftProgress = 0;
+    let giftReady = false;
+
+    let cleanStains = {
+      1: false,
+      2: false,
+      3: false
+    };
+
     let repairClicks = 0;
+    let chairPlacementClicks = 0;
     let generalActionClicks = 0;
 
     let cafeState = {
@@ -1360,9 +1362,7 @@
       chairs: null,
       display: false,
       decor: null,
-      plant: false,
-      vip: false,
-      floor: false
+      plant: false
     };
 
     const drinkMachineIndex = 0;
@@ -1395,6 +1395,9 @@
     const renovationActionArea = document.getElementById("renovationActionArea");
     const adEnergyBtn = document.getElementById("adEnergyBtn");
     const adMessage = document.getElementById("adMessage");
+    const giftText = document.getElementById("giftText");
+    const giftBtn = document.getElementById("giftBtn");
+    const recycleText = document.getElementById("recycleText");
 
     function playSound(type) {
       try {
@@ -1422,13 +1425,17 @@
     function createBoard() {
       boardElement.innerHTML = "";
 
-      board.forEach((item, index) => {
+      board.forEach((cellItem, index) => {
         const cell = document.createElement("div");
         cell.classList.add("cell");
         cell.dataset.index = index;
 
         if (index === selectedIndex) {
           cell.classList.add("mobile-selected");
+        }
+
+        if (cellItem && cellItem.lucky) {
+          cell.classList.add("lucky-cell");
         }
 
         cell.ondragover = allowDrop;
@@ -1450,24 +1457,40 @@
             cell.classList.add("merge-effect");
           }
 
-          if (item !== null) {
+          if (cellItem !== null) {
+            const itemData = items[cellItem.item];
+
             cell.innerHTML = `
               <div 
                 class="item" 
                 draggable="true" 
                 ondragstart="dragStart(event, ${index})"
               >
-                ${items[item].emoji}
+                ${itemData.emoji}
               </div>
-              <div class="item-name">${items[item].name}</div>
+              <div class="item-name">${itemData.name}</div>
             `;
-          }
 
-          if (item !== null && isItemNeededForOrder(item)) {
-            const check = document.createElement("div");
-            check.classList.add("order-check");
-            check.textContent = "✓";
-            cell.appendChild(check);
+            if (cellItem.lucky) {
+              const lucky = document.createElement("div");
+              lucky.classList.add("lucky-badge");
+              lucky.textContent = "✨";
+              cell.appendChild(lucky);
+            }
+
+            if (cellItem.chainBadge) {
+              const badge = document.createElement("div");
+              badge.classList.add("chain-badge");
+              badge.textContent = "⭐";
+              cell.appendChild(badge);
+            }
+
+            if (isItemNeededForOrder(cellItem.item)) {
+              const check = document.createElement("div");
+              check.classList.add("order-check");
+              check.textContent = "✓";
+              cell.appendChild(check);
+            }
           }
         }
 
@@ -1576,29 +1599,7 @@
         return;
       }
 
-      const draggedItem = board[draggedIndex];
-      const targetItem = board[targetIndex];
-
-      if (draggedItem === null) {
-        draggedIndex = null;
-        return;
-      }
-
-      if (targetItem === null) {
-        board[targetIndex] = draggedItem;
-        board[draggedIndex] = null;
-        message.textContent = "Item moved!";
-      } else if (canMerge(draggedItem, targetItem)) {
-        mergeItems(draggedIndex, targetIndex);
-      } else {
-        targetCell.classList.add("invalid-drop");
-        message.textContent = "Only same items can be merged!";
-        playSound("error");
-
-        setTimeout(() => {
-          targetCell.classList.remove("invalid-drop");
-        }, 350);
-      }
+      performMoveOrMerge(draggedIndex, targetIndex);
 
       draggedIndex = null;
       createBoard();
@@ -1625,57 +1626,63 @@
         return;
       }
 
-      const selectedItem = board[selectedIndex];
-      const targetItem = board[index];
+      performMoveOrMerge(selectedIndex, index);
+      selectedIndex = null;
+      createBoard();
+    }
 
-      if (selectedItem === null) {
-        selectedIndex = null;
-        createBoard();
-        return;
-      }
+    function performMoveOrMerge(fromIndex, toIndex) {
+      const selectedItem = board[fromIndex];
+      const targetItem = board[toIndex];
+
+      if (selectedItem === null) return;
 
       if (targetItem === null) {
-        board[index] = selectedItem;
-        board[selectedIndex] = null;
-        selectedIndex = null;
+        board[toIndex] = selectedItem;
+        board[fromIndex] = null;
         message.textContent = "Item moved!";
-        createBoard();
         return;
       }
 
       if (canMerge(selectedItem, targetItem)) {
-        mergeItems(selectedIndex, index);
-        selectedIndex = null;
-        createBoard();
+        mergeItems(fromIndex, toIndex);
         return;
       }
 
       message.textContent = "Only same items can be merged!";
       playSound("error");
-      selectedIndex = null;
-      createBoard();
     }
 
     function canMerge(a, b) {
-      return a === b && mergeMap[a] !== undefined;
+      return a.item === b.item && mergeMap[a.item] !== undefined;
     }
 
-    function isItemNeededForOrder(item) {
-      return customers.some(customer => customer.order === item);
+    function isItemNeededForOrder(itemIndex) {
+      return customers.some(customer => customer.order === itemIndex);
     }
 
     function mergeItems(firstIndex, secondIndex) {
-      const currentItem = board[firstIndex];
+      const first = board[firstIndex];
+      const second = board[secondIndex];
+      const newItemIndexValue = mergeMap[first.item];
 
-      board[secondIndex] = mergeMap[currentItem];
+      const lucky = first.lucky || second.lucky;
+      const chainBadge = newItemIndexValue === 7 || first.chainBadge || second.chainBadge;
+
+      board[secondIndex] = makeItem(newItemIndexValue, {
+        lucky,
+        chainBadge
+      });
+
       board[firstIndex] = null;
-
       mergedItemIndex = secondIndex;
 
-      if (isItemNeededForOrder(board[secondIndex])) {
+      if (newItemIndexValue === 7) {
+        message.textContent = "Drink chain completed! Fancy Drink earned ⭐ badge!";
+      } else if (isItemNeededForOrder(newItemIndexValue)) {
         message.textContent = "Order item is ready!";
       } else {
-        message.textContent = "Nice merge!";
+        message.textContent = lucky ? "Lucky merge completed! ✨" : "Nice merge!";
       }
 
       playSound("merge");
@@ -1683,20 +1690,20 @@
     }
 
     function generateItem(type) {
-      machineInfoButton.classList.add("show");
+      machineInfoButton.style.display = "block";
 
       if (energy <= 0) {
-        message.textContent = "No energy left! Use Energy Boost or complete cafe tasks.";
+        message.textContent = "No energy left! Use Gift Box, Recycle, or Energy Boost.";
         playSound("error");
         return;
       }
 
       const emptyCells = board
-        .map((item, index) => {
+        .map((cellItem, index) => {
           if (
             index !== drinkMachineIndex &&
             index !== dessertMachineIndex &&
-            item === null
+            cellItem === null
           ) {
             return index;
           }
@@ -1705,7 +1712,7 @@
         .filter(index => index !== null);
 
       if (emptyCells.length === 0) {
-        message.textContent = "Board is full! Merge items first.";
+        message.textContent = "Board is full! Merge or recycle items first.";
         playSound("error");
         return;
       }
@@ -1714,11 +1721,14 @@
 
       const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
       const randomItem = getMachineItem(type);
+      const lucky = Math.random() < 0.08;
 
-      board[randomCell] = randomItem;
+      board[randomCell] = makeItem(randomItem, { lucky });
       newItemIndex = randomCell;
 
-      if (isItemNeededForOrder(randomItem)) {
+      if (lucky) {
+        message.textContent = "Lucky item created! ✨";
+      } else if (isItemNeededForOrder(randomItem)) {
         message.textContent = "Order item created!";
       } else {
         message.textContent = type === "drink"
@@ -1738,9 +1748,7 @@
       if (type === "dessert") {
         if (level === 1) return 0;
 
-        if (level === 2) {
-          return chance < 0.82 ? 0 : 1;
-        }
+        if (level === 2) return chance < 0.82 ? 0 : 1;
 
         if (level === 3) {
           if (chance < 0.65) return 0;
@@ -1756,9 +1764,7 @@
 
       if (level === 1) return 4;
 
-      if (level === 2) {
-        return chance < 0.82 ? 4 : 5;
-      }
+      if (level === 2) return chance < 0.82 ? 4 : 5;
 
       if (level === 3) {
         if (chance < 0.65) return 4;
@@ -1784,20 +1790,15 @@
       return baseRewards[item.level] + ((cafeLevel - 1) * 5);
     }
 
-    function orderGivesPart(itemIndex) {
-  return Math.random() < 0.25;
-}
+    function orderGivesPart() {
+      return Math.random() < 0.15;
+    }
 
     function getAvailableOrders() {
       let possibleOrders = [1, 2, 5, 6];
 
-      if (cafeLevel >= 2) {
-        possibleOrders.push(3);
-      }
-
-      if (cafeLevel >= 3) {
-        possibleOrders.push(7);
-      }
+      if (cafeLevel >= 2) possibleOrders.push(3);
+      if (cafeLevel >= 3) possibleOrders.push(7);
 
       return possibleOrders;
     }
@@ -1848,12 +1849,18 @@
     function completeCustomerOrder(customerIndex) {
       const customer = customers[customerIndex];
       const wantedItem = customer.order;
-      const itemIndex = board.findIndex(item => item === wantedItem);
+      const itemIndex = board.findIndex(cellItem => cellItem && cellItem.item === wantedItem);
 
       if (itemIndex !== -1) {
+        const servedItem = board[itemIndex];
         board[itemIndex] = null;
 
-        const reward = getOrderReward(wantedItem);
+        let reward = getOrderReward(wantedItem);
+
+        if (servedItem.lucky) {
+          reward += 25;
+        }
+
         coins += reward;
 
         let partMessage = "";
@@ -1863,7 +1870,16 @@
           partMessage = ", +1 🔧";
         }
 
-        message.textContent = "Customer served! +" + reward + " 🪙" + partMessage;
+        if (servedItem.chainBadge) {
+          reward += 0;
+        }
+
+        message.textContent = servedItem.lucky
+          ? "Lucky order served! +" + reward + " 🪙" + partMessage
+          : "Customer served! +" + reward + " 🪙" + partMessage;
+
+        giftProgress++;
+        updateGiftBox();
 
         customers[customerIndex] = createRandomCustomer(customerIndex);
         lastChangedCustomerIndex = customerIndex;
@@ -1886,9 +1902,7 @@
 
       let possibleOrders = getAvailableOrders().filter(order => !usedOrders.includes(order));
 
-      if (possibleOrders.length === 0) {
-        possibleOrders = getAvailableOrders();
-      }
+      if (possibleOrders.length === 0) possibleOrders = getAvailableOrders();
 
       const order = possibleOrders[Math.floor(Math.random() * possibleOrders.length)];
 
@@ -1904,6 +1918,61 @@
       customers.push(createRandomCustomer());
       customers.push(createRandomCustomer());
       customers.push(createRandomCustomer());
+    }
+
+    function updateGiftBox() {
+      if (giftProgress >= 3) {
+        giftReady = true;
+        giftBtn.disabled = false;
+        giftBtn.textContent = "Claim Gift +8 ⚡";
+        giftText.textContent = "Gift ready! Claim +8 energy.";
+      } else {
+        giftReady = false;
+        giftBtn.disabled = true;
+        giftBtn.textContent = "Gift Locked";
+        giftText.textContent = "Serve " + giftProgress + "/3 customers to unlock +8 ⚡";
+      }
+    }
+
+    function claimGift() {
+      if (!giftReady) {
+        message.textContent = "Gift is not ready yet.";
+        playSound("error");
+        return;
+      }
+
+      energy = Math.min(maxEnergy, energy + 8);
+      giftProgress = 0;
+      giftReady = false;
+
+      message.textContent = "Gift claimed! +8 ⚡";
+      playSound("upgrade");
+
+      updateGiftBox();
+      updateStats();
+      createBoard();
+    }
+
+    function recycleSelectedItem() {
+      if (selectedIndex === null || board[selectedIndex] === null) {
+        message.textContent = "Select an item first, then recycle it.";
+        playSound("error");
+        return;
+      }
+
+      const cellItem = board[selectedIndex];
+      const itemLevel = items[cellItem.item].level;
+      const energyGain = Math.min(6, itemLevel + (cellItem.lucky ? 1 : 0));
+
+      board[selectedIndex] = null;
+      selectedIndex = null;
+      energy = Math.min(maxEnergy, energy + energyGain);
+
+      message.textContent = "Item recycled! +" + energyGain + " ⚡";
+      playSound("upgrade");
+
+      updateStats();
+      createBoard();
     }
 
     function createTaskSummary() {
@@ -1947,9 +2016,9 @@
       document.getElementById("counter").classList.toggle("clean", cafeState.counterClean);
       document.getElementById("cafeSign").classList.toggle("fixed", cafeState.signFixed);
 
-      document.getElementById("stain1").style.display = cafeState.counterClean ? "none" : "block";
-      document.getElementById("stain2").style.display = cafeState.counterClean ? "none" : "block";
-      document.getElementById("stain3").style.display = cafeState.counterClean ? "none" : "block";
+      document.getElementById("stain1").style.display = cafeState.counterClean || cleanStains[1] ? "none" : "block";
+      document.getElementById("stain2").style.display = cafeState.counterClean || cleanStains[2] ? "none" : "block";
+      document.getElementById("stain3").style.display = cafeState.counterClean || cleanStains[3] ? "none" : "block";
 
       const chairs = [
         document.getElementById("chair1"),
@@ -1959,10 +2028,7 @@
 
       chairs.forEach(chair => {
         chair.classList.remove("wood", "blue", "pink");
-
-        if (cafeState.chairs) {
-          chair.classList.add(cafeState.chairs);
-        }
+        if (cafeState.chairs) chair.classList.add(cafeState.chairs);
       });
 
       const wallDecor = document.getElementById("wallDecor");
@@ -2002,7 +2068,6 @@
       else if (task.type === "itemDisplay") renderItemTask(task);
       else if (task.type === "chooseDecor") renderDecorChoices(task);
       else if (task.type === "placePlant") renderPlantAction(task);
-      else if (task.type === "click") renderClickAction(task);
     }
 
     function canPayTask(task) {
@@ -2012,7 +2077,7 @@
         return false;
       }
 
-      if (task.itemRequired !== undefined && !board.includes(task.itemRequired)) {
+      if (task.itemRequired !== undefined && !board.some(cellItem => cellItem && cellItem.item === task.itemRequired)) {
         message.textContent = "You need " + items[task.itemRequired].emoji + " " + items[task.itemRequired].name + " for this task.";
         playSound("error");
         return false;
@@ -2025,7 +2090,7 @@
       coins -= task.cost;
 
       if (task.itemRequired !== undefined) {
-        const idx = board.findIndex(item => item === task.itemRequired);
+        const idx = board.findIndex(cellItem => cellItem && cellItem.item === task.itemRequired);
         if (idx !== -1) board[idx] = null;
       }
     }
@@ -2037,17 +2102,15 @@
 
       payTaskCost(task);
 
-      if (typeof extraCallback === "function") {
-        extraCallback(task);
-      }
+      if (typeof extraCallback === "function") extraCallback(task);
 
       if (task.rewardEnergy > 0) {
         energy = Math.min(maxEnergy, energy + task.rewardEnergy);
       }
 
       completedTasks++;
-      cleanClicks = 0;
       repairClicks = 0;
+      chairPlacementClicks = 0;
       generalActionClicks = 0;
 
       message.textContent = "Renovation completed: " + task.title + "!";
@@ -2063,23 +2126,28 @@
 
     function renderCleanAction(task) {
       renovationActionArea.innerHTML = `
-        <div>Tap the cleaning cloth 3 times to clean the counter.</div>
-        <div class="mini-progress">Clean progress: ${cleanClicks}/3</div>
-        <div class="action-row">
-          <button class="small-action-btn" onclick="cleanStep()">🧽 Clean</button>
-        </div>
+        <div>Tap the stains directly on the cafe counter.</div>
+        <div class="mini-progress">Cleaned stains: ${Object.values(cleanStains).filter(Boolean).length}/3</div>
       `;
     }
 
-    function cleanStep() {
+    function cleanStain(number) {
       const task = cafeTasks[completedTasks];
+
+      if (!task || task.type !== "clean") {
+        message.textContent = "This stain is not part of the current task yet.";
+        return;
+      }
 
       if (!canPayTask(task)) return;
 
-      cleanClicks++;
-      renovationActionArea.querySelector(".mini-progress").textContent = "Clean progress: " + cleanClicks + "/3";
+      cleanStains[number] = true;
+      renderCafeScene();
+      renderCleanAction(task);
 
-      if (cleanClicks >= 3) {
+      const cleaned = Object.values(cleanStains).filter(Boolean).length;
+
+      if (cleaned >= 3) {
         finishTask(() => {
           cafeState.counterClean = true;
         });
@@ -2088,10 +2156,12 @@
 
     function renderRepairAction(task) {
       renovationActionArea.innerHTML = `
-        <div>Repair the sign in 3 steps.</div>
+        <div>Attach 3 sign pieces to repair the cafe sign.</div>
         <div class="mini-progress">Repair progress: ${repairClicks}/3</div>
         <div class="action-row">
-          <button class="small-action-btn" onclick="repairStep()">🔨 Repair</button>
+          <button class="small-action-btn" onclick="repairStep()">Piece 1</button>
+          <button class="small-action-btn" onclick="repairStep()">Piece 2</button>
+          <button class="small-action-btn" onclick="repairStep()">Piece 3</button>
         </div>
       `;
     }
@@ -2113,17 +2183,17 @@
 
     function renderChairChoices(task) {
       renovationActionArea.innerHTML = `
-        <div>Choose a chair style for your cafe.</div>
+        <div>Choose a chair style, then place 3 chairs.</div>
         <div class="action-row">
-          <div class="choice-card" onclick="chooseChairs('wood')">
+          <div class="choice-card" onclick="startChairPlacement('wood')">
             <div class="choice-icon">🪑</div>
             Wood
           </div>
-          <div class="choice-card" onclick="chooseChairs('blue')">
+          <div class="choice-card" onclick="startChairPlacement('blue')">
             <div class="choice-icon">🔵</div>
             Blue
           </div>
-          <div class="choice-card" onclick="chooseChairs('pink')">
+          <div class="choice-card" onclick="startChairPlacement('pink')">
             <div class="choice-icon">🌸</div>
             Pink
           </div>
@@ -2131,10 +2201,33 @@
       `;
     }
 
-    function chooseChairs(style) {
-      finishTask(() => {
-        cafeState.chairs = style;
-      });
+    function startChairPlacement(style) {
+      const task = cafeTasks[completedTasks];
+
+      if (!canPayTask(task)) return;
+
+      cafeState.chairs = style;
+      chairPlacementClicks = 0;
+      renderCafeScene();
+
+      renovationActionArea.innerHTML = `
+        <div>Place the chairs one by one.</div>
+        <div class="mini-progress">Placed chairs: ${chairPlacementClicks}/3</div>
+        <div class="action-row">
+          <button class="small-action-btn" onclick="placeChairStep()">Place Chair</button>
+        </div>
+      `;
+    }
+
+    function placeChairStep() {
+      const task = cafeTasks[completedTasks];
+
+      chairPlacementClicks++;
+      renovationActionArea.querySelector(".mini-progress").textContent = "Placed chairs: " + chairPlacementClicks + "/3";
+
+      if (chairPlacementClicks >= 3) {
+        finishTask(() => {});
+      }
     }
 
     function renderItemTask(task) {
@@ -2153,9 +2246,7 @@
       const task = cafeTasks[completedTasks];
 
       finishTask(() => {
-        if (task.title.includes("Dessert Display")) {
-          cafeState.display = true;
-        }
+        if (task.title.includes("Dessert Display")) cafeState.display = true;
       });
     }
 
@@ -2210,36 +2301,6 @@
       }
     }
 
-    function renderClickAction(task) {
-      const needed = task.clicksNeeded || 3;
-
-      renovationActionArea.innerHTML = `
-        <div>Complete the mini action.</div>
-        <div class="mini-progress">Action progress: ${generalActionClicks}/${needed}</div>
-        <div class="action-row">
-          <button class="small-action-btn" onclick="generalTaskStep()">Do Action</button>
-        </div>
-      `;
-    }
-
-    function generalTaskStep() {
-      const task = cafeTasks[completedTasks];
-
-      if (!canPayTask(task)) return;
-
-      const needed = task.clicksNeeded || 3;
-
-      generalActionClicks++;
-      renovationActionArea.querySelector(".mini-progress").textContent = "Action progress: " + generalActionClicks + "/" + needed;
-
-      if (generalActionClicks >= needed) {
-        finishTask(() => {
-          if (task.title.includes("VIP")) cafeState.vip = true;
-          if (task.title.includes("Floor")) cafeState.floor = true;
-        });
-      }
-    }
-
     function checkCafeLevelUp() {
       if (completedTasks > 0 && completedTasks % 3 === 0) {
         levelUpText.textContent = "You completed 3 renovation tasks. Cafe Level " + (cafeLevel + 1) + " unlocked!";
@@ -2289,7 +2350,6 @@
       }
 
       energy = Math.min(maxEnergy, energy + 10);
-      machineInfoButton.classList.add("show");
 
       upgradeMessage.classList.add("show");
 
@@ -2304,11 +2364,9 @@
 
     function getUpgradeCost(type) {
       const level = getMachineLevel(type);
-
       if (level === 1) return 3;
       if (level === 2) return 6;
       if (level === 3) return 10;
-
       return 999;
     }
 
@@ -2392,6 +2450,8 @@
       } else {
         dessertUpgradeBtn.textContent = "Upgrade Dessert - " + getUpgradeCost("dessert") + " 🔧";
       }
+
+      updateGiftBox();
     }
 
     function openMachineInfo() {
