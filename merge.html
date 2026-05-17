@@ -788,6 +788,114 @@
       font-size: 11px;
     }
 
+
+    /* NEW RENOVATION SYSTEM: no ugly PNG furniture pasted on background */
+    .scene-chair,
+    .chair-preview {
+      display: none !important;
+      background-image: none !important;
+    }
+
+    .scene-stain {
+      background-image: none !important;
+      width: 58px;
+      height: 48px;
+      background: rgba(255, 248, 239, 0.86);
+      border: 3px solid #ffb703;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scene-stain::before {
+      content: "🧽";
+      font-size: 28px;
+    }
+
+    .chairs-badge {
+      position: absolute;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.84);
+      border: 3px solid #ffb24a;
+      box-shadow: 0 0 18px rgba(255,183,3,0.75);
+      z-index: 9;
+      right: 58px;
+      bottom: 70px;
+      width: 54px;
+      height: 54px;
+    }
+
+    .chairs-visible .chairs-badge {
+      display: flex;
+    }
+
+    .reno-progress {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin: 10px 0 12px;
+    }
+
+    .reno-mini-card {
+      background: #ffffff;
+      border: 2px solid #f1c27d;
+      border-radius: 17px;
+      padding: 9px;
+      box-shadow: 0 4px 10px rgba(90,56,37,0.08);
+    }
+
+    .reno-mini-card.current {
+      border-color: #ff8c1a;
+      box-shadow: 0 0 0 3px rgba(255,140,26,0.18);
+    }
+
+    .reno-mini-card.done {
+      border-color: #4caf7a;
+      background: #f2fff5;
+    }
+
+    .reno-mini-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #653719;
+      margin-bottom: 4px;
+    }
+
+    .reno-mini-status {
+      font-size: 11px;
+      font-weight: 900;
+      color: #8b5e34;
+    }
+
+    .reno-task-action-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .reno-style-btn {
+      background: #fff3e8;
+      border: 2px solid #f1c27d;
+      border-radius: 17px;
+      padding: 12px 6px;
+      font-size: 13px;
+      color: #653719;
+      box-shadow: 0 4px 9px rgba(90,56,37,0.08);
+    }
+
+    .reno-style-btn .big {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 4px;
+    }
+
+
     @media (min-width: 760px) {
       .app {
         max-width: 520px;
@@ -872,7 +980,10 @@
         <div class="display-badge">🧁</div>
         <div class="decor-badge">🖼️</div>
         <div class="plant-badge">🪴</div>
+        <div class="chairs-badge">🪑</div>
       </div>
+
+      <div class="reno-progress" id="renoProgress"></div>
 
       <div class="task-box">
         <h3 id="taskTitle">Current Task</h3>
@@ -1532,11 +1643,29 @@
 
       ["chair1", "chair2", "chair3"].forEach(id => {
         const el = document.getElementById(id);
-
+        if (!el) return;
         el.classList.remove("wood", "blue", "pink");
-
         if (cafeState.chairs) el.classList.add(cafeState.chairs);
       });
+
+      renderTaskList();
+    }
+
+    function renderTaskList() {
+      const progress = document.getElementById("renoProgress");
+      if (!progress) return;
+
+      progress.innerHTML = cafeTasks.map((t, i) => {
+        const done = i < completedTasks;
+        const current = i === completedTasks;
+        const status = done ? "Done ✓" : current ? "Current" : "Locked";
+        return `
+          <div class="reno-mini-card ${done ? "done" : ""} ${current ? "current" : ""}">
+            <div class="reno-mini-title">${i + 1}. ${t.title}</div>
+            <div class="reno-mini-status">${status}</div>
+          </div>
+        `;
+      }).join("");
     }
 
     function renderTask() {
@@ -1578,23 +1707,11 @@
 
       if (task.type === "chairs") {
         action.innerHTML = `
-          <p>Choose one chair style:</p>
-          <div class="choice-row">
-            <div class="choice ${chairStyle === "wood" ? "selected" : ""}" onclick="chooseChair('wood')">
-              <div class="chair-preview chair-wood"></div>
-              Wood Classic
-              <small>Warm cafe style</small>
-            </div>
-            <div class="choice ${chairStyle === "blue" ? "selected" : ""}" onclick="chooseChair('blue')">
-              <div class="chair-preview chair-blue"></div>
-              Blue Comfort
-              <small>Cozy soft style</small>
-            </div>
-            <div class="choice ${chairStyle === "pink" ? "selected" : ""}" onclick="chooseChair('pink')">
-              <div class="chair-preview chair-pink"></div>
-              Pink Chic
-              <small>Sweet cafe style</small>
-            </div>
+          <p>Pick a style. It will unlock the Table Area as a clean upgrade badge, not a pasted PNG.</p>
+          <div class="reno-task-action-grid">
+            <button class="reno-style-btn" onclick="chooseChair('wood')"><span class="big">🪑</span>Classic<br><small>Warm style</small></button>
+            <button class="reno-style-btn" onclick="chooseChair('blue')"><span class="big">🛋️</span>Cozy<br><small>Soft style</small></button>
+            <button class="reno-style-btn" onclick="chooseChair('pink')"><span class="big">🌸</span>Chic<br><small>Sweet style</small></button>
           </div>
         `;
       }
@@ -1717,26 +1834,14 @@
       if (!canPayTask(task)) return;
 
       chairStyle = style;
-      cafeState.chairs = style;
 
-      renderCafe();
-
-      document.getElementById("taskAction").innerHTML = `
-        <p>Place chairs: ${chairSteps}/3</p>
-        <button class="green-btn" onclick="placeChair()">Place Chair</button>
-      `;
+      finishTask(() => {
+        cafeState.chairs = style;
+      });
     }
 
     function placeChair() {
-      chairSteps++;
-
-      if (chairSteps >= 3) finishTask(() => {});
-      else {
-        document.getElementById("taskAction").innerHTML = `
-          <p>Place chairs: ${chairSteps}/3</p>
-          <button class="green-btn" onclick="placeChair()">Place Chair</button>
-        `;
-      }
+      chooseChair(chairStyle || "wood");
     }
 
     function completeItemTask() {
