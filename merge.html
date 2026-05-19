@@ -148,7 +148,7 @@
       display: flex;
       gap: 10px;
       overflow-x: auto;
-      padding: 3px 2px 4px;
+      padding: 4px 2px 6px;
       scroll-snap-type: x mandatory;
     }
 
@@ -157,33 +157,33 @@
     }
 
     .customer-card {
-      min-width: 150px;
-      background: #fff7e8;
+      min-width: 206px;
+      background: linear-gradient(180deg, #fff9f2, #fff0df);
       border: 2px solid #f1c27d;
-      border-radius: 19px;
+      border-radius: 22px;
       padding: 10px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(90,56,37,0.1);
+      box-shadow: 0 6px 14px rgba(90,56,37,0.11);
       scroll-snap-align: start;
       position: relative;
       transition: 0.2s;
+      overflow: hidden;
     }
 
     .customer-card.ready {
       border-color: #34c759;
-      box-shadow: 0 0 0 3px rgba(52,199,89,0.22), 0 0 18px rgba(52,199,89,0.45), 0 5px 12px rgba(90,56,37,0.12);
+      box-shadow: 0 0 0 3px rgba(52,199,89,0.18), 0 0 18px rgba(52,199,89,0.28), 0 6px 14px rgba(90,56,37,0.12);
       animation: readyPulse 1.1s infinite ease-in-out;
     }
 
     @keyframes readyPulse {
       0%,100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-2px) scale(1.025); }
+      50% { transform: translateY(-2px) scale(1.02); }
     }
 
     .ready-check {
       position: absolute;
-      top: -8px;
-      right: -8px;
+      top: 8px;
+      right: 8px;
       width: 26px;
       height: 26px;
       border-radius: 50%;
@@ -194,40 +194,95 @@
       align-items: center;
       justify-content: center;
       border: 2px solid white;
+      z-index: 4;
     }
 
-    .avatar {
-      font-size: 36px;
-      height: 38px;
-      margin-bottom: 3px;
+    .customer-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
     }
 
-    .story-name {
-      font-size: 11px;
+    .portrait-ring {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      padding: 3px;
+      background: linear-gradient(180deg, #ffddb5, #f1b56f);
+      box-shadow: 0 4px 10px rgba(90,56,37,0.15);
+      flex-shrink: 0;
+    }
+
+    .portrait-ring img {
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      object-fit: cover;
+      display: block;
+      background: #fff7ee;
+    }
+
+    .customer-meta {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .customer-name {
+      font-size: 15px;
       font-weight: 900;
-      color: #8b5e34;
-      margin-top: -1px;
+      color: #653719;
+      line-height: 1.1;
       margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    }
+
+    .customer-trait {
+      font-size: 11px;
+      font-weight: 800;
+      color: #9c6a3f;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .customer-mood {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #fff6e7;
+      border: 1px solid #f1d3a5;
+      color: #8b5e34;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .order-block {
+      background: rgba(255,255,255,0.85);
+      border: 2px solid #f2d1a5;
+      border-radius: 16px;
+      padding: 9px;
+      margin-bottom: 8px;
+    }
+
+    .order-label {
+      font-size: 10px;
+      color: #9e6b42;
+      font-weight: 900;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
     }
 
     .order-emoji {
-      font-size: 26px;
-      margin: 2px 0;
-      min-height: 34px;
+      font-size: 25px;
+      min-height: 30px;
+      margin-bottom: 3px;
     }
 
     .order-name {
       font-weight: 900;
       font-size: 13px;
-      margin-bottom: 6px;
-      min-height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1.15;
+      line-height: 1.2;
+      color: #653719;
     }
 
     .reward {
@@ -236,8 +291,15 @@
       gap: 6px;
       font-weight: 900;
       font-size: 12px;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
       flex-wrap: wrap;
+    }
+
+    .reward span {
+      background: #fff8ef;
+      border: 1px solid #f1d3a5;
+      border-radius: 999px;
+      padding: 4px 7px;
     }
 
     .serve-btn {
@@ -329,29 +391,12 @@
       box-shadow: 0 5px 12px rgba(90,56,37,0.25);
     }
 
-    .drink-machine {
-      background: linear-gradient(180deg, #79c7e8, #2e8ebb);
-    }
-
-    .dessert-machine {
-      background: linear-gradient(180deg, #ffb6c8, #e6789a);
-    }
-
-    .bakery-machine {
-      background: linear-gradient(180deg, #e9b872, #b76b26);
-    }
-
-    .tea-machine {
-      background: linear-gradient(180deg, #9be37d, #3f9b45);
-    }
-
-    .juice-machine {
-      background: linear-gradient(180deg, #ffb24a, #ef6f2e);
-    }
-
-    .ice-machine {
-      background: linear-gradient(180deg, #b7e6ff, #5aa9d6);
-    }
+    .drink-machine { background: linear-gradient(180deg, #79c7e8, #2e8ebb); }
+    .dessert-machine { background: linear-gradient(180deg, #ffb6c8, #e6789a); }
+    .bakery-machine { background: linear-gradient(180deg, #e9b872, #b76b26); }
+    .tea-machine { background: linear-gradient(180deg, #9be37d, #3f9b45); }
+    .juice-machine { background: linear-gradient(180deg, #ffb24a, #ef6f2e); }
+    .ice-machine { background: linear-gradient(180deg, #b7e6ff, #5aa9d6); }
 
     .machine-label,
     .item-name {
@@ -385,9 +430,7 @@
       50% { transform: translateY(-2px); }
     }
 
-    .pop {
-      animation: pop 0.35s ease-out;
-    }
+    .pop { animation: pop 0.35s ease-out; }
 
     @keyframes pop {
       0% { transform: scale(0.2) rotate(-12deg); opacity: 0; }
@@ -600,14 +643,28 @@
 
     .story-avatar,
     .order-avatar {
-      font-size: 34px;
-      width: 42px;
-      text-align: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      padding: 3px;
+      background: linear-gradient(180deg, #ffe0b8, #efb06f);
+      flex-shrink: 0;
+    }
+
+    .story-avatar img,
+    .order-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 13px;
+      object-fit: cover;
+      display: block;
+      background: #fff7ee;
     }
 
     .story-body,
     .order-body {
       flex: 1;
+      min-width: 0;
     }
 
     .story-title,
@@ -623,6 +680,7 @@
       font-weight: 900;
       color: #8b5e34;
       margin-top: 2px;
+      line-height: 1.25;
     }
 
     .story-text,
@@ -729,9 +787,7 @@
       padding: 16px;
     }
 
-    .modal.show {
-      display: flex;
-    }
+    .modal.show { display: flex; }
 
     .modal-card {
       width: min(420px, 100%);
@@ -754,7 +810,16 @@
     .rank-big { font-size: 58px; margin-bottom: 8px; }
     .rank-title { font-size: 27px; font-weight: 900; color: #653719; margin-bottom: 6px; }
     .rank-name { font-size: 20px; font-weight: 900; color: #ff8c1a; margin-bottom: 10px; }
-    .rank-reward { background: white; border: 2px solid #f1c27d; border-radius: 18px; padding: 10px; margin: 10px 0; color: #5a3825; font-weight: 900; line-height: 1.4; }
+    .rank-reward {
+      background: white;
+      border: 2px solid #f1c27d;
+      border-radius: 18px;
+      padding: 10px;
+      margin: 10px 0;
+      color: #5a3825;
+      font-weight: 900;
+      line-height: 1.4;
+    }
 
     .confetti {
       position: absolute;
@@ -816,33 +881,12 @@
       box-shadow: 0 4px 9px rgba(90,56,37,0.08);
     }
 
-    .discovery-badge {
-      display: inline-block;
-      background: #fff3e8;
-      border: 2px solid #f1c27d;
-      color: #653719;
-      padding: 5px 8px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 12px;
-      margin: 3px;
-    }
-
-    @media (min-width: 760px) {
-      .app {
-        max-width: 520px;
-        margin: 20px 0;
-        border-radius: 30px;
-        min-height: auto;
-        box-shadow: 0 15px 40px rgba(90,56,37,0.2);
-      }
-    }
-
     @media (max-width: 380px) {
       .stat-pill { font-size: 12px; padding: 7px 3px; }
       h1 { font-size: 21px; }
       .cell { font-size: 26px; }
-      .customer-card { min-width: 142px; }
+      .customer-card { min-width: 190px; }
+      .portrait-ring { width: 58px; height: 58px; }
     }
   </style>
 </head>
@@ -949,60 +993,12 @@
     };
 
     const machineDefs = {
-      drink: {
-        name: "Drink Machine",
-        short: "Drink",
-        emoji: "☕",
-        cls: "drink-machine",
-        chain: "drink",
-        unlockRank: 0,
-        cost: 0
-      },
-      dessert: {
-        name: "Dessert Machine",
-        short: "Dessert",
-        emoji: "🍪",
-        cls: "dessert-machine",
-        chain: "dessert",
-        unlockRank: 0,
-        cost: 0
-      },
-      bakery: {
-        name: "Bakery Oven",
-        short: "Bakery",
-        emoji: "🥐",
-        cls: "bakery-machine",
-        chain: "bakery",
-        unlockRank: 1,
-        cost: 45
-      },
-      tea: {
-        name: "Tea Machine",
-        short: "Tea",
-        emoji: "🌿",
-        cls: "tea-machine",
-        chain: "tea",
-        unlockRank: 2,
-        cost: 65
-      },
-      juice: {
-        name: "Juice Blender",
-        short: "Juice",
-        emoji: "🍓",
-        cls: "juice-machine",
-        chain: "juice",
-        unlockRank: 2,
-        cost: 75
-      },
-      ice: {
-        name: "Ice Cream Machine",
-        short: "Ice",
-        emoji: "🍦",
-        cls: "ice-machine",
-        chain: "ice",
-        unlockRank: 3,
-        cost: 95
-      }
+      drink: { name: "Drink Machine", short: "Drink", emoji: "☕", cls: "drink-machine", chain: "drink", unlockRank: 0, cost: 0 },
+      dessert: { name: "Dessert Machine", short: "Dessert", emoji: "🍪", cls: "dessert-machine", chain: "dessert", unlockRank: 0, cost: 0 },
+      bakery: { name: "Bakery Oven", short: "Bakery", emoji: "🥐", cls: "bakery-machine", chain: "bakery", unlockRank: 1, cost: 45 },
+      tea: { name: "Tea Machine", short: "Tea", emoji: "🌿", cls: "tea-machine", chain: "tea", unlockRank: 2, cost: 65 },
+      juice: { name: "Juice Blender", short: "Juice", emoji: "🍓", cls: "juice-machine", chain: "juice", unlockRank: 2, cost: 75 },
+      ice: { name: "Ice Cream Machine", short: "Ice", emoji: "🍦", cls: "ice-machine", chain: "ice", unlockRank: 3, cost: 95 }
     };
 
     const fameRanks = [
@@ -1015,43 +1011,105 @@
 
     const storyProfiles = [
       {
-        id: "leyla", avatar: "👵", name: "Grandma Leyla", favorite: "Coffee",
-        visits: 0, unlocked: 0, costs: [80, 160, 260],
-        bonusNames: ["Coffee orders +5 coins", "Coffee orders appear more often", "Drink machine lucky chance +2%"],
+        id: "luna",
+        name: "Luna",
+        portrait: "assets/renovation/customers/luna.png",
+        trait: "Loves sweet drinks",
+        mood: "Sweet Tooth",
+        favorite: "Latte",
+        visits: 0,
+        unlocked: 0,
+        costs: [80, 160, 260],
+        bonusNames: ["Latte orders +5 coins", "Dessert combo chance improves", "Sweet drink customers appear more often"],
+        stories: [
+          "Luna says your cafe is the cutest place to spend the afternoon.",
+          "She starts posting your drinks online and brings more trendy visitors.",
+          "Luna becomes one of your star regulars and sweet combo orders increase."
+        ]
+      },
+      {
+        id: "kerem",
+        name: "Kerem",
+        portrait: "assets/renovation/customers/kerem.png",
+        trait: "Office break regular",
+        mood: "In a Hurry",
+        favorite: "Coffee",
+        visits: 0,
+        unlocked: 0,
+        costs: [70, 150, 240],
+        bonusNames: ["Coffee orders +5 coins", "Fast orders give +2 extra fame", "Single drink orders appear more often"],
+        stories: [
+          "Kerem stops by every lunch break because your coffee wakes him up.",
+          "He starts recommending your cafe to coworkers in the nearby offices.",
+          "Now the office crowd knows your cafe as the best quick coffee stop."
+        ]
+      },
+      {
+        id: "leyla",
+        name: "Grandma Leyla",
+        portrait: "assets/renovation/customers/leyla.png",
+        trait: "Warm coffee mornings",
+        mood: "Relaxed",
+        favorite: "Coffee",
+        visits: 0,
+        unlocked: 0,
+        costs: [90, 170, 270],
+        bonusNames: ["Coffee orders +5 coins", "Gift progress sometimes +1 extra", "Drink machine lucky chance +2%"],
         stories: [
           "Leyla says this cafe reminds her of Sunday mornings with her husband.",
-          "She starts bringing old neighborhood photos and becomes your first loyal regular.",
-          "Leyla recommends the cafe to everyone in the neighborhood. Drink rewards improve."
+          "She starts bringing old neighborhood stories and stays for longer chats.",
+          "Leyla becomes the soul of the cafe and warm drink rewards improve."
         ]
       },
       {
-        id: "mert", avatar: "🧑", name: "Student Mert", favorite: "Cupcake",
-        visits: 0, unlocked: 0, costs: [70, 150, 240],
-        bonusNames: ["Cupcake orders +5 coins", "Gift progress sometimes +1 extra", "Daily tasks give +1 gem bonus"],
-        stories: [
-          "Mert studies here because the cafe feels calmer than the library.",
-          "He shares the cafe with his classmates after a difficult exam week.",
-          "Mert creates a small study group here. Gift progress improves."
-        ]
-      },
-      {
-        id: "ada", avatar: "👱‍♀️", name: "Influencer Ada", favorite: "Latte",
-        visits: 0, unlocked: 0, costs: [120, 220, 340],
-        bonusNames: ["All fame rewards +10%", "Multi-order chance +10%", "Rare customer chance improves"],
-        stories: [
-          "Ada posts her first photo from the cafe and calls it a hidden gem.",
-          "Her followers start asking where the cafe is. Trendy Spot progress begins.",
-          "Ada's weekend post goes viral. Multi-order customers become more common."
-        ]
-      },
-      {
-        id: "chef", avatar: "🧔", name: "Chef Bora", favorite: "Cake",
-        visits: 0, unlocked: 0, costs: [140, 250, 380],
+        id: "bora",
+        name: "Chef Bora",
+        portrait: "assets/renovation/customers/bora.png",
+        trait: "Checks every dessert carefully",
+        mood: "Expert Taste",
+        favorite: "Cake",
+        visits: 0,
+        unlocked: 0,
+        costs: [130, 230, 340],
         bonusNames: ["Dessert orders +10 coins", "Cake orders unlock earlier", "Dessert machine high-level chance improves"],
         stories: [
-          "Bora tastes your dessert and says the cafe has real potential.",
-          "He gives you a small menu idea that makes desserts more valuable.",
-          "Bora becomes a secret mentor. Dessert production improves."
+          "Bora tastes your desserts and says the cafe has serious potential.",
+          "He gives a few baking tips and your cakes start standing out more.",
+          "Bora becomes a silent mentor and dessert rewards improve noticeably."
+        ]
+      },
+      {
+        id: "ada",
+        name: "Ada",
+        portrait: "assets/renovation/customers/ada.png",
+        trait: "Loves stylish drinks",
+        mood: "Trendy",
+        favorite: "Fancy Drink",
+        visits: 0,
+        unlocked: 0,
+        costs: [120, 220, 340],
+        bonusNames: ["All fame rewards +10%", "Multi-order chance +10%", "Rare customer chance improves"],
+        stories: [
+          "Ada posts her first cafe photo and calls it a hidden gem.",
+          "Her followers start visiting just to try your prettiest drinks.",
+          "A viral post turns your cafe into a trendy spot for stylish orders."
+        ]
+      },
+      {
+        id: "emre",
+        name: "Emre",
+        portrait: "assets/renovation/customers/emre.png",
+        trait: "Student on a budget",
+        mood: "Friendly",
+        favorite: "Cupcake",
+        visits: 0,
+        unlocked: 0,
+        costs: [75, 155, 250],
+        bonusNames: ["Cupcake orders +5 coins", "Daily task rewards +1 gem", "Gift box fills faster"],
+        stories: [
+          "Emre studies here because the atmosphere helps him focus.",
+          "He brings friends during exam weeks and fills the cafe with energy.",
+          "Now your place is known among students as their favorite study cafe."
         ]
       }
     ];
@@ -1432,9 +1490,7 @@
       }
 
       const empty = [];
-      for (let i = 0; i < boardSize; i++) {
-        if (board[i] === null) empty.push(i);
-      }
+      for (let i = 0; i < boardSize; i++) if (board[i] === null) empty.push(i);
 
       if (empty.length === 0) {
         setMsg("Board full. Merge or recycle.");
@@ -1447,7 +1503,8 @@
       const item = getMachineItem(type);
       let luckyChance = 0.08;
 
-      if (storyProfiles[0].unlocked >= 3 && machineDefs[type].chain === "drink") luckyChance += 0.02;
+      const leyla = storyProfiles.find(p => p.id === "leyla");
+      if (leyla.unlocked >= 3 && machineDefs[type].chain === "drink") luckyChance += 0.02;
 
       const lucky = Math.random() < luckyChance;
       board[slot] = makeItem(item, { lucky });
@@ -1466,15 +1523,8 @@
       const r = Math.random();
 
       if (maxLevel <= 1) return start;
-
-      if (maxLevel === 2) {
-        return r < 0.82 ? start : start + 1;
-      }
-
-      if (maxLevel === 3) {
-        return r < 0.65 ? start : r < 0.92 ? start + 1 : start + 2;
-      }
-
+      if (maxLevel === 2) return r < 0.82 ? start : start + 1;
+      if (maxLevel === 3) return r < 0.65 ? start : r < 0.92 ? start + 1 : start + 2;
       return r < 0.5 ? start : r < 0.8 ? start + 1 : r < 0.96 ? start + 2 : start + 3;
     }
 
@@ -1485,13 +1535,32 @@
         const ready = isCustomerReady(c);
         const card = document.createElement("div");
         card.className = "customer-card" + (ready ? " ready" : "");
+
         card.innerHTML = `
           ${ready ? `<div class="ready-check">✓</div>` : ""}
-          <div class="avatar">${c.profile.avatar}</div>
-          <div class="story-name">${c.profile.name}</div>
-          <div class="order-emoji">${orderEmojiText(c.orders)}</div>
-          <div class="order-name">${orderNameText(c.orders)}</div>
-          <div class="reward"><span>🪙 ${getCustomerReward(c)}</span>${c.givesPart ? `<span>🔧 +1</span>` : ""}<span>⭐ +${getCustomerFameReward(c)}</span></div>
+          <div class="customer-top">
+            <div class="portrait-ring">
+              <img src="${c.profile.portrait}" alt="${c.profile.name}">
+            </div>
+            <div class="customer-meta">
+              <div class="customer-name">${c.profile.name}</div>
+              <div class="customer-trait">${c.profile.trait}</div>
+              <div class="customer-mood">${c.profile.mood}</div>
+            </div>
+          </div>
+
+          <div class="order-block">
+            <div class="order-label">Order</div>
+            <div class="order-emoji">${orderEmojiText(c.orders)}</div>
+            <div class="order-name">${orderNameText(c.orders)}</div>
+          </div>
+
+          <div class="reward">
+            <span>🪙 ${getCustomerReward(c)}</span>
+            ${c.givesPart ? `<span>🔧 +1</span>` : ""}
+            <span>⭐ +${getCustomerFameReward(c)}</span>
+          </div>
+
           ${ready ? `<button class="serve-btn" onclick="serveCustomer(${index})">Serve</button>` : ``}
         `;
         customersEl.appendChild(card);
@@ -1511,7 +1580,7 @@
       for (let i = 0; i < customerSlots; i++) customers.push(newCustomer());
     }
 
-    function newCustomer(replaceIndex = -1) {
+    function newCustomer() {
       const profile = storyProfiles[Math.floor(Math.random() * storyProfiles.length)];
       const orderCount = shouldMakeMultiOrder() ? 2 : 1;
       const pool = availableOrders();
@@ -1532,8 +1601,9 @@
 
     function shouldMakeMultiOrder() {
       if (fameRank < 3) return false;
+      const ada = storyProfiles.find(p => p.id === "ada");
       let chance = fameRank >= 4 ? 0.45 : 0.25;
-      if (storyProfiles[2].unlocked >= 2) chance += 0.10;
+      if (ada.unlocked >= 2) chance += 0.10;
       return Math.random() < chance;
     }
 
@@ -1591,28 +1661,35 @@
       let reward = c.orders.reduce((sum, itemIndex) => sum + getBaseReward(itemIndex), 0);
       reward += fameRank * 5;
 
+      const ada = storyProfiles.find(p => p.id === "ada");
+      const bora = storyProfiles.find(p => p.id === "bora");
+      const kerem = storyProfiles.find(p => p.id === "kerem");
+      const luna = storyProfiles.find(p => p.id === "luna");
+      const emre = storyProfiles.find(p => p.id === "emre");
+
       c.orders.forEach(itemIndex => {
         const item = items[itemIndex];
-
-        if (storyProfiles[0].unlocked >= 1 && item.name === "Coffee") reward += 5;
-        if (storyProfiles[1].unlocked >= 1 && item.name === "Cupcake") reward += 5;
-        if (storyProfiles[3].unlocked >= 1 && item.chain === "dessert") reward += 10;
+        if (kerem.unlocked >= 1 && item.name === "Coffee") reward += 5;
+        if (luna.unlocked >= 1 && item.name === "Latte") reward += 5;
+        if (emre.unlocked >= 1 && item.name === "Cupcake") reward += 5;
+        if (bora.unlocked >= 1 && item.chain === "dessert") reward += 10;
       });
 
       if (c.orders.length > 1) reward += 35;
+      if (ada.unlocked >= 3) reward += 5;
       return reward;
     }
 
     function getCustomerFameReward(c) {
       let fame = c.orders.reduce((sum, itemIndex) => sum + items[itemIndex].level * 4 + 4, 0);
       if (c.orders.length > 1) fame += 10;
-      if (storyProfiles[2].unlocked >= 1) fame = Math.ceil(fame * 1.1);
+      const ada = storyProfiles.find(p => p.id === "ada");
+      if (ada.unlocked >= 1) fame = Math.ceil(fame * 1.1);
       return fame;
     }
 
     function serveCustomer(index) {
       const c = customers[index];
-
       if (!isCustomerReady(c)) {
         setMsg("Order items are not ready.");
         playSound("error");
@@ -1651,10 +1728,11 @@
         ordersSinceLastPart++;
       }
 
+      const emre = storyProfiles.find(p => p.id === "emre");
       giftProgress++;
-      if (storyProfiles[1].unlocked >= 2 && Math.random() < 0.3) giftProgress++;
+      if (emre.unlocked >= 3 && Math.random() < 0.3) giftProgress++;
 
-      customers[index] = newCustomer(index);
+      customers[index] = newCustomer();
 
       setMsg((luckyBonus ? "Lucky order! " : "Served! ") + "+" + reward + " 🪙 +" + fameGain + " ⭐" + partMsg);
       playSound("order");
@@ -1750,8 +1828,10 @@
       if (!task || task.claimed || task.value < task.target) return;
       task.claimed = true;
 
+      const emre = storyProfiles.find(p => p.id === "emre");
+
       if (key === "merge") coins += 35;
-      if (key === "serve") gems += storyProfiles[1].unlocked >= 3 ? 4 : 3;
+      if (key === "serve") gems += emre.unlocked >= 2 ? 4 : 3;
       if (key === "discover") parts += 1;
       if (key === "mini") famePoints += 15;
 
@@ -1824,13 +1904,16 @@
         const nextStory = p.unlocked < p.stories.length ? p.stories[p.unlocked] : null;
         const canUnlock = nextStory && p.visits >= p.unlocked + 1;
         const cost = p.costs[p.unlocked] || 0;
+
         html += `
           <div class="story-card">
             <div class="story-top">
-              <div class="story-avatar">${p.avatar}</div>
+              <div class="story-avatar">
+                <img src="${p.portrait}" alt="${p.name}">
+              </div>
               <div class="story-body">
                 <div class="story-title">${p.name}</div>
-                <div class="story-meta">Favorite: ${p.favorite} · Visits: ${p.visits} · Story: ${p.unlocked}/3</div>
+                <div class="story-meta">${p.trait} · Favorite: ${p.favorite} · Visits: ${p.visits} · Story: ${p.unlocked}/3</div>
               </div>
               ${nextStory ? `<button class="small-action-btn" onclick="unlockStory('${p.id}')" ${canUnlock ? "" : "disabled"}>${cost} 🪙</button>` : `<span class="done-badge2">Done ✓</span>`}
             </div>
@@ -2011,7 +2094,6 @@
       const def = machineDefs[type];
 
       if (unlockedMachines[type]) return;
-
       if (fameRank < def.unlockRank) {
         setMsg("Reach " + fameRanks[def.unlockRank].name + " first.");
         playSound("error");
@@ -2121,14 +2203,12 @@
       cleanGame.remaining = 5;
       cleanGame.reward = 0;
       daily.mini.value++;
-
       setTimeout(spawnCleanStains, 80);
     }
 
     function spawnCleanStains() {
       const area = document.getElementById("cleanArea");
       if (!area) return;
-
       area.innerHTML = "";
 
       for (let i = 0; i < 5; i++) {
@@ -2144,14 +2224,12 @@
 
     function cleanDot(dot) {
       if (!cleanGame.active) return;
-
       dot.remove();
       cleanGame.remaining--;
       cleanGame.reward += 1;
 
-      if (cleanGame.remaining <= 0) {
-        finishCleanGame();
-      } else {
+      if (cleanGame.remaining <= 0) finishCleanGame();
+      else {
         refreshOpenSheet();
         setTimeout(spawnCleanStains, 30);
       }
@@ -2182,11 +2260,8 @@
 
       if (rushGame.sequence[rushGame.index] === symbol) {
         rushGame.index++;
-        if (rushGame.index >= rushGame.sequence.length) {
-          finishRushGame();
-        } else {
-          refreshOpenSheet();
-        }
+        if (rushGame.index >= rushGame.sequence.length) finishRushGame();
+        else refreshOpenSheet();
       } else {
         rushGame.active = false;
         setMsg("Coffee Rush failed. Try again!");
@@ -2271,11 +2346,7 @@
       const start = chainStart[chain];
       const max = Math.min(machineLevels[type], discoveredLevel[chain]);
       const names = [];
-
-      for (let i = 0; i < max; i++) {
-        names.push(items[start + i].emoji + " " + items[start + i].name);
-      }
-
+      for (let i = 0; i < max; i++) names.push(items[start + i].emoji + " " + items[start + i].name);
       return names.join(", ");
     }
 
@@ -2288,7 +2359,6 @@
       }
 
       const cost = upgradeCost(type);
-
       if (parts < cost) {
         setMsg("Need " + cost + " 🔧.");
         playSound("error");
@@ -2351,11 +2421,9 @@
 
     function claimGift() {
       if (!giftReady) return;
-
       energy = Math.min(maxEnergy, energy + 8);
       giftProgress = 0;
       giftReady = false;
-
       setMsg("Gift claimed! +8 ⚡");
       playSound("upgrade");
       updateAll();
@@ -2369,7 +2437,6 @@
       }
 
       const obj = board[selectedIndex];
-
       if (obj.machine) {
         setMsg("Machines cannot be recycled.");
         playSound("error");
@@ -2404,7 +2471,6 @@
           playSound("upgrade");
           startAdCooldown();
           updateAll();
-
           if (document.getElementById("sheet").classList.contains("show")) refreshOpenSheet();
         }
       }, 1000);
@@ -2412,17 +2478,14 @@
 
     function startAdCooldown() {
       adCooldownSeconds = 60;
-
       if (adTimer) clearInterval(adTimer);
 
       adTimer = setInterval(() => {
         adCooldownSeconds--;
-
         if (adCooldownSeconds <= 0) {
           clearInterval(adTimer);
           adCooldown = false;
         }
-
         if (document.getElementById("sheet").classList.contains("show")) refreshOpenSheet();
       }, 1000);
     }
@@ -2463,14 +2526,11 @@
 
     function updateAll() {
       cafeLevel = fameRank + 1;
-
       document.getElementById("coinsText").textContent = "🪙 " + coins;
       document.getElementById("gemsText").textContent = "💎 " + gems;
       document.getElementById("partsText").textContent = "🔧 " + parts;
       document.getElementById("energyText").textContent = "⚡ " + energy + "/" + maxEnergy;
-
       giftReady = giftProgress >= 3;
-
       createBoard();
       createCustomers();
       updateAchievements();
