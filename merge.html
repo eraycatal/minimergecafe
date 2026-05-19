@@ -881,6 +881,89 @@
       box-shadow: 0 4px 9px rgba(90,56,37,0.08);
     }
 
+
+    .asset-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .item-img {
+      width: 84%;
+      height: 84%;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 4px 4px rgba(90,56,37,0.18));
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .machine-img {
+      width: 91%;
+      height: 84%;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 5px 5px rgba(90,56,37,0.24));
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .order-emoji {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .order-icon-img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 3px rgba(90,56,37,0.16));
+      vertical-align: middle;
+    }
+
+    .order-plus {
+      font-size: 18px;
+      font-weight: 900;
+      color: #9e6b42;
+    }
+
+    .info-item-img {
+      width: 82px;
+      height: 82px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 8px;
+      filter: drop-shadow(0 5px 7px rgba(90,56,37,0.20));
+    }
+
+    .info-machine-img {
+      width: 120px;
+      height: 100px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 8px;
+      filter: drop-shadow(0 5px 7px rgba(90,56,37,0.20));
+    }
+
+    .drag-ghost .item-img,
+    .drag-ghost .machine-img {
+      width: 92%;
+      height: 92%;
+    }
+
+    .emoji-fallback {
+      font-size: 30px;
+      line-height: 1;
+    }
+
     @media (max-width: 380px) {
       .stat-pill { font-size: 12px; padding: 7px 3px; }
       h1 { font-size: 21px; }
@@ -952,53 +1035,67 @@
 
   <script>
     const items = [
-      { name: "Cookie", emoji: "🍪", chain: "dessert", level: 1 },
-      { name: "Cupcake", emoji: "🧁", chain: "dessert", level: 2 },
-      { name: "Cake", emoji: "🍰", chain: "dessert", level: 3 },
-      { name: "Special Cake", emoji: "🎂", chain: "dessert", level: 4 },
+      { name: "Cookie", emoji: "🍪", chain: "dessert", level: 1, img: "assets/items/dessert_line/01_cookie.png" },
+      { name: "Cupcake", emoji: "🧁", chain: "dessert", level: 2, img: "assets/items/dessert_line/02_cupcake.png" },
+      { name: "Cake Slice", emoji: "🍰", chain: "dessert", level: 3, img: "assets/items/dessert_line/03_cake_slice.png" },
+      { name: "Blueberry Muffin", emoji: "🫐", chain: "dessert", level: 4, img: "assets/items/dessert_line/05_blueberry_muffin.png" },
+      { name: "Strawberry Cheesecake", emoji: "🍓", chain: "dessert", level: 5, img: "assets/items/dessert_line/08_strawberry_cheesecake.png" },
+      { name: "Special Cake", emoji: "🎂", chain: "dessert", level: 6, img: "assets/items/dessert_line/04_special_cake.png" },
 
-      { name: "Bean", emoji: "🫘", chain: "drink", level: 1 },
-      { name: "Coffee", emoji: "☕", chain: "drink", level: 2 },
-      { name: "Latte", emoji: "🥤", chain: "drink", level: 3 },
-      { name: "Fancy Drink", emoji: "🍹", chain: "drink", level: 4 },
+      { name: "Coffee Beans", emoji: "🫘", chain: "drink", level: 1, img: "assets/items/coffee_line/01_coffee_beans.png" },
+      { name: "Coffee", emoji: "☕", chain: "drink", level: 2, img: "assets/items/coffee_line/02_coffee.png" },
+      { name: "Latte", emoji: "🥤", chain: "drink", level: 3, img: "assets/items/coffee_line/03_latte.png" },
+      { name: "Iced Coffee", emoji: "🧊", chain: "drink", level: 4, img: "assets/items/coffee_line/07_iced_coffee.png" },
+      { name: "Caramel Latte", emoji: "🍮", chain: "drink", level: 5, img: "assets/items/coffee_line/06_caramel_latte.png" },
+      { name: "Fancy Drink", emoji: "🍹", chain: "drink", level: 6, img: "assets/items/coffee_line/04_fancy_drink.png" },
 
-      { name: "Croissant", emoji: "🥐", chain: "bakery", level: 1 },
-      { name: "Bagel", emoji: "🥯", chain: "bakery", level: 2 },
-      { name: "Sandwich", emoji: "🥪", chain: "bakery", level: 3 },
-      { name: "Premium Snack", emoji: "🥨", chain: "bakery", level: 4 },
+      { name: "Croissant", emoji: "🥐", chain: "bakery", level: 1, img: "assets/items/bakery_line/01_croissant.png" },
+      { name: "Bagel", emoji: "🥯", chain: "bakery", level: 2, img: "assets/items/bakery_line/02_bagel.png" },
+      { name: "Sandwich", emoji: "🥪", chain: "bakery", level: 3, img: "assets/items/bakery_line/03_sandwich.png" },
+      { name: "Pretzel", emoji: "🥨", chain: "bakery", level: 4, img: "assets/items/bakery_line/04_pretzel.png" },
+      { name: "Cheesy Sandwich", emoji: "🧀", chain: "bakery", level: 5, img: "assets/items/bakery_line/05_cheesy_sandwich.png" },
+      { name: "Toasted Panini", emoji: "🥪", chain: "bakery", level: 6, img: "assets/items/bakery_line/06_toasted_panini.png" },
 
-      { name: "Tea Leaf", emoji: "🌿", chain: "tea", level: 1 },
-      { name: "Green Tea", emoji: "🍵", chain: "tea", level: 2 },
-      { name: "Tea Pot", emoji: "🫖", chain: "tea", level: 3 },
-      { name: "Bubble Tea", emoji: "🧋", chain: "tea", level: 4 },
+      { name: "Tea Leaves", emoji: "🌿", chain: "tea", level: 1, img: "assets/items/tea_line/01_tea_leaves.png" },
+      { name: "Green Tea", emoji: "🍵", chain: "tea", level: 2, img: "assets/items/tea_line/02_green_tea.png" },
+      { name: "Chai Tea Latte", emoji: "☕", chain: "tea", level: 3, img: "assets/items/tea_line/05_chai_tea_latte.png" },
+      { name: "Tea Pot", emoji: "🫖", chain: "tea", level: 4, img: "assets/items/tea_line/03_tea_pot.png" },
+      { name: "Bubble Tea", emoji: "🧋", chain: "tea", level: 5, img: "assets/items/tea_line/04_bubble_tea.png" },
+      { name: "Iced Lemon Tea", emoji: "🍋", chain: "tea", level: 6, img: "assets/items/tea_line/06_iced_lemon_tea.png" },
 
-      { name: "Fruit", emoji: "🍓", chain: "juice", level: 1 },
-      { name: "Juice", emoji: "🧃", chain: "juice", level: 2 },
-      { name: "Smoothie", emoji: "🍹", chain: "juice", level: 3 },
-      { name: "Tropical Mix", emoji: "🥭", chain: "juice", level: 4 },
+      { name: "Fruit Trio", emoji: "🍓", chain: "juice", level: 1, img: "assets/items/juice_line/01_fruit_trio.png" },
+      { name: "Orange Juice", emoji: "🧃", chain: "juice", level: 2, img: "assets/items/juice_line/02_orange_juice.png" },
+      { name: "Tropical Fruit Cocktail", emoji: "🍹", chain: "juice", level: 3, img: "assets/items/juice_line/03_tropical_fruit_cocktail.png" },
+      { name: "Berry Smoothie", emoji: "🥤", chain: "juice", level: 4, img: "assets/items/juice_line/04_berry_smoothie.png" },
+      { name: "Citrus Punch", emoji: "🍊", chain: "juice", level: 5, img: "assets/items/juice_line/05_citrus_punch.png" },
+      { name: "Tropical Paradise", emoji: "🥭", chain: "juice", level: 6, img: "assets/items/juice_line/06_tropical_paradise.png" },
 
-      { name: "Ice Cream", emoji: "🍦", chain: "ice", level: 1 },
-      { name: "Sundae", emoji: "🍨", chain: "ice", level: 2 },
-      { name: "Special Ice", emoji: "🍧", chain: "ice", level: 3 },
-      { name: "Deluxe Dessert", emoji: "🍮", chain: "ice", level: 4 }
+      { name: "Vanilla Soft Serve", emoji: "🍦", chain: "ice", level: 1, img: "assets/items/ice_cream_line/01_vanilla_soft_serve.png" },
+      { name: "Ice Cream Sundae", emoji: "🍨", chain: "ice", level: 2, img: "assets/items/ice_cream_line/02_ice_cream_sundae.png" },
+      { name: "Glass Cup Sundae", emoji: "🍧", chain: "ice", level: 3, img: "assets/items/ice_cream_line/03_glass_cup_sundae.png" },
+      { name: "Dessert Parfait", emoji: "🍮", chain: "ice", level: 4, img: "assets/items/ice_cream_line/04_dessert_parfait.png" },
+      { name: "Rainbow Shaved Ice", emoji: "🌈", chain: "ice", level: 5, img: "assets/items/ice_cream_line/05_rainbow_shaved_ice.png" },
+      { name: "Rainbow Fantasy Sundae", emoji: "✨", chain: "ice", level: 6, img: "assets/items/ice_cream_line/06_rainbow_fantasy_sundae.png" }
     ];
 
     const chainStart = {
       dessert: 0,
-      drink: 4,
-      bakery: 8,
-      tea: 12,
-      juice: 16,
-      ice: 20
+      drink: 6,
+      bakery: 12,
+      tea: 18,
+      juice: 24,
+      ice: 30
     };
 
+    const CHAIN_LENGTH = 6;
+
     const machineDefs = {
-      drink: { name: "Drink Machine", short: "Drink", emoji: "☕", cls: "drink-machine", chain: "drink", unlockRank: 0, cost: 0 },
-      dessert: { name: "Dessert Machine", short: "Dessert", emoji: "🍪", cls: "dessert-machine", chain: "dessert", unlockRank: 0, cost: 0 },
-      bakery: { name: "Bakery Oven", short: "Bakery", emoji: "🥐", cls: "bakery-machine", chain: "bakery", unlockRank: 1, cost: 45 },
-      tea: { name: "Tea Machine", short: "Tea", emoji: "🌿", cls: "tea-machine", chain: "tea", unlockRank: 2, cost: 65 },
-      juice: { name: "Juice Blender", short: "Juice", emoji: "🍓", cls: "juice-machine", chain: "juice", unlockRank: 2, cost: 75 },
-      ice: { name: "Ice Cream Machine", short: "Ice", emoji: "🍦", cls: "ice-machine", chain: "ice", unlockRank: 3, cost: 95 }
+      drink: { name: "Coffee Machine", short: "Coffee", emoji: "☕", cls: "drink-machine", chain: "drink", unlockRank: 0, cost: 0, img: "assets/items/mini_merge_cafe_machine_assets_pack_v1/01_coffee_machine.png" },
+      dessert: { name: "Dessert Machine", short: "Dessert", emoji: "🍪", cls: "dessert-machine", chain: "dessert", unlockRank: 0, cost: 0, img: "assets/items/mini_merge_cafe_machine_assets_pack_v1/02_dessert_machine.png" },
+      bakery: { name: "Bakery Oven", short: "Bakery", emoji: "🥐", cls: "bakery-machine", chain: "bakery", unlockRank: 1, cost: 45, img: "assets/items/mini_merge_cafe_machine_assets_pack_v1/04_bakery_oven.png" },
+      tea: { name: "Tea Machine", short: "Tea", emoji: "🌿", cls: "tea-machine", chain: "tea", unlockRank: 2, cost: 65, img: "assets/items/mini_merge_cafe_machine_assets_pack_v1/03_tea_machine.png" },
+      juice: { name: "Juice Blender", short: "Juice", emoji: "🍓", cls: "juice-machine", chain: "juice", unlockRank: 2, cost: 75, img: "assets/items/mini_merge_cafe_machine_assets_pack_v1/05_juice_blender.png" },
+      ice: { name: "Ice Cream Machine", short: "Ice", emoji: "🍦", cls: "ice-machine", chain: "ice", unlockRank: 3, cost: 95, img: "assets/items/mini_merge_cafe_machine_assets_pack_v1/06_ice_cream_machine.png" }
     };
 
     const fameRanks = [
@@ -1013,7 +1110,7 @@
       {
         id: "luna",
         name: "Luna",
-        portrait: "assets/renovation/luna.png",
+        portrait: "assets/renovation/customers/luna.png",
         trait: "Loves sweet drinks",
         mood: "Sweet Tooth",
         favorite: "Latte",
@@ -1030,7 +1127,7 @@
       {
         id: "kerem",
         name: "Kerem",
-        portrait: "assets/renovation/kerem.png",
+        portrait: "assets/renovation/customers/kerem.png",
         trait: "Office break regular",
         mood: "In a Hurry",
         favorite: "Coffee",
@@ -1047,7 +1144,7 @@
       {
         id: "leyla",
         name: "Grandma Leyla",
-        portrait: "assets/renovation/leyla.png",
+        portrait: "assets/renovation/customers/leyla.png",
         trait: "Warm coffee mornings",
         mood: "Relaxed",
         favorite: "Coffee",
@@ -1064,7 +1161,7 @@
       {
         id: "bora",
         name: "Chef Bora",
-        portrait: "assets/renovation/bora.png",
+        portrait: "assets/renovation/customers/bora.png",
         trait: "Checks every dessert carefully",
         mood: "Expert Taste",
         favorite: "Cake",
@@ -1081,7 +1178,7 @@
       {
         id: "ada",
         name: "Ada",
-        portrait: "assets/renovation/ada.png",
+        portrait: "assets/renovation/customers/ada.png",
         trait: "Loves stylish drinks",
         mood: "Trendy",
         favorite: "Fancy Drink",
@@ -1098,7 +1195,7 @@
       {
         id: "emre",
         name: "Emre",
-        portrait: "assets/renovation/emre.png",
+        portrait: "assets/renovation/customers/emre.png",
         trait: "Student on a budget",
         mood: "Friendly",
         favorite: "Cupcake",
@@ -1117,10 +1214,19 @@
     const mergeMap = {};
     Object.keys(chainStart).forEach(chain => {
       const s = chainStart[chain];
-      mergeMap[s] = s + 1;
-      mergeMap[s + 1] = s + 2;
-      mergeMap[s + 2] = s + 3;
+      for (let i = 0; i < CHAIN_LENGTH - 1; i++) {
+        mergeMap[s + i] = s + i + 1;
+      }
     });
+
+    function chainEnd(chain) {
+      return chainStart[chain] + CHAIN_LENGTH - 1;
+    }
+
+    function isMaxItem(itemIndex) {
+      const item = items[itemIndex];
+      return item && item.level >= CHAIN_LENGTH;
+    }
 
     const boardSize = 30;
     let board = Array(boardSize).fill(null);
@@ -1227,11 +1333,11 @@
           const type = data.machine;
           const def = machineDefs[type];
           cell.classList.add("machine", def.cls);
-          cell.innerHTML = `<div>${getMachineEmoji(type)}</div><div class="machine-label">${def.short} Lv.${machineLevels[type]}</div>`;
+          cell.innerHTML = `${machineImageHTML(type)}<div class="machine-label">${def.short} Lv.${machineLevels[type]}</div>`;
         } else if (data && data.item !== undefined) {
           if (data.lucky) cell.classList.add("lucky-cell");
           const item = items[data.item];
-          cell.innerHTML = `<div class="item">${item.emoji}</div><div class="item-name">${item.name}</div>`;
+          cell.innerHTML = `<div class="item">${itemImageHTML(data.item)}</div><div class="item-name">${item.name}</div>`;
           if (data.lucky) addBadge(cell, "✨", "badge-lucky");
           if (data.chainBadge) addBadge(cell, "⭐", "badge-star");
           if (isOrderReady(data.item)) addBadge(cell, "✓", "badge-ready");
@@ -1253,13 +1359,27 @@
       cell.appendChild(b);
     }
 
+    function safeImgHTML(src, alt, cls, fallback) {
+      if (!src) return `<span class="emoji-fallback">${fallback || ""}</span>`;
+      return `<span class="asset-wrap"><img class="${cls}" src="${src}" alt="${alt}" draggable="false" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex';"><span class="emoji-fallback" style="display:none">${fallback || ""}</span></span>`;
+    }
+
+    function itemImageHTML(itemIndex, cls = "item-img") {
+      const item = items[itemIndex];
+      if (!item) return "";
+      return safeImgHTML(item.img, item.name, cls, item.emoji);
+    }
+
+    function machineImageHTML(type, cls = "machine-img") {
+      const def = machineDefs[type];
+      if (!def) return "";
+      return safeImgHTML(def.img, def.name, cls, def.emoji);
+    }
+
     function getMachineEmoji(type) {
-      const lvl = machineLevels[type];
+      const lvl = Math.min(machineLevels[type], CHAIN_LENGTH);
       const s = chainStart[machineDefs[type].chain];
-      if (lvl <= 1) return items[s].emoji;
-      if (lvl === 2) return items[s + 1].emoji;
-      if (lvl === 3) return items[s + 2].emoji;
-      return items[s + 3].emoji;
+      return items[s + lvl - 1].emoji;
     }
 
     function pointerDown(e) {
@@ -1357,7 +1477,7 @@
 
       const ghost = document.createElement("div");
       ghost.className = "drag-ghost";
-      ghost.textContent = getBoardObjectEmoji(data);
+      ghost.innerHTML = getBoardObjectVisual(data);
       document.body.appendChild(ghost);
       pointerDrag.ghost = ghost;
       pointerDrag.active = true;
@@ -1395,6 +1515,12 @@
       if (!data) return "";
       if (data.machine) return getMachineEmoji(data.machine);
       return items[data.item].emoji;
+    }
+
+    function getBoardObjectVisual(data) {
+      if (!data) return "";
+      if (data.machine) return machineImageHTML(data.machine);
+      return itemImageHTML(data.item);
     }
 
     function handleBoardTap(index) {
@@ -1464,7 +1590,7 @@
 
         board[to] = makeItem(newItem, {
           lucky: a.lucky || b.lucky,
-          chainBadge: newLevel === 4 || a.chainBadge || b.chainBadge
+          chainBadge: isMaxItem(newItem) || a.chainBadge || b.chainBadge
         });
 
         board[from] = null;
@@ -1473,7 +1599,7 @@
         daily.merge.value++;
         updateAchievements();
 
-        setMsg(newLevel === 4 ? items[newItem].name + " completed! ⭐" : ((a.lucky || b.lucky) ? "Lucky merge! ✨" : "Nice merge!"));
+        setMsg(isMaxItem(newItem) ? items[newItem].name + " completed! ⭐" : ((a.lucky || b.lucky) ? "Lucky merge! ✨" : "Nice merge!"));
         playSound("merge");
         return;
       }
@@ -1517,15 +1643,23 @@
     function getMachineItem(type) {
       const chain = machineDefs[type].chain;
       const start = chainStart[chain];
-      const level = machineLevels[type];
-      const discovered = discoveredLevel[chain];
-      const maxLevel = Math.min(level, discovered);
-      const r = Math.random();
+      const maxLevel = Math.min(machineLevels[type], discoveredLevel[chain], CHAIN_LENGTH);
 
       if (maxLevel <= 1) return start;
-      if (maxLevel === 2) return r < 0.82 ? start : start + 1;
-      if (maxLevel === 3) return r < 0.65 ? start : r < 0.92 ? start + 1 : start + 2;
-      return r < 0.5 ? start : r < 0.8 ? start + 1 : r < 0.96 ? start + 2 : start + 3;
+
+      const weights = [];
+      for (let i = 0; i < maxLevel; i++) {
+        weights.push(Math.pow(0.55, i));
+      }
+
+      const total = weights.reduce((a, b) => a + b, 0);
+      let r = Math.random() * total;
+      for (let i = 0; i < weights.length; i++) {
+        r -= weights[i];
+        if (r <= 0) return start + i;
+      }
+
+      return start + maxLevel - 1;
     }
 
     function createCustomers() {
@@ -1568,7 +1702,7 @@
     }
 
     function orderEmojiText(orderArr) {
-      return orderArr.map(i => items[i].emoji).join(" + ");
+      return orderArr.map((i, idx) => `${idx > 0 ? '<span class="order-plus">+</span>' : ''}${itemImageHTML(i, "order-icon-img")}`).join("");
     }
 
     function orderNameText(orderArr) {
@@ -1653,7 +1787,7 @@
 
     function getBaseReward(itemIndex) {
       const level = items[itemIndex].level;
-      const base = { 1: 8, 2: 20, 3: 45, 4: 85 };
+      const base = { 1: 8, 2: 20, 3: 45, 4: 85, 5: 140, 6: 220 };
       return base[level] || 15;
     }
 
@@ -1930,12 +2064,12 @@
       const label = chainLabel(chain);
       const level = discoveredLevel[chain];
 
-      if (level >= 4) {
+      if (level >= CHAIN_LENGTH) {
         return `<button class="green-btn" disabled>${label} Research Complete ✓</button>`;
       }
 
       const nextItem = items[chainStart[chain] + level];
-      return `<button class="blue-btn" onclick="doResearch('${chain}'); refreshOpenSheet();">${label} Research - ${researchCost[chain]} 🪙<br>Discover: ${nextItem.emoji} ${nextItem.name}</button>`;
+      return `<button class="blue-btn" onclick="doResearch('${chain}'); refreshOpenSheet();">${label} Research - ${researchCost[chain]} 🪙<br>Discover: ${itemImageHTML(chainStart[chain] + level, "order-icon-img")} ${nextItem.name}</button>`;
     }
 
     function chainLabel(chain) {
@@ -1949,7 +2083,7 @@
     }
 
     function doResearch(chain) {
-      if (discoveredLevel[chain] >= 4) {
+      if (discoveredLevel[chain] >= CHAIN_LENGTH) {
         setMsg("All recipes already discovered.");
         return;
       }
@@ -1973,7 +2107,7 @@
       updateAchievements();
       famePoints += 8;
 
-      showGameModal("🔬", "New Recipe Discovered!", item.emoji + " " + item.name, "Unlocked for merge, machine production and customer orders. Reward: +8 ⭐");
+      showGameModal("🔬", "New Recipe Discovered!", itemImageHTML(itemIndex, "info-item-img") + "<br>" + item.name, "Unlocked for merge, machine production and customer orders. Reward: +8 ⭐");
       setMsg(item.name + " discovered!");
       playSound("upgrade");
 
@@ -2120,7 +2254,7 @@
       famePoints += 20;
       updateAchievements();
 
-      showGameModal("🛒", "New Machine Unlocked!", def.emoji + " " + def.name, "A new item chain is now available. Reward: +20 ⭐");
+      showGameModal("🛒", "New Machine Unlocked!", machineImageHTML(type, "info-machine-img") + "<br>" + def.name, "A new item chain is now available. Reward: +20 ⭐");
       setMsg(def.name + " unlocked!");
       playSound("upgrade");
 
@@ -2308,24 +2442,26 @@
         const produces = getMachineProductionText(type);
         return `
           <div class="panel-card">
-            <h3>${getMachineEmoji(type)} ${def.name}</h3>
+            ${machineImageHTML(type, "info-machine-img")}
+            <h3>${def.name}</h3>
             <p><b>Level:</b> ${lvl}</p>
             <p><b>Produces:</b> ${produces}</p>
             <p><b>How it works:</b> Tap the machine to produce items. Drag it to move it on the board.</p>
-            <p><b>Upgrade:</b> ${lvl >= 4 ? "Max level reached." : "Cost: " + cost + " 🔧"}</p>
-            <button class="${type === "drink" ? "blue-btn" : "orange-btn"}" onclick="upgradeMachine('${type}'); refreshOpenSheet();" ${lvl >= 4 ? "disabled" : ""}>${lvl >= 4 ? "Max Level" : "Upgrade Machine"}</button>
+            <p><b>Upgrade:</b> ${lvl >= CHAIN_LENGTH ? "Max level reached." : "Cost: " + cost + " 🔧"}</p>
+            <button class="${type === "drink" ? "blue-btn" : "orange-btn"}" onclick="upgradeMachine('${type}'); refreshOpenSheet();" ${lvl >= CHAIN_LENGTH ? "disabled" : ""}>${lvl >= CHAIN_LENGTH ? "Max Level" : "Upgrade Machine"}</button>
           </div>`;
       }
 
       const item = items[data.item];
       const chain = getChainItems(item.chain);
       const nextIndex = mergeMap[data.item];
-      const nextText = nextIndex !== undefined ? items[nextIndex].emoji + " " + items[nextIndex].name : "Max level";
+      const nextText = nextIndex !== undefined ? itemImageHTML(nextIndex, "order-icon-img") + " " + items[nextIndex].name : "Max level";
       const how = item.level === 1 ? "Produced by " + chainLabel(item.chain) + " machine." : "Merge two previous items from the same chain.";
 
       return `
         <div class="panel-card">
-          <h3>${item.emoji} ${item.name}</h3>
+          ${itemImageHTML(data.item, "info-item-img")}
+          <h3>${item.name}</h3>
           <p><b>Product name:</b> ${item.name}</p>
           <p><b>How to make:</b> ${how}</p>
           <p><b>Merge chain:</b> ${chain.map(i => items[i].name).join(" → ")}</p>
@@ -2338,22 +2474,24 @@
 
     function getChainItems(chain) {
       const s = chainStart[chain];
-      return [s, s + 1, s + 2, s + 3];
+      const arr = [];
+      for (let i = 0; i < CHAIN_LENGTH; i++) arr.push(s + i);
+      return arr;
     }
 
     function getMachineProductionText(type) {
       const chain = machineDefs[type].chain;
       const start = chainStart[chain];
-      const max = Math.min(machineLevels[type], discoveredLevel[chain]);
+      const max = Math.min(machineLevels[type], discoveredLevel[chain], CHAIN_LENGTH);
       const names = [];
-      for (let i = 0; i < max; i++) names.push(items[start + i].emoji + " " + items[start + i].name);
+      for (let i = 0; i < max; i++) names.push(itemImageHTML(start + i, "order-icon-img") + " " + items[start + i].name);
       return names.join(", ");
     }
 
     function upgradeMachine(type) {
       const lvl = machineLevels[type];
 
-      if (lvl >= 4) {
+      if (lvl >= CHAIN_LENGTH) {
         setMsg("Machine already max.");
         return;
       }
@@ -2378,7 +2516,8 @@
 
     function upgradeCost(type) {
       const lvl = machineLevels[type];
-      return lvl === 1 ? 3 : lvl === 2 ? 6 : lvl === 3 ? 10 : 999;
+      const costs = { 1: 3, 2: 6, 3: 10, 4: 15, 5: 22 };
+      return costs[lvl] || 999;
     }
 
     function checkFameRankUp() {
