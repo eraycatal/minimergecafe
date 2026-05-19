@@ -1013,15 +1013,14 @@
       {
         id: "luna",
         name: "Luna",
-        portrait: "assets/renovation/luna.png",
-        trait: "Sweet drink lover",
+        portrait: "assets/renovation/customers/luna.png",
+        trait: "Loves sweet drinks",
         mood: "Sweet Tooth",
         favorite: "Latte",
-        favChains: ["drink", "dessert"],
         visits: 0,
         unlocked: 0,
         costs: [80, 160, 260],
-        bonusNames: ["Latte orders +5 coins", "Sweet combo chance improves", "Sweet drink customers appear more often"],
+        bonusNames: ["Latte orders +5 coins", "Dessert combo chance improves", "Sweet drink customers appear more often"],
         stories: [
           "Luna says your cafe is the cutest place to spend the afternoon.",
           "She starts posting your drinks online and brings more trendy visitors.",
@@ -1031,11 +1030,10 @@
       {
         id: "kerem",
         name: "Kerem",
-        portrait: "assets/renovation/kerem.png",
+        portrait: "assets/renovation/customers/kerem.png",
         trait: "Office break regular",
         mood: "In a Hurry",
         favorite: "Coffee",
-        favChains: ["drink", "bakery"],
         visits: 0,
         unlocked: 0,
         costs: [70, 150, 240],
@@ -1049,11 +1047,10 @@
       {
         id: "leyla",
         name: "Grandma Leyla",
-        portrait: "assets/renovation/leyla.png",
+        portrait: "assets/renovation/customers/leyla.png",
         trait: "Warm coffee mornings",
         mood: "Relaxed",
         favorite: "Coffee",
-        favChains: ["drink", "tea"],
         visits: 0,
         unlocked: 0,
         costs: [90, 170, 270],
@@ -1067,11 +1064,10 @@
       {
         id: "bora",
         name: "Chef Bora",
-        portrait: "assets/renovation/bora.png",
-        trait: "Dessert expert",
+        portrait: "assets/renovation/customers/bora.png",
+        trait: "Checks every dessert carefully",
         mood: "Expert Taste",
         favorite: "Cake",
-        favChains: ["dessert", "bakery"],
         visits: 0,
         unlocked: 0,
         costs: [130, 230, 340],
@@ -1085,11 +1081,10 @@
       {
         id: "ada",
         name: "Ada",
-        portrait: "assets/renovation/ada.png",
-        trait: "Trendy drink fan",
+        portrait: "assets/renovation/customers/ada.png",
+        trait: "Loves stylish drinks",
         mood: "Trendy",
         favorite: "Fancy Drink",
-        favChains: ["drink", "juice"],
         visits: 0,
         unlocked: 0,
         costs: [120, 220, 340],
@@ -1103,11 +1098,10 @@
       {
         id: "emre",
         name: "Emre",
-        portrait: "assets/renovation/emre.png",
-        trait: "Student regular",
+        portrait: "assets/renovation/customers/emre.png",
+        trait: "Student on a budget",
         mood: "Friendly",
         favorite: "Cupcake",
-        favChains: ["dessert", "drink"],
         visits: 0,
         unlocked: 0,
         costs: [75, 155, 250],
@@ -1116,78 +1110,6 @@
           "Emre studies here because the atmosphere helps him focus.",
           "He brings friends during exam weeks and fills the cafe with energy.",
           "Now your place is known among students as their favorite study cafe."
-        ]
-      },
-      {
-        id: "ece",
-        name: "Ece",
-        portrait: "assets/renovation/ece.png",
-        trait: "Book lover",
-        mood: "Calm",
-        favorite: "Green Tea",
-        favChains: ["tea", "dessert"],
-        visits: 0,
-        unlocked: 0,
-        costs: [85, 165, 260],
-        bonusNames: ["Tea orders +5 coins", "Research costs -10 coins", "Tea customers appear more often"],
-        stories: [
-          "Ece starts reading her favorite books at the corner table.",
-          "She brings other readers and quiet afternoons become busier.",
-          "Your cafe becomes known as the coziest reading spot nearby."
-        ]
-      },
-      {
-        id: "mert",
-        name: "Mert",
-        portrait: "assets/renovation/mert.png",
-        trait: "Gamer customer",
-        mood: "Playful",
-        favorite: "Bubble Tea",
-        favChains: ["tea", "ice"],
-        visits: 0,
-        unlocked: 0,
-        costs: [85, 165, 260],
-        bonusNames: ["Combo orders +5 coins", "Multi-order chance +5%", "Ice orders appear more often"],
-        stories: [
-          "Mert drops by between gaming sessions for quick sweet drinks.",
-          "His friends begin using the cafe as their small meeting spot.",
-          "Gaming groups start ordering more combo snacks and drinks."
-        ]
-      },
-      {
-        id: "selin",
-        name: "Selin",
-        portrait: "assets/renovation/selin.png",
-        trait: "Business regular",
-        mood: "Focused",
-        favorite: "Coffee",
-        favChains: ["drink", "bakery"],
-        visits: 0,
-        unlocked: 0,
-        costs: [110, 210, 320],
-        bonusNames: ["Bakery orders +5 coins", "Office customers give +3 fame", "Premium orders appear more often"],
-        stories: [
-          "Selin chooses your cafe for quick meetings and focused breaks.",
-          "Her team starts placing bigger snack orders in the afternoon.",
-          "Business customers now see your cafe as a reliable stop."
-        ]
-      },
-      {
-        id: "can",
-        name: "Can",
-        portrait: "assets/renovation/can.png",
-        trait: "Sporty customer",
-        mood: "Energetic",
-        favorite: "Smoothie",
-        favChains: ["juice", "ice"],
-        visits: 0,
-        unlocked: 0,
-        costs: [90, 180, 280],
-        bonusNames: ["Juice orders +5 coins", "Energy rewards +1", "Healthy orders appear more often"],
-        stories: [
-          "Can comes in after training and asks for something fresh.",
-          "He recommends your smoothies to his gym friends.",
-          "Healthy drinks become a small but loyal part of the cafe menu."
         ]
       }
     ];
@@ -1225,7 +1147,6 @@
     let newItemIndex = null;
     let mergedItemIndex = null;
     let customers = [];
-    let customerDeck = [];
     let giftProgress = 0;
     let giftReady = false;
     let ordersSinceLastPart = 0;
@@ -1654,81 +1575,27 @@
       return orderArr.map(i => items[i].name).join(" + ");
     }
 
-
-    function shuffleArray(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
-    function refillCustomerDeck() {
-      customerDeck = shuffleArray(storyProfiles.map(p => p.id));
-    }
-
-    function nextCustomerProfile() {
-      const activeIds = customers.map(c => c.profile.id);
-      if (customerDeck.length === 0) refillCustomerDeck();
-
-      let tries = 0;
-      while (tries < storyProfiles.length * 3) {
-        if (customerDeck.length === 0) refillCustomerDeck();
-        const id = customerDeck.shift();
-        if (!activeIds.includes(id)) return storyProfiles.find(p => p.id === id);
-        customerDeck.push(id);
-        tries++;
-      }
-
-      return storyProfiles.find(p => !activeIds.includes(p.id)) || storyProfiles[0];
-    }
-
-    function orderKey(orderArr) {
-      return orderArr.slice().sort((a, b) => a - b).join("-");
-    }
-
-    function weightedOrdersForProfile(profile) {
-      const base = availableOrders();
-      const weighted = [...base];
-      base.forEach(itemIndex => {
-        if (profile.favChains && profile.favChains.includes(items[itemIndex].chain)) weighted.push(itemIndex, itemIndex);
-      });
-      return weighted.length ? weighted : base;
-    }
-
-    function generateUniqueOrder(profile) {
-      const activeKeys = customers.map(c => orderKey(c.orders));
-      let fallback = null;
-
-      for (let tries = 0; tries < 50; tries++) {
-        const pool = weightedOrdersForProfile(profile);
-        const orderCount = shouldMakeMultiOrder() ? 2 : 1;
-        const orders = [];
-
-        while (orders.length < orderCount && pool.length) {
-          const pick = pool[Math.floor(Math.random() * pool.length)];
-          if (!orders.includes(pick)) orders.push(pick);
-          if (pool.length === 1) break;
-        }
-
-        if (!orders.length) orders.push(availableOrders()[0]);
-        const key = orderKey(orders);
-        fallback = orders;
-        if (!activeKeys.includes(key)) return orders;
-      }
-
-      return fallback || [availableOrders()[0]];
-    }
-
     function setupCustomers() {
       customers = [];
-      refillCustomerDeck();
       for (let i = 0; i < customerSlots; i++) customers.push(newCustomer());
     }
 
     function newCustomer() {
-      const profile = nextCustomerProfile();
-      const orders = generateUniqueOrder(profile);
+      const profile = storyProfiles[Math.floor(Math.random() * storyProfiles.length)];
+      const orderCount = shouldMakeMultiOrder() ? 2 : 1;
+      const pool = availableOrders();
+      const orders = [];
+
+      for (let i = 0; i < orderCount; i++) {
+        let pick = pool[Math.floor(Math.random() * pool.length)];
+        let safety = 0;
+        while (orders.includes(pick) && safety < 10) {
+          pick = pool[Math.floor(Math.random() * pool.length)];
+          safety++;
+        }
+        orders.push(pick);
+      }
+
       return { profile, orders, givesPart: orderGivesPart() };
     }
 
@@ -1747,8 +1614,7 @@
         if (!isChainAvailable(chain)) return;
         const start = chainStart[chain];
         const max = discoveredLevel[chain];
-        const minLevel = (chain === "drink" || chain === "dessert") ? 2 : 1;
-        for (let lvl = minLevel; lvl <= max; lvl++) {
+        for (let lvl = 2; lvl <= max; lvl++) {
           result.push(start + lvl - 1);
         }
       });
@@ -1914,6 +1780,14 @@
         ${renderTask("merge", daily.merge)}
         ${renderTask("serve", daily.serve)}
         ${renderTask("discover", daily.discover)}
+        ${renderTask("mini", daily.mini)}
+
+        <div class="panel-card">
+          <h3>Mini Games</h3>
+          <p>Take a short break from merging and earn rewards.</p>
+          <button class="blue-btn" onclick="openSheet('minigame')">Open Mini Games</button>
+        </div>
+
         <div class="panel-card">
           <h3>Achievements</h3>
           <p>Long-term goals for progression.</p>
@@ -2173,6 +2047,12 @@
           <h3>Energy Boost</h3>
           <p>Watch a short ad break to get +15 energy.</p>
           <button class="blue-btn" onclick="watchAd(); refreshOpenSheet();" ${adCooldown ? "disabled" : ""}>${adCooldown ? "Available in " + adCooldownSeconds + "s" : "Watch Ad +15 ⚡"}</button>
+        </div>
+
+        <div class="panel-card">
+          <h3>Mini Games</h3>
+          <p>Play short mini games for bonus coins, fame and energy.</p>
+          <button class="purple-btn" onclick="openSheet('minigame')">Open Mini Games</button>
         </div>`;
     }
 
