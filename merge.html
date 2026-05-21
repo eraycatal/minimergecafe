@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Mini Merge Cafe</title>
-  <!-- VISUAL_ASSETS_V2_CHECKED -->
+  <!-- MINI_MERGE_CUSTOMERS_BALANCE_V2 -->
 
   <style>
     * {
@@ -965,6 +965,129 @@
       line-height: 1;
     }
 
+
+    /* Customer/order compact mobile-app layout v2 */
+    .orders-section { overflow: hidden; }
+
+    .customers {
+      cursor: grab;
+      scrollbar-width: thin;
+      scrollbar-color: #d69456 transparent;
+    }
+
+    .customers::-webkit-scrollbar {
+      display: block;
+      height: 6px;
+    }
+
+    .customers::-webkit-scrollbar-thumb {
+      background: #d69456;
+      border-radius: 999px;
+    }
+
+    .customer-card {
+      min-width: 145px;
+      padding: 8px;
+      border-radius: 20px;
+    }
+
+    .customer-top {
+      gap: 7px;
+      margin-bottom: 6px;
+    }
+
+    .portrait-ring {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      padding: 2px;
+    }
+
+    .portrait-ring img { border-radius: 12px; }
+
+    .customer-name {
+      font-size: 13px;
+      margin-bottom: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .customer-trait,
+    .customer-mood { display: none; }
+
+    .order-block {
+      padding: 7px;
+      margin-bottom: 7px;
+      border-radius: 14px;
+      min-height: 88px;
+    }
+
+    .order-label {
+      font-size: 9px;
+      margin-bottom: 2px;
+    }
+
+    .order-emoji {
+      min-height: 48px;
+      margin-bottom: 2px;
+    }
+
+    .order-icon-img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .order-name {
+      font-size: 10.5px;
+      min-height: 24px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .reward {
+      font-size: 10px;
+      gap: 3px;
+      margin-bottom: 6px;
+    }
+
+    .reward span { padding: 3px 5px; }
+
+    .serve-btn {
+      padding: 7px;
+      font-size: 12px;
+      border-radius: 11px;
+    }
+
+    .board {
+      width: 100%;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .cell {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .item-name,
+    .machine-label {
+      font-size: 5.4px;
+      padding: 0 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 380px) {
+      .board { gap: 5px; padding: 6px; }
+      .board-frame { padding: 10px; }
+      .customer-card { min-width: 138px; }
+      .order-icon-img { width: 46px; height: 46px; }
+      .portrait-ring { width: 39px; height: 39px; }
+    }
+
     @media (max-width: 380px) {
       .stat-pill { font-size: 12px; padding: 7px 3px; }
       h1 { font-size: 21px; }
@@ -1101,17 +1224,32 @@
 
     const fameRanks = [
       { name: "Unknown Cafe", need: 0, reward: "Customer stories unlocked." },
-      { name: "Local Favorite", need: 45, reward: "+1 Customer Slot, Bakery Oven offer, +10 Energy, +1 Part, +5 Gems." },
-      { name: "Trendy Spot", need: 120, reward: "Drink/Dessert discoveries improved, Tea and Juice machines unlocked, +15 Energy, +2 Parts." },
-      { name: "Famous Cafe", need: 240, reward: "Multi-order customers unlocked, Ice Cream machine unlocked, +20 Energy, +10 Gems." },
-      { name: "City Icon", need: 430, reward: "Rare combo orders, stronger story bonuses, +25 Energy, +20 Gems." }
+      { name: "Corner Cafe", need: 25, reward: "+5 Energy, +1 Part." },
+      { name: "Morning Spot", need: 60, reward: "Early combo orders unlocked, +5 Gems." },
+      { name: "Local Favorite", need: 110, reward: "New Customer Spot offer, Bakery Oven offer, +10 Energy." },
+      { name: "Cozy Hangout", need: 180, reward: "Tea and Juice machine offers, +2 Parts." },
+      { name: "Busy Counter", need: 270, reward: "More balanced orders, +10 Gems." },
+      { name: "Trendy Spot", need: 390, reward: "More combo orders, +15 Energy." },
+      { name: "Neighborhood Star", need: 540, reward: "Ice Cream machine offer, +2 Parts." },
+      { name: "Weekend Favorite", need: 720, reward: "High-level order chance improves, +15 Gems." },
+      { name: "City Cafe", need: 930, reward: "Final Customer Spot offer, +20 Energy." },
+      { name: "Famous Cafe", need: 1170, reward: "Stronger story bonuses, +3 Parts." },
+      { name: "Cafe Landmark", need: 1440, reward: "Rare orders appear more often, +20 Gems." },
+      { name: "Social Hotspot", need: 1740, reward: "Combo order rewards improve, +25 Energy." },
+      { name: "Premium Cafe", need: 2070, reward: "Research rewards improve, +3 Parts." },
+      { name: "City Icon", need: 2430, reward: "High-value orders improve, +25 Gems." },
+      { name: "Luxury Cafe", need: 2820, reward: "Lucky rewards improve, +30 Energy." },
+      { name: "Cafe Empire", need: 3240, reward: "Customer rewards improve, +4 Parts." },
+      { name: "Global Favorite", need: 3690, reward: "All order chains appear more often, +30 Gems." },
+      { name: "Legendary Cafe", need: 4170, reward: "Top-tier orders improve, +40 Energy." },
+      { name: "Mini Merge Master", need: 4680, reward: "Max fame rank reached." }
     ];
 
     const storyProfiles = [
       {
         id: "luna",
         name: "Luna",
-        portrait: "assets/renovation/customers/luna.png",
+        portrait: "assets/renovation/luna.png",
         trait: "Loves sweet drinks",
         mood: "Sweet Tooth",
         favorite: "Latte",
@@ -1128,7 +1266,7 @@
       {
         id: "kerem",
         name: "Kerem",
-        portrait: "assets/renovation/customers/kerem.png",
+        portrait: "assets/renovation/kerem.png",
         trait: "Office break regular",
         mood: "In a Hurry",
         favorite: "Coffee",
@@ -1145,7 +1283,7 @@
       {
         id: "leyla",
         name: "Grandma Leyla",
-        portrait: "assets/renovation/customers/leyla.png",
+        portrait: "assets/renovation/leyla.png",
         trait: "Warm coffee mornings",
         mood: "Relaxed",
         favorite: "Coffee",
@@ -1162,7 +1300,7 @@
       {
         id: "bora",
         name: "Chef Bora",
-        portrait: "assets/renovation/customers/bora.png",
+        portrait: "assets/renovation/bora.png",
         trait: "Checks every dessert carefully",
         mood: "Expert Taste",
         favorite: "Cake",
@@ -1179,7 +1317,7 @@
       {
         id: "ada",
         name: "Ada",
-        portrait: "assets/renovation/customers/ada.png",
+        portrait: "assets/renovation/ada.png",
         trait: "Loves stylish drinks",
         mood: "Trendy",
         favorite: "Fancy Drink",
@@ -1196,7 +1334,7 @@
       {
         id: "emre",
         name: "Emre",
-        portrait: "assets/renovation/customers/emre.png",
+        portrait: "assets/renovation/emre.png",
         trait: "Student on a budget",
         mood: "Friendly",
         favorite: "Cupcake",
@@ -1208,6 +1346,74 @@
           "Emre studies here because the atmosphere helps him focus.",
           "He brings friends during exam weeks and fills the cafe with energy.",
           "Now your place is known among students as their favorite study cafe."
+        ]
+      },
+      {
+        id: "ece",
+        name: "Ece",
+        portrait: "assets/renovation/ece.png",
+        trait: "",
+        mood: "",
+        favorite: "Tea",
+        visits: 0,
+        unlocked: 0,
+        costs: [85, 165, 260],
+        bonusNames: ["Tea orders +5 coins", "Tea customers appear more often", "Research rewards +1 fame"],
+        stories: [
+          "Ece studies in the corner and loves calm tea breaks.",
+          "She tells her book club about the cafe and brings quiet regulars.",
+          "Ece makes your cafe known as the best cozy reading spot."
+        ]
+      },
+      {
+        id: "mert",
+        name: "Mert",
+        portrait: "assets/renovation/mert.png",
+        trait: "",
+        mood: "",
+        favorite: "Iced Coffee",
+        visits: 0,
+        unlocked: 0,
+        costs: [85, 165, 260],
+        bonusNames: ["Drink orders +5 coins", "Multi-order chance +5%", "Energy rewards improve slightly"],
+        stories: [
+          "Mert comes in after gaming sessions for cold drinks.",
+          "He starts bringing friends who order quick snacks and drinks.",
+          "Mert turns the cafe into a small hangout for energetic customers."
+        ]
+      },
+      {
+        id: "selin",
+        name: "Selin",
+        portrait: "assets/renovation/selin.png",
+        trait: "",
+        mood: "",
+        favorite: "Coffee",
+        visits: 0,
+        unlocked: 0,
+        costs: [110, 210, 320],
+        bonusNames: ["Coffee orders +8 coins", "Bakery combo chance improves", "High-level orders reward more fame"],
+        stories: [
+          "Selin stops by between meetings and orders fast.",
+          "She recommends your cafe to people from nearby offices.",
+          "Selin makes your cafe a favorite business-break location."
+        ]
+      },
+      {
+        id: "can",
+        name: "Can",
+        portrait: "assets/renovation/can.png",
+        trait: "",
+        mood: "",
+        favorite: "Smoothie",
+        visits: 0,
+        unlocked: 0,
+        costs: [90, 180, 280],
+        bonusNames: ["Juice orders +5 coins", "Gift progress sometimes improves", "Fresh drink orders appear more often"],
+        stories: [
+          "Can visits after workouts and wants fresh drinks.",
+          "He brings teammates who love juice and light snacks.",
+          "Can makes your cafe popular with sporty customers."
         ]
       }
     ];
@@ -1244,10 +1450,14 @@
     let fameRank = 0;
     let totalServed = 0;
     let customerSlots = 3;
+    const MAX_CUSTOMER_SLOTS = 5;
+    let customerDeck = [];
+    let recentOrderKeys = [];
+    let recentOrderChains = [];
 
     let unlockedMachines = { drink: true, dessert: true, bakery: false, tea: false, juice: false, ice: false };
     let machineLevels = { drink: 1, dessert: 1, bakery: 1, tea: 1, juice: 1, ice: 1 };
-    let discoveredLevel = { drink: 2, dessert: 2, bakery: 1, tea: 1, juice: 1, ice: 1 };
+    let discoveredLevel = { drink: 3, dessert: 3, bakery: 2, tea: 2, juice: 2, ice: 2 };
     let researchCost = { drink: 120, dessert: 120, bakery: 150, tea: 170, juice: 180, ice: 200 };
 
     let selectedIndex = null;
@@ -1272,7 +1482,7 @@
       serve20: { title: "Serve 20 customers", value: 0, target: 20, reward: "💎 10", claimed: false },
       rank3: { title: "Reach Trendy Spot", value: 0, target: 1, reward: "🔧 3", claimed: false },
       unlock3: { title: "Unlock 3 machines", value: 2, target: 3, reward: "💎 15", claimed: false },
-      recipes6: { title: "Discover 6 recipes", value: 4, target: 6, reward: "🪙 150", claimed: false }
+      recipes6: { title: "Discover 6 recipes", value: 6, target: 6, reward: "🪙 150", claimed: false }
     };
 
     const pointerDrag = {
@@ -1292,6 +1502,14 @@
     const boardEl = document.getElementById("board");
     const customersEl = document.getElementById("customers");
     const messageEl = document.getElementById("message");
+
+    customersEl.addEventListener("wheel", function(e) {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        customersEl.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    }, { passive: false });
+
 
     function makeItem(item, opts = {}) {
       return { item, lucky: opts.lucky || false, chainBadge: opts.chainBadge || false };
@@ -1712,49 +1930,184 @@
 
     function setupCustomers() {
       customers = [];
+      refillCustomerDeck();
       for (let i = 0; i < customerSlots; i++) customers.push(newCustomer());
     }
 
-    function newCustomer() {
-      const profile = storyProfiles[Math.floor(Math.random() * storyProfiles.length)];
-      const orderCount = shouldMakeMultiOrder() ? 2 : 1;
-      const pool = availableOrders();
-      const orders = [];
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
 
-      for (let i = 0; i < orderCount; i++) {
-        let pick = pool[Math.floor(Math.random() * pool.length)];
-        let safety = 0;
-        while (orders.includes(pick) && safety < 10) {
-          pick = pool[Math.floor(Math.random() * pool.length)];
-          safety++;
+    function refillCustomerDeck() {
+      customerDeck = shuffleArray(storyProfiles.map(p => p.id));
+    }
+
+    function drawUniqueProfile() {
+      const activeIds = customers.map(c => c.profile.id);
+      if (customerDeck.length === 0) refillCustomerDeck();
+
+      let safety = 0;
+      while (safety < storyProfiles.length * 3) {
+        if (customerDeck.length === 0) refillCustomerDeck();
+        const id = customerDeck.shift();
+        if (!activeIds.includes(id)) {
+          return storyProfiles.find(p => p.id === id) || storyProfiles[0];
         }
-        orders.push(pick);
+        customerDeck.push(id);
+        safety++;
       }
 
+      return storyProfiles.find(p => !activeIds.includes(p.id)) || storyProfiles[Math.floor(Math.random() * storyProfiles.length)];
+    }
+
+    function newCustomer() {
+      const profile = drawUniqueProfile();
+      const orders = generateUniqueOrders(profile);
       return { profile, orders, givesPart: orderGivesPart() };
     }
 
     function shouldMakeMultiOrder() {
-      if (fameRank < 3) return false;
+      if (fameRank < 2) return false;
       const ada = storyProfiles.find(p => p.id === "ada");
-      let chance = fameRank >= 4 ? 0.45 : 0.25;
-      if (ada.unlocked >= 2) chance += 0.10;
+      let chance = fameRank >= 6 ? 0.48 : fameRank >= 4 ? 0.34 : 0.20;
+      if (ada && ada.unlocked >= 2) chance += 0.10;
       return Math.random() < chance;
     }
 
-    function availableOrders() {
-      const result = [];
+    function orderKey(orderArr) {
+      return orderArr.slice().sort((a, b) => a - b).join("-");
+    }
+
+    function getActiveOrderKeys() {
+      return customers.map(c => orderKey(c.orders));
+    }
+
+    function getActiveOrderChains() {
+      const chains = [];
+      customers.forEach(c => c.orders.forEach(itemIndex => chains.push(items[itemIndex].chain)));
+      return chains;
+    }
+
+    function generateUniqueOrders(profile) {
+      const activeKeys = getActiveOrderKeys();
+      const orderCount = shouldMakeMultiOrder() ? 2 : 1;
+      let fallback = [];
+
+      for (let attempt = 0; attempt < 60; attempt++) {
+        const orders = [];
+        const usedChains = [];
+
+        for (let i = 0; i < orderCount; i++) {
+          const item = pickBalancedOrderItem(profile, usedChains, orders);
+          if (item !== null && !orders.includes(item)) {
+            orders.push(item);
+            usedChains.push(items[item].chain);
+          }
+        }
+
+        if (orders.length === 0) orders.push(availableOrders()[0]);
+        fallback = orders;
+
+        const key = orderKey(orders);
+        if (!activeKeys.includes(key) && !recentOrderKeys.includes(key)) {
+          rememberOrder(orders);
+          return orders;
+        }
+      }
+
+      rememberOrder(fallback);
+      return fallback.length ? fallback : [availableOrders()[0]];
+    }
+
+    function rememberOrder(orders) {
+      const key = orderKey(orders);
+      recentOrderKeys.push(key);
+      if (recentOrderKeys.length > 10) recentOrderKeys.shift();
+
+      orders.forEach(itemIndex => {
+        recentOrderChains.push(items[itemIndex].chain);
+        if (recentOrderChains.length > 10) recentOrderChains.shift();
+      });
+    }
+
+    function pickBalancedOrderItem(profile, usedChains = [], usedItems = []) {
+      const groups = availableOrderGroups();
+      const chains = Object.keys(groups).filter(chain => groups[chain].length > 0);
+      if (chains.length === 0) return availableOrders()[0] || 1;
+
+      const activeChains = getActiveOrderChains();
+      const favoriteChain = favoriteToChain(profile.favorite);
+      const weightedChains = [];
+
+      chains.forEach(chain => {
+        let weight = 12;
+
+        if (activeChains.includes(chain)) weight -= 5;
+        if (recentOrderChains.includes(chain)) weight -= 3;
+        if (usedChains.includes(chain)) weight -= 7;
+        if (favoriteChain === chain) weight += 1;
+
+        const machineType = Object.keys(machineDefs).find(k => machineDefs[k].chain === chain);
+        if (machineType && unlockedMachines[machineType]) weight += 2;
+
+        weight = Math.max(1, weight);
+        for (let i = 0; i < weight; i++) weightedChains.push(chain);
+      });
+
+      const selectedChain = weightedChains[Math.floor(Math.random() * weightedChains.length)] || chains[0];
+      const pool = groups[selectedChain].filter(itemIndex => !usedItems.includes(itemIndex));
+      const finalPool = pool.length ? pool : groups[selectedChain];
+
+      const weightedItems = [];
+      finalPool.forEach(itemIndex => {
+        const lvl = items[itemIndex].level;
+        let weight = lvl <= 2 ? 9 : lvl === 3 ? 6 : lvl === 4 ? 4 : lvl === 5 ? 2 : 1;
+        for (let i = 0; i < weight; i++) weightedItems.push(itemIndex);
+      });
+
+      return weightedItems[Math.floor(Math.random() * weightedItems.length)] || finalPool[0];
+    }
+
+    function favoriteToChain(favorite) {
+      if (!favorite) return null;
+      const f = favorite.toLowerCase();
+      if (f.includes("tea")) return "tea";
+      if (f.includes("smoothie") || f.includes("juice")) return "juice";
+      if (f.includes("cake") || f.includes("cupcake") || f.includes("dessert")) return "dessert";
+      if (f.includes("coffee") || f.includes("latte") || f.includes("drink")) return "drink";
+      if (f.includes("sandwich") || f.includes("bagel") || f.includes("bakery")) return "bakery";
+      if (f.includes("ice") || f.includes("sundae")) return "ice";
+      return null;
+    }
+
+    function availableOrderGroups() {
+      const groups = {};
 
       Object.keys(chainStart).forEach(chain => {
         if (!isChainAvailable(chain)) return;
         const start = chainStart[chain];
-        const max = discoveredLevel[chain];
+        const max = Math.min(discoveredLevel[chain], CHAIN_LENGTH);
+        groups[chain] = [];
+
         for (let lvl = 2; lvl <= max; lvl++) {
-          result.push(start + lvl - 1);
+          groups[chain].push(start + lvl - 1);
         }
       });
 
-      if (result.length === 0) return [1, 5];
+      return groups;
+    }
+
+    function availableOrders() {
+      const groups = availableOrderGroups();
+      const result = [];
+      Object.keys(groups).forEach(chain => result.push(...groups[chain]));
+
+      if (result.length === 0) return [1, 7];
       return result;
     }
 
@@ -2026,7 +2379,7 @@
         <div class="unlock-card">
           <h3>Spend Coins</h3>
           <p>Coins unlock useful progress, not just numbers.</p>
-          <button class="orange-btn" onclick="unlockExtraCustomerSlot()" ${customerSlots >= 4 || fameRank < 1 ? "disabled" : ""}>Unlock 4th Customer Slot - 300 🪙</button>
+          ${renderCustomerSlotButton()}
         </div>
 
         <div class="panel-card">
@@ -2116,16 +2469,62 @@
       checkFameRankUp();
     }
 
-    function unlockExtraCustomerSlot() {
-      if (customerSlots >= 4) return;
-      if (fameRank < 1) { setMsg("Reach Local Favorite first."); return; }
-      if (coins < 300) { setMsg("Need 300 coins."); playSound("error"); return; }
+    function nextCustomerSlotRequirement() {
+      if (customerSlots >= MAX_CUSTOMER_SLOTS) {
+        return { cost: 0, rank: 0, label: "All customer spots unlocked" };
+      }
 
-      coins -= 300;
-      customerSlots = 4;
+      if (customerSlots === 3) {
+        return { cost: 250, rank: 3, label: "Unlock New Customer Spot" };
+      }
+
+      return { cost: 600, rank: 9, label: "Unlock Final Customer Spot" };
+    }
+
+    function renderCustomerSlotButton() {
+      const req = nextCustomerSlotRequirement();
+
+      if (customerSlots >= MAX_CUSTOMER_SLOTS) {
+        return `<button class="green-btn" disabled>Customer Spots: ${customerSlots}/${MAX_CUSTOMER_SLOTS} ✓</button>`;
+      }
+
+      const rankOk = fameRank >= req.rank;
+      const coinOk = coins >= req.cost;
+      const disabled = rankOk && coinOk ? "" : "disabled";
+      const needText = rankOk ? `${req.cost} 🪙` : `Requires ${fameRanks[req.rank].name}`;
+
+      return `<button class="orange-btn" onclick="unlockExtraCustomerSlot()" ${disabled}>${req.label} (${customerSlots}/${MAX_CUSTOMER_SLOTS}) - ${needText}</button>`;
+    }
+
+    function unlockExtraCustomerSlot() {
+      if (customerSlots >= MAX_CUSTOMER_SLOTS) {
+        setMsg("All customer spots are already unlocked.");
+        return;
+      }
+
+      const req = nextCustomerSlotRequirement();
+
+      if (fameRank < req.rank) {
+        setMsg("Reach " + fameRanks[req.rank].name + " first.");
+        playSound("error");
+        return;
+      }
+
+      if (coins < req.cost) {
+        setMsg("Need " + req.cost + " coins.");
+        playSound("error");
+        return;
+      }
+
+      coins -= req.cost;
+      customerSlots++;
       customers.push(newCustomer());
       famePoints += 25;
-      setMsg("4th customer slot unlocked! +25 ⭐");
+
+      showGameModal("👥", "New Customer Spot!", customerSlots + "/" + MAX_CUSTOMER_SLOTS + " spots unlocked", "More customers can wait at the same time. Reward: +25 ⭐");
+      setMsg("New customer spot unlocked!");
+      playSound("upgrade");
+
       updateAll();
       checkFameRankUp();
       refreshOpenSheet();
@@ -2250,6 +2649,7 @@
 
       gems -= def.cost;
       unlockedMachines[type] = true;
+      discoveredLevel[def.chain] = Math.max(discoveredLevel[def.chain], 2);
       board[empty] = { machine: type };
 
       famePoints += 20;
