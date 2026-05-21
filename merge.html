@@ -1496,11 +1496,254 @@
       margin-top: 6px;
     }
 
+
+
+    .energy-home-timer {
+      text-align: right;
+      font-size: 11px;
+      font-weight: 900;
+      color: #8b5e34;
+      margin: 6px 4px 0 0;
+      min-height: 14px;
+    }
+
+    .merge-drop-board {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      background: rgba(90,56,37,0.15);
+      border: 3px solid #d69456;
+      border-radius: 20px;
+      padding: 8px;
+      margin: 10px auto;
+      max-width: 320px;
+      touch-action: none;
+    }
+
+    .drop-cell {
+      aspect-ratio: 1 / 1;
+      background: linear-gradient(180deg,#fff4df,#f6d3a5);
+      border: 1px solid #e4af74;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .drop-cell.active {
+      outline: 3px solid #ffb703;
+      background: #fff8d9;
+    }
+
+    .drop-item-img {
+      width: 88%;
+      height: 88%;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 3px rgba(90,56,37,0.18));
+      pointer-events: none;
+    }
+
+    .drop-head {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .drop-stat {
+      background: #fff;
+      border: 2px solid #f1d3a5;
+      border-radius: 15px;
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: #6b4126;
+    }
+
+    .drop-controls {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .drop-control-btn {
+      background: linear-gradient(180deg,#ffffff,#fff1d9);
+      border: 2px solid #f1c27d;
+      color: #5a3825;
+      border-radius: 14px;
+      padding: 10px 4px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
     @media (max-width: 380px) {
       .customer-card { min-width: 205px; }
       .portrait-ring { width: 88px; height: 88px; }
       .order-icon-img { width: 66px; height: 66px; }
       .info-mini-grid, .rank-reward-icons { grid-template-columns: 1fr; }
+    }
+
+
+
+    /* ORDERS COMPACT REAL PATCH - paste-ready */
+    .orders-section {
+      padding: 9px;
+      margin-bottom: 10px;
+      max-height: none;
+      overflow: hidden;
+    }
+
+    .section-ribbon {
+      margin: -22px auto 8px;
+      padding: 7px 24px;
+      font-size: 15px;
+    }
+
+    .customers {
+      gap: 8px;
+      padding: 2px 1px 5px;
+    }
+
+    .customer-card {
+      min-width: 136px !important;
+      height: 154px;
+      padding: 7px !important;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fffaf4, #ffedd7);
+    }
+
+    .customer-card.ready {
+      border-color: #34c759;
+      box-shadow:
+        0 0 0 3px rgba(52,199,89,0.15),
+        0 5px 12px rgba(90,56,37,0.10);
+      animation: none;
+    }
+
+    .ready-check {
+      top: 5px;
+      right: 5px;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      z-index: 5;
+    }
+
+    .customer-top {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .portrait-ring {
+      width: 62px !important;
+      height: 62px !important;
+      border-radius: 18px;
+      padding: 2px;
+      margin: -2px auto 2px;
+    }
+
+    .portrait-ring img {
+      border-radius: 16px;
+      object-position: center top;
+    }
+
+    .customer-meta {
+      text-align: center;
+    }
+
+    .customer-name {
+      font-size: 13px;
+      line-height: 1.1;
+      margin-bottom: 3px;
+      text-align: center;
+    }
+
+    .customer-trait,
+    .customer-mood {
+      display: none !important;
+    }
+
+    .order-block {
+      height: 48px;
+      min-height: 48px !important;
+      padding: 4px 6px;
+      margin-bottom: 5px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+    }
+
+    .order-label {
+      display: none;
+    }
+
+    .order-emoji {
+      min-height: 0 !important;
+      margin: 0;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .order-icon-img {
+      width: 36px !important;
+      height: 36px !important;
+    }
+
+    .order-plus {
+      font-size: 12px;
+    }
+
+    .order-name {
+      flex: 1;
+      min-height: 0 !important;
+      text-align: left;
+      font-size: 10.5px;
+      line-height: 1.1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .reward {
+      font-size: 10px;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .reward span {
+      padding: 3px 5px;
+    }
+
+    .serve-btn {
+      padding: 4px 6px;
+      height: 24px;
+      font-size: 11px;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 380px) {
+      .customer-card {
+        min-width: 132px !important;
+        height: 150px;
+      }
+
+      .portrait-ring {
+        width: 58px !important;
+        height: 58px !important;
+      }
+
+      .order-icon-img {
+        width: 34px !important;
+        height: 34px !important;
+      }
     }
 
   </style>
@@ -1519,8 +1762,9 @@
         <div class="stat-pill" id="coinsText">🪙 0</div>
         <div class="stat-pill" id="gemsText">💎 25</div>
         <div class="stat-pill" id="partsText">🔧 0</div>
-        <div class="stat-pill" id="energyText">⚡ 30/75</div>
+        <div class="stat-pill" id="energyText">⚡ 25/100</div>
       </div>
+      <div class="energy-home-timer" id="energyHomeTimer">Next +1 ⚡ 2:00</div>
     </div>
 
     <div class="orders-section">
@@ -1853,7 +2097,7 @@
     let coins = 0;
     let gems = 25;
     let parts = 0;
-    let energy = 30;
+    let energy = 25;
     let maxEnergy = 100;
     let cafeLevel = 1;
     let famePoints = 0;
@@ -1882,6 +2126,25 @@
     let adCooldown = false;
     let adCooldownSeconds = 0;
     let adTimer = null;
+
+    const MERGE_DROP_COLS = 6;
+    const MERGE_DROP_ROWS = 10;
+    const MERGE_DROP_LIMIT = 90;
+    const MERGE_DROP_TARGET = 1000;
+    const MERGE_DROP_MAX_DAILY = 2;
+    let mergeDrop = {
+      active: false,
+      over: false,
+      success: false,
+      grid: [],
+      current: null,
+      score: 0,
+      timeLeft: MERGE_DROP_LIMIT,
+      timer: null,
+      dropTimer: null,
+      playsToday: 0,
+      dateKey: ""
+    };
 
     let daily = {
       merge: { title: "Merge 5 items", value: 0, target: 5, reward: "🪙 35", claimed: false },
@@ -2408,17 +2671,18 @@
 
         card.innerHTML = `
           ${ready ? `<div class="ready-check">✓</div>` : ""}
+
           <div class="customer-top">
             <div class="portrait-ring">
-              <img src="${c.profile.portrait}" alt="${c.profile.name}">
+              <img src="${c.profile.portrait}" alt="${c.profile.name}" draggable="false">
             </div>
+
             <div class="customer-meta">
               <div class="customer-name">${c.profile.name}</div>
             </div>
           </div>
 
           <div class="order-block">
-            <div class="order-label">Wants</div>
             <div class="order-emoji">${orderEmojiText(c.orders)}</div>
             <div class="order-name">${orderNameText(c.orders)}</div>
           </div>
@@ -2431,6 +2695,7 @@
 
           ${ready ? `<button class="serve-btn" onclick="serveCustomer(${index})">Serve</button>` : ``}
         `;
+
         customersEl.appendChild(card);
       });
     }
@@ -2780,7 +3045,7 @@
       if (type === "gift") { title.textContent = "🎁 Gift"; content.innerHTML = renderGiftPanel(); }
       if (type === "shop") { title.textContent = "🛒 Shop"; content.innerHTML = renderShopPanel(); }
       if (type === "info") { title.textContent = "ℹ️ Info"; content.innerHTML = renderInfoPanel(); }
-      if (type === "minigame") { title.textContent = "🎮 Mini Games"; content.innerHTML = renderMiniGamePanel(); }
+      if (type === "minigame") { title.textContent = "🎮 Merge Drop"; content.innerHTML = renderMiniGamePanel(); }
     }
 
     function closeSheet() {
@@ -2796,7 +3061,6 @@
         ${renderTask("merge", daily.merge)}
         ${renderTask("serve", daily.serve)}
         ${renderTask("discover", daily.discover)}
-        ${renderTask("mini", daily.mini)}
         <div class="panel-card">
           <h3>Achievements</h3>
           <p>Long-term goals for progression.</p>
@@ -3166,9 +3430,10 @@
         </div>
 
         <div class="panel-card">
-          <h3>Mini Games</h3>
-          <p>Play short mini games for bonus coins, fame and energy.</p>
-          <button class="purple-btn" onclick="openSheet('minigame')">Open Mini Games</button>
+          <h3>🎮 Merge Drop</h3>
+          <p>Drop cafe items, complete rows and reach 1000 points before time ends.</p>
+          <p><b>Daily plays:</b> ${MERGE_DROP_MAX_DAILY - mergeDrop.playsToday}/${MERGE_DROP_MAX_DAILY}</p>
+          <button class="purple-btn" onclick="openSheet('minigame')">Open Merge Drop</button>
         </div>`;
     }
 
@@ -3177,6 +3442,18 @@
       const m = Math.floor(sec / 60);
       const s = sec % 60;
       return m + ":" + String(s).padStart(2, "0");
+    }
+
+
+
+    function updateEnergyHomeTimer() {
+      const el = document.getElementById("energyHomeTimer");
+      if (!el) return;
+      if (energy >= maxEnergy) {
+        el.textContent = "Energy Full";
+      } else {
+        el.textContent = "Next +1 ⚡ " + formatSeconds(nextEnergySeconds || Math.ceil(getEnergyRegenMs() / 1000));
+      }
     }
 
     function renderShopPanel() {
@@ -3278,133 +3555,240 @@
       updateAll();
     }
 
+    function todayKey() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function loadMergeDropUsage() {
+      const key = todayKey();
+      const savedKey = localStorage.getItem("mmc_mergeDropDate") || "";
+      if (savedKey !== key) {
+        mergeDrop.dateKey = key;
+        mergeDrop.playsToday = 0;
+        localStorage.setItem("mmc_mergeDropDate", key);
+        localStorage.setItem("mmc_mergeDropPlays", "0");
+      } else {
+        mergeDrop.dateKey = key;
+        mergeDrop.playsToday = Number(localStorage.getItem("mmc_mergeDropPlays")) || 0;
+      }
+    }
+
+    function saveMergeDropUsage() {
+      localStorage.setItem("mmc_mergeDropDate", todayKey());
+      localStorage.setItem("mmc_mergeDropPlays", String(mergeDrop.playsToday));
+    }
+
     function renderMiniGamePanel() {
+      loadMergeDropUsage();
       return `
         <div class="panel-card">
-          <h3>🧽 Clean the Table</h3>
-          <p>Tap all stains before they disappear. Reward: coins + fame.</p>
-          <button class="green-btn" onclick="startCleanGame(); refreshOpenSheet();">Start Clean Game</button>
-        </div>
-
-        <div class="panel-card">
-          <h3>☕ Coffee Rush</h3>
-          <p>Tap the correct sequence to make a quick drink. Reward: energy + coins.</p>
-          <button class="blue-btn" onclick="startRushGame(); refreshOpenSheet();">Start Coffee Rush</button>
-        </div>
-
-        <div id="miniGameMount">${renderActiveMiniGame()}</div>`;
+          <h3>🎮 Merge Drop</h3>
+          <p>Use cafe products like a mini Tetris game. Fill a full row to clear it and gain points.</p>
+          <div class="drop-head">
+            <div class="drop-stat">⭐ ${mergeDrop.score}</div>
+            <div class="drop-stat">⏱️ ${mergeDrop.timeLeft}s</div>
+            <div class="drop-stat">🎯 ${MERGE_DROP_TARGET}</div>
+          </div>
+          ${renderMergeDropStatus()}
+          ${renderMergeDropBoard()}
+          ${renderMergeDropControls()}
+        </div>`;
     }
 
-    function renderActiveMiniGame() {
-      if (cleanGame.active) {
-        return `
-          <div class="panel-card">
-            <h3>Clean the Table</h3>
-            <p>Remaining stains: ${cleanGame.remaining}</p>
-            <div class="mini-game-area" id="cleanArea"></div>
-          </div>`;
-      }
-
-      if (rushGame.active) {
-        return `
-          <div class="panel-card">
-            <h3>Coffee Rush</h3>
-            <p>Tap the sequence in order.</p>
-            <div class="rush-sequence">${rushGame.sequence.map((s, idx) => `<span style="${idx < rushGame.index ? "opacity:.35" : ""}">${s}</span>`).join("")}</div>
-            <div class="rush-btn-row">
-              <button class="rush-btn" onclick="tapRush('🫘')">🫘</button>
-              <button class="rush-btn" onclick="tapRush('☕')">☕</button>
-              <button class="rush-btn" onclick="tapRush('🥤')">🥤</button>
-            </div>
-          </div>`;
-      }
-
-      return ``;
+    function renderMergeDropStatus() {
+      const left = MERGE_DROP_MAX_DAILY - mergeDrop.playsToday;
+      if (mergeDrop.active) return `<p><b>Goal:</b> Reach 1000 points. Full rows give big points.</p>`;
+      if (mergeDrop.success) return `<p>✅ Success! Reward earned: +6 💎 +20 ⚡</p><button class="green-btn" onclick="startMergeDropGame(); refreshOpenSheet();" ${left > 0 ? "" : "disabled"}>Play Again (${left}/${MERGE_DROP_MAX_DAILY})</button>`;
+      if (mergeDrop.over) return `<p>Game over. Try again tomorrow or use your remaining daily play.</p><button class="orange-btn" onclick="startMergeDropGame(); refreshOpenSheet();" ${left > 0 ? "" : "disabled"}>Try Again (${left}/${MERGE_DROP_MAX_DAILY})</button>`;
+      return `<p><b>Daily plays:</b> ${left}/${MERGE_DROP_MAX_DAILY}</p><button class="purple-btn" onclick="startMergeDropGame(); refreshOpenSheet();" ${left > 0 ? "" : "disabled"}>Start Merge Drop</button>`;
     }
 
-    function startCleanGame() {
-      cleanGame.active = true;
-      cleanGame.remaining = 5;
-      cleanGame.reward = 0;
+    function renderMergeDropBoard() {
+      if (!mergeDrop.grid.length) initMergeDropGrid();
+      let html = `<div class="merge-drop-board" id="mergeDropBoard">`;
+      for (let r = 0; r < MERGE_DROP_ROWS; r++) {
+        for (let c = 0; c < MERGE_DROP_COLS; c++) {
+          let idx = mergeDrop.grid[r][c];
+          let active = false;
+          if (mergeDrop.current && mergeDrop.current.r === r && mergeDrop.current.c === c) {
+            idx = mergeDrop.current.item;
+            active = true;
+          }
+          html += `<div class="drop-cell ${active ? "active" : ""}">${idx !== null && idx !== undefined ? itemImageHTML(idx, "drop-item-img") : ""}</div>`;
+        }
+      }
+      html += `</div>`;
+      return html;
+    }
+
+    function renderMergeDropControls() {
+      return `
+        <div class="drop-controls">
+          <button class="drop-control-btn" onclick="moveMergeDrop(-1)">⬅️</button>
+          <button class="drop-control-btn" onclick="softDropMergeDrop()">⬇️</button>
+          <button class="drop-control-btn" onclick="moveMergeDrop(1)">➡️</button>
+          <button class="drop-control-btn" onclick="hardDropMergeDrop()">⏬</button>
+        </div>`;
+    }
+
+    function initMergeDropGrid() {
+      mergeDrop.grid = Array.from({ length: MERGE_DROP_ROWS }, () => Array(MERGE_DROP_COLS).fill(null));
+    }
+
+    function startMergeDropGame() {
+      loadMergeDropUsage();
+      if (mergeDrop.playsToday >= MERGE_DROP_MAX_DAILY) {
+        setMsg("Merge Drop daily plays are finished. Come back tomorrow.");
+        return;
+      }
+      stopMergeDropTimers();
+      mergeDrop.playsToday++;
+      saveMergeDropUsage();
+      mergeDrop.active = true;
+      mergeDrop.over = false;
+      mergeDrop.success = false;
+      mergeDrop.score = 0;
+      mergeDrop.timeLeft = MERGE_DROP_LIMIT;
+      initMergeDropGrid();
+      spawnMergeDropPiece();
       daily.mini.value++;
-      setTimeout(spawnCleanStains, 80);
+      mergeDrop.timer = setInterval(() => {
+        if (!mergeDrop.active) return;
+        mergeDrop.timeLeft--;
+        if (mergeDrop.timeLeft <= 0) finishMergeDrop(false);
+        refreshMiniGameIfOpen();
+      }, 1000);
+      mergeDrop.dropTimer = setInterval(() => {
+        if (!mergeDrop.active) return;
+        softDropMergeDrop(false);
+      }, 700);
+      setMsg("Merge Drop started! Reach 1000 points.");
     }
 
-    function spawnCleanStains() {
-      const area = document.getElementById("cleanArea");
-      if (!area) return;
-      area.innerHTML = "";
+    function stopMergeDropTimers() {
+      if (mergeDrop.timer) clearInterval(mergeDrop.timer);
+      if (mergeDrop.dropTimer) clearInterval(mergeDrop.dropTimer);
+      mergeDrop.timer = null;
+      mergeDrop.dropTimer = null;
+    }
 
-      for (let i = 0; i < 5; i++) {
-        const dot = document.createElement("button");
-        dot.className = "stain-dot";
-        dot.textContent = "🧽";
-        dot.style.left = Math.floor(Math.random() * 74 + 3) + "%";
-        dot.style.top = Math.floor(Math.random() * 68 + 8) + "%";
-        dot.onclick = () => cleanDot(dot);
-        area.appendChild(dot);
+    function randomMergeDropItem() {
+      const openChains = Object.keys(unlockedMachines).filter(ch => unlockedMachines[ch]);
+      const chain = openChains[Math.floor(Math.random() * openChains.length)] || "drink";
+      const maxLvl = Math.min(discoveredLevel[chain] || 2, 4);
+      const lvl = Math.floor(Math.random() * maxLvl);
+      return chainStart[chain] + lvl;
+    }
+
+    function spawnMergeDropPiece() {
+      const c = Math.floor(MERGE_DROP_COLS / 2);
+      if (mergeDrop.grid[0][c] !== null) {
+        finishMergeDrop(false);
+        return;
       }
+      mergeDrop.current = { r: 0, c, item: randomMergeDropItem() };
     }
 
-    function cleanDot(dot) {
-      if (!cleanGame.active) return;
-      dot.remove();
-      cleanGame.remaining--;
-      cleanGame.reward += 1;
-
-      if (cleanGame.remaining <= 0) finishCleanGame();
-      else {
-        refreshOpenSheet();
-        setTimeout(spawnCleanStains, 30);
-      }
+    function moveMergeDrop(dir) {
+      if (!mergeDrop.active || !mergeDrop.current) return;
+      const nc = mergeDrop.current.c + dir;
+      const r = mergeDrop.current.r;
+      if (nc < 0 || nc >= MERGE_DROP_COLS) return;
+      if (mergeDrop.grid[r][nc] !== null) return;
+      mergeDrop.current.c = nc;
+      refreshMiniGameIfOpen();
     }
 
-    function finishCleanGame() {
-      cleanGame.active = false;
-      coins += 25;
-      famePoints += 12;
-      giftProgress++;
-      setMsg("Clean game completed! +25 🪙 +12 ⭐");
-      playSound("upgrade");
-      updateAll();
-      checkFameRankUp();
-      refreshOpenSheet();
-    }
-
-    function startRushGame() {
-      rushGame.active = true;
-      rushGame.sequence = ["🫘", "☕", "🥤", "☕", "🫘"];
-      rushGame.index = 0;
-      rushGame.reward = 0;
-      daily.mini.value++;
-    }
-
-    function tapRush(symbol) {
-      if (!rushGame.active) return;
-
-      if (rushGame.sequence[rushGame.index] === symbol) {
-        rushGame.index++;
-        if (rushGame.index >= rushGame.sequence.length) finishRushGame();
-        else refreshOpenSheet();
+    function softDropMergeDrop(refresh = true) {
+      if (!mergeDrop.active || !mergeDrop.current) return;
+      const nr = mergeDrop.current.r + 1;
+      const c = mergeDrop.current.c;
+      if (nr >= MERGE_DROP_ROWS || mergeDrop.grid[nr][c] !== null) {
+        lockMergeDropPiece();
       } else {
-        rushGame.active = false;
-        setMsg("Coffee Rush failed. Try again!");
-        playSound("error");
-        refreshOpenSheet();
+        mergeDrop.current.r = nr;
+      }
+      if (refresh) refreshMiniGameIfOpen();
+    }
+
+    function hardDropMergeDrop() {
+      if (!mergeDrop.active || !mergeDrop.current) return;
+      while (mergeDrop.active && mergeDrop.current) {
+        const nr = mergeDrop.current.r + 1;
+        const c = mergeDrop.current.c;
+        if (nr >= MERGE_DROP_ROWS || mergeDrop.grid[nr][c] !== null) break;
+        mergeDrop.current.r = nr;
+        mergeDrop.score += 2;
+      }
+      lockMergeDropPiece();
+      refreshMiniGameIfOpen();
+    }
+
+    function lockMergeDropPiece() {
+      const p = mergeDrop.current;
+      if (!p) return;
+      mergeDrop.grid[p.r][p.c] = p.item;
+      mergeDrop.current = null;
+      mergeDrop.score += 15;
+      clearMergeDropRows();
+      if (mergeDrop.score >= MERGE_DROP_TARGET) {
+        finishMergeDrop(true);
+        return;
+      }
+      spawnMergeDropPiece();
+    }
+
+    function clearMergeDropRows() {
+      let cleared = 0;
+      for (let r = MERGE_DROP_ROWS - 1; r >= 0; r--) {
+        if (mergeDrop.grid[r].every(x => x !== null)) {
+          mergeDrop.grid.splice(r, 1);
+          mergeDrop.grid.unshift(Array(MERGE_DROP_COLS).fill(null));
+          cleared++;
+          r++;
+        }
+      }
+      if (cleared > 0) {
+        mergeDrop.score += cleared * 160 + (cleared > 1 ? cleared * 80 : 0);
+        playSound("merge");
       }
     }
 
-    function finishRushGame() {
-      rushGame.active = false;
-      coins += 20;
-      energy = Math.min(maxEnergy, energy + 6);
-      famePoints += 8;
-      setMsg("Coffee Rush completed! +20 🪙 +6 ⚡ +8 ⭐");
-      playSound("upgrade");
-      updateAll();
-      checkFameRankUp();
-      refreshOpenSheet();
+    function finishMergeDrop(success) {
+      if (!mergeDrop.active && !success) return;
+      stopMergeDropTimers();
+      mergeDrop.active = false;
+      mergeDrop.over = !success;
+      mergeDrop.success = success;
+      mergeDrop.current = null;
+      if (success) {
+        gems += 6;
+        energy = Math.min(maxEnergy, energy + 20);
+        famePoints += 20;
+        setMsg("Merge Drop success! +6 💎 +20 ⚡ +20 ⭐");
+        playSound("upgrade");
+        updateAll();
+        checkFameRankUp();
+      } else {
+        setMsg("Merge Drop ended. Target was 1000 points.");
+        playSound("error");
+      }
+      refreshMiniGameIfOpen();
     }
+
+    function refreshMiniGameIfOpen() {
+      const sheet = document.getElementById("sheet");
+      if (sheet.classList.contains("show") && sheet.dataset.type === "minigame") refreshOpenSheet();
+    }
+
+    document.addEventListener("keydown", function(e) {
+      if (!mergeDrop.active) return;
+      if (e.key === "ArrowLeft") { e.preventDefault(); moveMergeDrop(-1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); moveMergeDrop(1); }
+      if (e.key === "ArrowDown") { e.preventDefault(); softDropMergeDrop(); }
+      if (e.key === " ") { e.preventDefault(); hardDropMergeDrop(); }
+    });
 
     function openInfoPanel() {
       if (selectedIndex === null || !board[selectedIndex]) {
@@ -3670,6 +4054,7 @@
       document.getElementById("gemsText").textContent = "💎 " + gems;
       document.getElementById("partsText").textContent = "🔧 " + parts;
       document.getElementById("energyText").textContent = "⚡ " + energy + "/" + maxEnergy;
+      updateEnergyHomeTimer();
       giftReady = giftProgress >= giftTarget;
       persistEnergyState();
       createBoard();
@@ -3680,6 +4065,7 @@
     document.addEventListener("dragstart", e => e.preventDefault());
 
     applyOfflineEnergyRegen();
+    loadMergeDropUsage();
     setupCustomers();
     updateAll();
     setInterval(tickEnergyRegen, 1000);
