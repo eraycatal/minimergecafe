@@ -1753,7 +1753,6 @@
   <div class="app">
     <div class="topbar">
       <div class="title-row">
-        <div class="logo">☕</div>
         <h1>Mini Merge Cafe</h1>
         <div class="gear" onclick="openInfoPanel()">ℹ️</div>
       </div>
@@ -2103,8 +2102,8 @@
     let famePoints = 0;
     let fameRank = 0;
     let totalServed = 0;
-    let customerSlots = 4;
-    const MAX_CUSTOMER_SLOTS = 5;
+    let customerSlots = 3;
+    const MAX_CUSTOMER_SLOTS = 6;
     let customerDeck = [];
     let recentOrderKeys = [];
     let recentOrderChains = [];
@@ -2129,8 +2128,8 @@
 
     const MERGE_DROP_COLS = 6;
     const MERGE_DROP_ROWS = 10;
-    const MERGE_DROP_LIMIT = 90;
-    const MERGE_DROP_TARGET = 1000;
+    const MERGE_DROP_LIMIT = 120;
+    const MERGE_DROP_TARGET = 2000;
     const MERGE_DROP_MAX_DAILY = 2;
     let mergeDrop = {
       active: false,
@@ -2211,6 +2210,10 @@
       const savedGiftTarget = Number(localStorage.getItem("mmc_giftTarget"));
 
       if (!Number.isNaN(savedEnergy) && savedEnergy >= 0) energy = Math.min(savedEnergy, maxEnergy);
+      if (!localStorage.getItem("mmc_energyStart25_v1") && energy < 25) {
+        energy = 25;
+        localStorage.setItem("mmc_energyStart25_v1", "1");
+      }
       if (!Number.isNaN(savedMaxEnergy) && savedMaxEnergy >= maxEnergy) maxEnergy = savedMaxEnergy;
       if (!Number.isNaN(savedGiftStage) && savedGiftStage >= 0) giftStage = savedGiftStage;
       if (!Number.isNaN(savedGiftTarget) && savedGiftTarget >= 3) giftTarget = savedGiftTarget;
@@ -2241,6 +2244,7 @@
       if (energy >= maxEnergy) {
         nextEnergySeconds = 0;
         localStorage.setItem("mmc_lastEnergyTime", String(now));
+        updateEnergyHomeTimer();
         return;
       }
 
@@ -2254,6 +2258,7 @@
       }
 
       nextEnergySeconds = Math.max(0, Math.ceil((energyRegenMs - diff) / 1000));
+      updateEnergyHomeTimer();
       const sheet = document.getElementById("sheet");
       if (sheet && sheet.classList.contains("show") && sheet.dataset.type === "gift") refreshOpenSheet();
     }
@@ -3317,8 +3322,16 @@
         return { cost: 0, rank: 0, label: "All customer spots unlocked" };
       }
 
+      if (customerSlots === 3) {
+        return { cost: 180, rank: 3, label: "Unlock 4th Customer Spot" };
+      }
+
       if (customerSlots === 4) {
-        return { cost: 500, rank: 9, label: "Unlock Final Customer Spot" };
+        return { cost: 500, rank: 9, label: "Unlock 5th Customer Spot" };
+      }
+
+      if (customerSlots === 5) {
+        return { cost: 900, rank: 14, label: "Unlock 6th Customer Spot" };
       }
 
       return { cost: 0, rank: 0, label: "All customer spots unlocked" };
@@ -3407,7 +3420,6 @@
     }
 
     function renderGiftPanel() {
-      const timerText = energy >= maxEnergy ? "Energy is full." : "Next +1 energy in " + formatSeconds(nextEnergySeconds || Math.ceil(getEnergyRegenMs() / 1000)) + ".";
       return `
         <div class="panel-card">
           <h3>Gift Box</h3>
@@ -3416,12 +3428,6 @@
           <button class="green-btn" onclick="claimGift(); refreshOpenSheet();" ${giftReady ? "" : "disabled"}>${giftReady ? "Claim +8 ⚡" : "Locked"}</button>
         </div>
 
-        <div class="panel-card">
-          <h3>⚡ Energy Regen</h3>
-          <p>Energy refills with real time. It stops when your energy is full.</p>
-          <p><b>Rate:</b> ${fameRank >= 10 ? "1 energy / 90 sec" : "1 energy / 2 min"}</p>
-          <div class="energy-timer">${timerText}</div>
-        </div>
 
         <div class="panel-card">
           <h3>Energy Boost</h3>
@@ -3431,7 +3437,7 @@
 
         <div class="panel-card">
           <h3>🎮 Merge Drop</h3>
-          <p>Drop cafe items, complete rows and reach 1000 points before time ends.</p>
+          <p>Drop cafe items, complete rows and reach 2000 points before time ends.</p>
           <p><b>Daily plays:</b> ${MERGE_DROP_MAX_DAILY - mergeDrop.playsToday}/${MERGE_DROP_MAX_DAILY}</p>
           <button class="purple-btn" onclick="openSheet('minigame')">Open Merge Drop</button>
         </div>`;
@@ -3584,7 +3590,7 @@
       return `
         <div class="panel-card">
           <h3>🎮 Merge Drop</h3>
-          <p>Use cafe products like a mini Tetris game. Fill a full row to clear it and gain points.</p>
+          <p>Use cafe products like a mini Tetris game. Match 3+ same items in a row to clear them and gain points.</p>
           <div class="drop-head">
             <div class="drop-stat">⭐ ${mergeDrop.score}</div>
             <div class="drop-stat">⏱️ ${mergeDrop.timeLeft}s</div>
@@ -3598,7 +3604,7 @@
 
     function renderMergeDropStatus() {
       const left = MERGE_DROP_MAX_DAILY - mergeDrop.playsToday;
-      if (mergeDrop.active) return `<p><b>Goal:</b> Reach 1000 points. Full rows give big points.</p>`;
+      if (mergeDrop.active) return `<p><b>Goal:</b> Reach 2000 points. Same-item rows give big points.</p>`;
       if (mergeDrop.success) return `<p>✅ Success! Reward earned: +6 💎 +20 ⚡</p><button class="green-btn" onclick="startMergeDropGame(); refreshOpenSheet();" ${left > 0 ? "" : "disabled"}>Play Again (${left}/${MERGE_DROP_MAX_DAILY})</button>`;
       if (mergeDrop.over) return `<p>Game over. Try again tomorrow or use your remaining daily play.</p><button class="orange-btn" onclick="startMergeDropGame(); refreshOpenSheet();" ${left > 0 ? "" : "disabled"}>Try Again (${left}/${MERGE_DROP_MAX_DAILY})</button>`;
       return `<p><b>Daily plays:</b> ${left}/${MERGE_DROP_MAX_DAILY}</p><button class="purple-btn" onclick="startMergeDropGame(); refreshOpenSheet();" ${left > 0 ? "" : "disabled"}>Start Merge Drop</button>`;
@@ -3663,7 +3669,7 @@
         if (!mergeDrop.active) return;
         softDropMergeDrop(false);
       }, 700);
-      setMsg("Merge Drop started! Reach 1000 points.");
+      setMsg("Merge Drop started! Reach 2000 points.");
     }
 
     function stopMergeDropTimers() {
@@ -3719,7 +3725,6 @@
         const c = mergeDrop.current.c;
         if (nr >= MERGE_DROP_ROWS || mergeDrop.grid[nr][c] !== null) break;
         mergeDrop.current.r = nr;
-        mergeDrop.score += 2;
       }
       lockMergeDropPiece();
       refreshMiniGameIfOpen();
@@ -3730,7 +3735,6 @@
       if (!p) return;
       mergeDrop.grid[p.r][p.c] = p.item;
       mergeDrop.current = null;
-      mergeDrop.score += 15;
       clearMergeDropRows();
       if (mergeDrop.score >= MERGE_DROP_TARGET) {
         finishMergeDrop(true);
@@ -3740,18 +3744,53 @@
     }
 
     function clearMergeDropRows() {
+      const clear = Array.from({ length: MERGE_DROP_ROWS }, () => Array(MERGE_DROP_COLS).fill(false));
       let cleared = 0;
-      for (let r = MERGE_DROP_ROWS - 1; r >= 0; r--) {
-        if (mergeDrop.grid[r].every(x => x !== null)) {
-          mergeDrop.grid.splice(r, 1);
-          mergeDrop.grid.unshift(Array(MERGE_DROP_COLS).fill(null));
-          cleared++;
-          r++;
+      let lineBonus = 0;
+
+      for (let r = 0; r < MERGE_DROP_ROWS; r++) {
+        let c = 0;
+        while (c < MERGE_DROP_COLS) {
+          const item = mergeDrop.grid[r][c];
+          if (item === null || item === undefined) { c++; continue; }
+
+          let end = c + 1;
+          while (end < MERGE_DROP_COLS && mergeDrop.grid[r][end] === item) end++;
+          const len = end - c;
+
+          if (len >= 3) {
+            for (let x = c; x < end; x++) {
+              if (!clear[r][x]) { clear[r][x] = true; cleared++; }
+            }
+            lineBonus += len >= MERGE_DROP_COLS ? 420 : len * 120;
+          }
+          c = end;
         }
       }
-      if (cleared > 0) {
-        mergeDrop.score += cleared * 160 + (cleared > 1 ? cleared * 80 : 0);
-        playSound("merge");
+
+      if (cleared <= 0) return;
+
+      for (let r = 0; r < MERGE_DROP_ROWS; r++) {
+        for (let c = 0; c < MERGE_DROP_COLS; c++) {
+          if (clear[r][c]) mergeDrop.grid[r][c] = null;
+        }
+      }
+
+      applyMergeDropGravity();
+      mergeDrop.score += lineBonus + cleared * 20;
+      playSound("merge");
+    }
+
+    function applyMergeDropGravity() {
+      for (let c = 0; c < MERGE_DROP_COLS; c++) {
+        const stack = [];
+        for (let r = MERGE_DROP_ROWS - 1; r >= 0; r--) {
+          const item = mergeDrop.grid[r][c];
+          if (item !== null && item !== undefined) stack.push(item);
+        }
+        for (let r = MERGE_DROP_ROWS - 1; r >= 0; r--) {
+          mergeDrop.grid[r][c] = stack.length ? stack.shift() : null;
+        }
       }
     }
 
@@ -3771,7 +3810,7 @@
         updateAll();
         checkFameRankUp();
       } else {
-        setMsg("Merge Drop ended. Target was 1000 points.");
+        setMsg("Merge Drop ended. Target was 2000 points.");
         playSound("error");
       }
       refreshMiniGameIfOpen();
