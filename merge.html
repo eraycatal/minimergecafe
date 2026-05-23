@@ -3423,6 +3423,88 @@
       .orders-section .serve-btn{width:108px!important;height:25px!important;font-size:11px!important;}
     }
 
+
+    /* PATCH 144: final order polish + shop grid + machine cards */
+    .orders-section{
+      height:258px!important;min-height:258px!important;max-height:258px!important;
+      padding:18px 10px 12px!important;overflow:hidden!important;
+    }
+    .orders-section .section-ribbon,.section-ribbon{
+      margin:-18px auto 8px!important;padding:7px 24px!important;line-height:1.05!important;
+      transform:none!important;top:0!important;z-index:20!important;
+    }
+    .customers{height:214px!important;min-height:214px!important;max-height:214px!important;align-items:flex-start!important;overflow-y:hidden!important;}
+    .orders-section .customer-card{
+      flex:0 0 134px!important;width:134px!important;min-width:134px!important;max-width:134px!important;
+      height:204px!important;min-height:204px!important;max-height:204px!important;
+      grid-template-rows:86px 56px 22px 28px!important;row-gap:3px!important;
+      padding:3px 2px 4px!important;overflow:hidden!important;
+    }
+    .orders-section .customer-card.ready::before{inset:1px 1px 1px!important;border-radius:26px!important;}
+    .orders-section .ready-check{
+      top:8px!important;right:15px!important;width:20px!important;height:20px!important;
+      font-size:12px!important;line-height:18px!important;border:2px solid #fff!important;
+      box-shadow:0 2px 6px rgba(52,199,89,.28)!important;z-index:30!important;
+    }
+    .orders-section .portrait-ring{width:68px!important;height:68px!important;min-width:68px!important;min-height:68px!important;max-width:68px!important;max-height:68px!important;}
+    .orders-section .customer-name{font-size:12px!important;height:17px!important;line-height:17px!important;}
+    .orders-section .order-block{
+      width:112px!important;height:54px!important;min-height:54px!important;max-height:54px!important;
+      padding:4px 8px!important;overflow:hidden!important;
+    }
+    .orders-section .single-order .order-slot{width:48px!important;height:48px!important;min-width:48px!important;max-width:48px!important;overflow:visible!important;}
+    .orders-section .single-order .order-icon-img{width:47px!important;height:47px!important;max-width:47px!important;max-height:47px!important;}
+    .orders-section .multi-order .order-slot{width:37px!important;height:37px!important;min-width:37px!important;max-width:37px!important;overflow:visible!important;}
+    .orders-section .multi-order .order-icon-img{width:36px!important;height:36px!important;max-width:36px!important;max-height:36px!important;}
+    .orders-section .order-item-check{
+      right:-2px!important;top:-2px!important;width:14px!important;height:14px!important;
+      font-size:8px!important;line-height:11px!important;border-width:1.5px!important;z-index:25!important;
+      box-shadow:0 1px 4px rgba(52,199,89,.24)!important;
+    }
+    .orders-section .multi-order .order-item-check{right:-1px!important;top:-1px!important;width:12px!important;height:12px!important;font-size:7px!important;line-height:9px!important;}
+    .orders-section .reward{height:22px!important;min-height:22px!important;max-height:22px!important;font-size:8px!important;gap:2px!important;}
+    .orders-section .reward span{height:18px!important;max-height:18px!important;padding:2px 4px!important;}
+    .orders-section .serve-btn{
+      width:108px!important;height:26px!important;min-height:26px!important;max-height:26px!important;
+      padding:0 8px!important;margin:0!important;border-radius:14px!important;font-size:11.5px!important;
+      line-height:23px!important;box-shadow:none!important;border:2px solid #328c1f!important;display:block!important;
+      align-self:center!important;justify-self:center!important;overflow:hidden!important;
+    }
+    .orders-section .serve-btn:disabled{background:#e8ddce!important;border-color:#c9b59b!important;color:#a48b72!important;box-shadow:none!important;}
+    .cell .mini-badge{width:15px!important;height:15px!important;font-size:8.5px!important;border-width:1px!important;top:2px!important;}
+    .cell .badge-lucky{left:2px!important;}
+    .cell .badge-star{left:50%!important;transform:translateX(-50%)!important;}
+    .cell .badge-ready{right:2px!important;}
+
+    .shop-section-title{font-size:14px;font-weight:900;color:#653719;margin:12px 0 7px;padding-left:2px;}
+    .shop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+    .shop-tile{background:linear-gradient(180deg,#fff,#fff3e4);border:2px solid #f1c27d;border-radius:20px;padding:11px 8px;text-align:center;box-shadow:0 5px 12px rgba(90,56,37,.08);min-height:112px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:5px;}
+    .shop-tile-icon{font-size:30px;line-height:1;min-height:32px;display:flex;align-items:center;justify-content:center;}
+    .shop-tile-title{font-size:13px;font-weight:900;color:#653719;line-height:1.15;}
+    .shop-tile-cost{font-size:12px;font-weight:900;color:#8b5e34;}
+    .shop-tile button{width:100%;height:30px;border-radius:13px;color:white;font-size:11px;font-weight:900;}
+    .shop-buy-energy{background:linear-gradient(180deg,#78c943,#43a92c);border:2px solid #328c1f;}
+    .shop-buy-coin{background:linear-gradient(180deg,#ffb24a,#ff8c1a);border:2px solid #d96e00;}
+    .shop-buy-part{background:linear-gradient(180deg,#b28dff,#7c4dff);border:2px solid #5c35c9;}
+    .shop-buy-free{background:linear-gradient(180deg,#ffb24a,#ff8c1a);border:2px solid #d96e00;}
+    .machine-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+    .machine-shop-card{background:linear-gradient(180deg,#fffaf4,#ffe8cf);border:2px solid #f1c27d;border-radius:20px;padding:9px;text-align:center;box-shadow:0 5px 12px rgba(90,56,37,.08);min-height:158px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:5px;}
+    .machine-shop-card.locked{opacity:.72;filter:saturate(.75);}
+    .machine-shop-card.owned{background:linear-gradient(180deg,#effff0,#fff8e8);border-color:#7edc82;}
+    .machine-shop-img .info-machine-img{width:82px!important;height:60px!important;margin:0 auto 2px!important;}
+    .machine-shop-name{font-size:12.5px;font-weight:900;color:#653719;line-height:1.12;min-height:28px;}
+    .machine-shop-meta{font-size:10.5px;font-weight:900;color:#8b5e34;line-height:1.2;min-height:24px;}
+    .machine-shop-btn{width:100%;height:30px;border-radius:13px;color:white;font-size:11px;font-weight:900;background:linear-gradient(180deg,#ffb24a,#ff8c1a);border:2px solid #d96e00;}
+    .machine-shop-btn:disabled{background:#e8ddce!important;border:2px solid #c9b59b!important;color:#a48b72!important;}
+
+    .machine-upgrade-card{background:linear-gradient(180deg,#fffaf4,#ffe8cf);border:2px solid #f1c27d;border-radius:22px;padding:12px;margin:8px 0;text-align:center;}
+    .machine-upgrade-hero .info-machine-img{width:136px!important;height:96px!important;margin:0 auto 4px!important;}
+    .machine-upgrade-title{font-size:18px;font-weight:900;color:#653719;margin:3px 0;}
+    .machine-upgrade-sub{font-size:13px;font-weight:900;color:#8b5e34;margin-bottom:8px;}
+    .machine-upgrade-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+    .machine-upgrade-chip{background:#fff;border:2px solid #f1d3a5;border-radius:16px;padding:8px 5px;font-size:12px;font-weight:900;color:#6b4126;min-height:48px;display:flex;align-items:center;justify-content:center;}
+    @media(max-width:380px){.shop-grid,.machine-grid{gap:8px}.orders-section .customer-card{flex-basis:128px!important;width:128px!important;min-width:128px!important;max-width:128px!important}.orders-section .order-block{width:106px!important}.orders-section .serve-btn{width:104px!important}}
+
   </style>
 </head>
 
@@ -4470,7 +4552,7 @@
 
       const weights = [];
       for (let level = 1; level <= maxLevel; level++) {
-        weights.push({ itemIndex: getChainIndexByLevel(chain, level), weight: Math.pow(0.55, level - 1) });
+        weights.push({ itemIndex: getChainIndexByLevel(chain, level), weight: Math.pow(0.72, level - 1) });
       }
 
       const total = weights.reduce((sum, x) => sum + x.weight, 0);
@@ -4750,8 +4832,8 @@
     }
 
     function orderGivesPart() {
-      if (ordersSinceLastPart >= 7) return true;
-      return Math.random() < 0.10;
+      if (ordersSinceLastPart >= 12) return true;
+      return Math.random() < 0.035;
     }
 
     function isCustomerReady(c) {
@@ -5304,26 +5386,51 @@
       return `
         <div class="panel-card">
           <h3>💎 Gem Shop</h3>
-          <p>Spend gems on useful resources. Prototype Gem Pack stays free for testing now.</p>
           <p><b>Your gems:</b> 💎 ${gems}</p>
-          <button class="green-btn" onclick="buyEnergyWithGems(10, 6); refreshOpenSheet();">Buy +10 Energy - 6 💎</button>
-          <button class="blue-btn" onclick="buyEnergyWithGems(25, 14); refreshOpenSheet();">Buy +25 Energy - 14 💎</button>
-          <button class="orange-btn" onclick="buyCoinsWithGems(150, 8); refreshOpenSheet();">Buy +150 Coins - 8 💎</button>
-          <button class="orange-btn" onclick="buyCoinsWithGems(500, 22); refreshOpenSheet();">Buy +500 Coins - 22 💎</button>
-          <button class="purple-btn" onclick="buyPartsWithGems(3, 10); refreshOpenSheet();">Buy +3 Parts - 10 💎</button>
-          <button class="purple-btn" onclick="buyPartsWithGems(8, 24); refreshOpenSheet();">Buy +8 Parts - 24 💎</button>
-          <button class="orange-btn" onclick="prototypeBuyGems(); refreshOpenSheet();">Prototype Gem Pack +25 💎</button>
-          <div class="info-note">Coin and part packs are balanced for testing and can be tuned later.</div>
+
+          <div class="shop-section-title">⚡ Energy Packs</div>
+          <div class="shop-grid">
+            ${shopTile("⚡", "+10 Energy", "6 💎", "shop-buy-energy", "buyEnergyWithGems(10, 6); refreshOpenSheet();")}
+            ${shopTile("⚡", "+25 Energy", "14 💎", "shop-buy-energy", "buyEnergyWithGems(25, 14); refreshOpenSheet();")}
+          </div>
+
+          <div class="shop-section-title">🪙 Coin Packs</div>
+          <div class="shop-grid">
+            ${shopTile("🪙", "+150 Coins", "8 💎", "shop-buy-coin", "buyCoinsWithGems(150, 8); refreshOpenSheet();")}
+            ${shopTile("🪙", "+500 Coins", "22 💎", "shop-buy-coin", "buyCoinsWithGems(500, 22); refreshOpenSheet();")}
+          </div>
+
+          <div class="shop-section-title">🔧 Upgrade Parts</div>
+          <div class="shop-grid">
+            ${shopTile("🔧", "+3 Parts", "10 💎", "shop-buy-part", "buyPartsWithGems(3, 10); refreshOpenSheet();")}
+            ${shopTile("🔧", "+8 Parts", "24 💎", "shop-buy-part", "buyPartsWithGems(8, 24); refreshOpenSheet();")}
+          </div>
+
+          <div class="shop-section-title">🧪 Prototype</div>
+          <div class="shop-grid">
+            ${shopTile("💎", "+25 Gems", "Free test", "shop-buy-free", "prototypeBuyGems(); refreshOpenSheet();")}
+          </div>
         </div>
 
         <div class="panel-card">
-          <h3>New Machines</h3>
-          <p>Unlock machines with gems as your cafe becomes more famous.</p>
-          ${renderMachineShop("bakery")}
-          ${renderMachineShop("tea")}
-          ${renderMachineShop("juice")}
-          ${renderMachineShop("ice")}
+          <h3>🏪 Machine Shop</h3>
+          <p>Unlock new machines as your cafe fame grows.</p>
+          <div class="machine-grid">
+            ${renderMachineShop("bakery")}
+            ${renderMachineShop("tea")}
+            ${renderMachineShop("juice")}
+            ${renderMachineShop("ice")}
+          </div>
         </div>`;
+    }
+
+    function shopTile(icon, title, cost, cls, action) {
+      return `<div class="shop-tile">
+        <div class="shop-tile-icon">${icon}</div>
+        <div class="shop-tile-title">${title}</div>
+        <div class="shop-tile-cost">${cost}</div>
+        <button class="${cls}" onclick="${action}">Buy</button>
+      </div>`;
     }
 
     function buyCoinsWithGems(amount, cost) {
@@ -5346,14 +5453,25 @@
 
     function renderMachineShop(type) {
       const def = machineDefs[type];
-
-      if (unlockedMachines[type]) {
-        return `<button class="green-btn" disabled>${def.emoji} ${def.name} Owned ✓</button>`;
-      }
-
       const rankOk = fameRank >= def.unlockRank;
       const gemOk = gems >= def.cost;
-      return `<button class="orange-btn" onclick="unlockMachine('${type}'); refreshOpenSheet();" ${rankOk && gemOk ? "" : "disabled"}>${def.emoji} Unlock ${def.name} - ${def.cost} 💎<br>Requires: ${fameRanks[def.unlockRank].name}</button>`;
+      const reqName = fameRanks[def.unlockRank] ? fameRanks[def.unlockRank].name : "Future Rank";
+
+      if (unlockedMachines[type]) {
+        return `<div class="machine-shop-card owned">
+          <div class="machine-shop-img">${machineImageHTML(type, "info-machine-img")}</div>
+          <div class="machine-shop-name">${def.name}</div>
+          <div class="machine-shop-meta">Owned ✓<br>Lv.${machineLevels[type]}</div>
+          <button class="machine-shop-btn" disabled>Unlocked</button>
+        </div>`;
+      }
+
+      return `<div class="machine-shop-card ${rankOk ? "" : "locked"}">
+        <div class="machine-shop-img">${machineImageHTML(type, "info-machine-img")}</div>
+        <div class="machine-shop-name">${def.name}</div>
+        <div class="machine-shop-meta">Requires: ${reqName}<br>${def.cost} 💎</div>
+        <button class="machine-shop-btn" onclick="unlockMachine('${type}'); refreshOpenSheet();" ${rankOk && gemOk ? "" : "disabled"}>Unlock</button>
+      </div>`;
     }
 
     function unlockMachine(type) {
@@ -5858,15 +5976,20 @@
       const newLevel = machineLevels[type];
       const canMake = getChainIndexByLevel(chain, Math.min(newLevel, discoveredLevel[chain], getChainLength(chain)));
       const rewardHTML = `
-        <div class="rank-reward-icons">
-          <div class="rank-reward-chip">🔧 ${machineDefs[type].name} Lv.${newLevel}</div>
-          <div class="rank-reward-chip">${itemImageHTML(canMake, "order-icon-img")} Better production</div>
-          <div class="rank-reward-chip">⚡ +10 Energy</div>
-          <div class="rank-reward-chip">⭐ +10 Fame</div>
+        <div class="machine-upgrade-card">
+          <div class="machine-upgrade-hero">${machineImageHTML(type, "info-machine-img")}</div>
+          <div class="machine-upgrade-title">${machineDefs[type].name} Lv.${newLevel}</div>
+          <div class="machine-upgrade-sub">Your machine is stronger now!</div>
+          <div class="machine-upgrade-grid">
+            <div class="machine-upgrade-chip">${itemImageHTML(canMake, "order-icon-img")} Better items</div>
+            <div class="machine-upgrade-chip">⚡ +10 Energy</div>
+            <div class="machine-upgrade-chip">⭐ +10 Fame</div>
+            <div class="machine-upgrade-chip">🔧 Next upgrade: ${upgradeCost(type)} parts</div>
+          </div>
         </div>`;
 
       setMsg(machineDefs[type].name + " upgraded! +10 ⚡ +10 ⭐");
-      showGameModal("🔧", "Machine Upgraded!", machineDefs[type].name + " Lv." + newLevel, rewardHTML);
+      showGameModal("🔧", "Machine Upgraded!", "Level " + newLevel + " unlocked", rewardHTML);
       playSound("upgrade");
       updateAll();
       checkFameRankUp();
