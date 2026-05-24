@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Mini Merge Cafe</title>
-  <!-- MINI_MERGE_UI_FIX_V3 -->
+  <!-- MINI_MERGE_UI_FIX_V3_PATCH_148 -->
 
   <style>
     * {
@@ -3884,6 +3884,209 @@
       .secret-full-moves { min-width: 74px; font-size: 12px; }
     }
 
+
+
+    /* PATCH 148: App-like shop + clean rewards + safe order ticks + Secret Recipe drag */
+    .orders-section .reward.reward-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 1px 6px !important;
+      height: 28px !important;
+      min-height: 28px !important;
+      max-height: 28px !important;
+      margin: 1px 0 3px !important;
+      padding: 0 2px !important;
+      overflow: hidden !important;
+      align-items: center !important;
+    }
+
+    .orders-section .reward.reward-grid span {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      height: 12px !important;
+      min-height: 12px !important;
+      max-height: 12px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 9.5px !important;
+      line-height: 1 !important;
+      font-weight: 900 !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      color: #6b4126 !important;
+    }
+
+    .orders-section .reward.reward-grid span:empty { display: none !important; }
+
+    .orders-section .reward.reward-grid .secret-move-reward {
+      color: #6b3aa8 !important;
+    }
+
+    .orders-section .order-block,
+    .orders-section .order-emoji,
+    .orders-section .order-slot {
+      overflow: visible !important;
+    }
+
+    .orders-section .order-slot {
+      position: relative !important;
+      padding: 2px !important;
+    }
+
+    .orders-section .order-slot .asset-wrap {
+      overflow: hidden !important;
+      border-radius: 9px !important;
+    }
+
+    .orders-section .order-item-check {
+      position: absolute !important;
+      top: -2px !important;
+      right: -2px !important;
+      width: 15px !important;
+      height: 15px !important;
+      min-width: 15px !important;
+      min-height: 15px !important;
+      border-radius: 50% !important;
+      background: #4caf7a !important;
+      color: #fff !important;
+      border: 2px solid #fff !important;
+      font-size: 8px !important;
+      line-height: 1 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 20 !important;
+      box-shadow: 0 2px 5px rgba(52,199,89,.28) !important;
+    }
+
+    .orders-section .multi-order .order-item-check {
+      top: -1px !important;
+      right: -1px !important;
+      width: 13px !important;
+      height: 13px !important;
+      min-width: 13px !important;
+      min-height: 13px !important;
+      font-size: 7px !important;
+    }
+
+    .shop-app { display: flex; flex-direction: column; gap: 14px; }
+
+    .shop-wallet {
+      background: linear-gradient(180deg, #fffaf4, #ffe8cf);
+      border: 2px solid #f1c27d;
+      border-radius: 24px;
+      padding: 13px;
+      box-shadow: 0 6px 14px rgba(90,56,37,.09);
+    }
+
+    .shop-wallet-title { font-size: 20px; font-weight: 900; color: #653719; margin-bottom: 8px; }
+
+    .shop-wallet-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+
+    .shop-wallet-pill {
+      background: #fff;
+      border: 2px solid #f1d3a5;
+      border-radius: 16px;
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: #6b4126;
+    }
+
+    .shop-section {
+      background: rgba(255,255,255,.72);
+      border: 2px solid #f4cf9c;
+      border-radius: 24px;
+      padding: 12px;
+      box-shadow: 0 6px 14px rgba(90,56,37,.08);
+    }
+
+    .shop-section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .shop-section-title { font-size: 17px; font-weight: 900; color: #653719; }
+    .shop-section-sub { font-size: 11px; font-weight: 900; color: #9c6a3f; }
+
+    .shop-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+    .shop-card {
+      background: linear-gradient(180deg, #ffffff, #fff2df);
+      border: 2px solid #f1c27d;
+      border-radius: 22px;
+      padding: 10px;
+      min-height: 142px;
+      box-shadow: 0 5px 12px rgba(90,56,37,.09);
+      display: grid;
+      grid-template-rows: 44px auto auto 31px;
+      gap: 5px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .shop-card.owned { background: linear-gradient(180deg, #f5fff1, #dff7d7); border-color: #72c760; }
+    .shop-card.locked { opacity: .72; }
+    .shop-icon { height: 44px; display: flex; align-items: center; justify-content: center; font-size: 33px; }
+    .shop-icon .info-machine-img { width: 66px !important; height: 48px !important; margin: 0 !important; }
+    .shop-name { font-size: 13px; font-weight: 900; color: #653719; line-height: 1.1; }
+    .shop-desc { font-size: 10.5px; font-weight: 800; color: #8b5e34; line-height: 1.2; min-height: 25px; }
+
+    .shop-buy-btn {
+      width: 100%;
+      height: 31px;
+      border-radius: 13px;
+      color: white;
+      font-size: 11px;
+      font-weight: 900;
+      box-shadow: 0 3px 0 rgba(90,56,37,.22);
+    }
+
+    .shop-buy-green { background: linear-gradient(180deg, #78c943, #43a92c); border: 2px solid #328c1f; }
+    .shop-buy-blue { background: linear-gradient(180deg, #79c7e8, #2e8ebb); border: 2px solid #1c6f97; }
+    .shop-buy-orange { background: linear-gradient(180deg, #ffb24a, #ff8c1a); border: 2px solid #d96e00; }
+    .shop-buy-purple { background: linear-gradient(180deg, #b28dff, #7c4dff); border: 2px solid #5c35c9; }
+    .shop-buy-gray { background: linear-gradient(180deg, #d8c9b6, #a88f72); border: 2px solid #8b7054; }
+
+    .secret-full-note b { color: #653719; }
+
+    .secret-full-board .secret-cell {
+      touch-action: none !important;
+      -webkit-touch-callout: none !important;
+      user-select: none !important;
+    }
+
+    .secret-drag-ghost {
+      position: fixed;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(255,248,239,.96);
+      border: 3px solid #ffb703;
+      box-shadow: 0 14px 28px rgba(90,56,37,.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      z-index: 9999;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+    }
+
+    .secret-full-board .secret-cell.secret-drop-hover {
+      outline: 3px solid #4caf7a !important;
+      box-shadow: 0 0 13px rgba(76,175,122,.55) !important;
+    }
+
+    @media (max-width: 380px) {
+      .shop-grid { gap: 8px; }
+      .shop-card { min-height: 136px; padding: 9px; }
+      .shop-name { font-size: 12px; }
+      .shop-desc { font-size: 10px; }
+      .shop-wallet-row { gap: 5px; }
+      .shop-wallet-pill { font-size: 11px; padding: 7px 2px; }
+    }
+
   </style>
 </head>
 
@@ -7170,6 +7373,365 @@
     addSecretMoves = function(n) {
       __mmcPatch147AddSecretMoves(n);
       refreshSecretScreen();
+    };
+
+
+
+
+    /* PATCH 148: Shop grid + clean rewards + Secret Recipe drag + new locked layout */
+    function secretPatternCellAt(idx) {
+      const r = Math.floor(idx / SECRET_COLS);
+      const c = idx % SECRET_COLS;
+
+      if (r === 0) return { level: 8, locked: true };
+      if (r === 1) return { level: 6, locked: true };
+      if (r === 2) return { level: 4, locked: true };
+      if (r === 3) {
+        if (c === 3 || c === 4) return null;
+        return { level: 4, locked: true };
+      }
+
+      return null;
+    }
+
+    secretDefaultBoard = function() {
+      const b = Array(SECRET_BOARD_SIZE).fill(null);
+      for (let i = 0; i < SECRET_BOARD_SIZE; i++) {
+        const cell = secretPatternCellAt(i);
+        b[i] = cell ? { level: cell.level, locked: true } : null;
+      }
+      return b;
+    };
+
+    function applySecretLockedPattern() {
+      if (!secretRecipe || !Array.isArray(secretRecipe.board)) return;
+      for (let i = 0; i < SECRET_BOARD_SIZE; i++) {
+        const current = secretRecipe.board[i];
+        const pattern = secretPatternCellAt(i);
+        if (!current || current.locked) {
+          secretRecipe.board[i] = pattern ? { level: pattern.level, locked: true } : null;
+        }
+      }
+    }
+
+    normalizeSecretRecipe = function() {
+      if (!secretRecipe || typeof secretRecipe !== "object") {
+        secretRecipe = { moves: 0, selected: null, maxReached: 1, board: secretDefaultBoard() };
+      }
+
+      secretRecipe.moves = Math.max(0, Number(secretRecipe.moves) || 0);
+      secretRecipe.maxReached = Math.max(1, Math.min(12, Number(secretRecipe.maxReached) || 1));
+
+      if (!Array.isArray(secretRecipe.board) || secretRecipe.board.length !== SECRET_BOARD_SIZE) {
+        secretRecipe.board = secretDefaultBoard();
+      }
+
+      secretRecipe.board = secretRecipe.board.map((x) => {
+        if (!x) return null;
+        const lvl = Math.max(1, Math.min(12, Number(x.level) || 1));
+        return { level: lvl, locked: !!x.locked };
+      });
+
+      applySecretLockedPattern();
+
+      if (secretRecipe.selected !== null && secretRecipe.selected !== undefined) {
+        const sel = Number(secretRecipe.selected);
+        if (!Number.isInteger(sel) || sel < 0 || sel >= SECRET_BOARD_SIZE || !secretRecipe.board[sel] || secretRecipe.board[sel].locked) {
+          secretRecipe.selected = null;
+        } else {
+          secretRecipe.selected = sel;
+        }
+      } else {
+        secretRecipe.selected = null;
+      }
+    };
+
+    let secretDragState = null;
+
+    function secretPointerDown(e, idx) {
+      if (!e) return;
+      e.preventDefault();
+      normalizeSecretRecipe();
+      const cell = secretRecipe.board[idx];
+      secretDragState = {
+        idx,
+        startX: e.clientX,
+        startY: e.clientY,
+        active: !!cell && !cell.locked,
+        moved: false,
+        ghost: null
+      };
+      document.addEventListener("pointermove", secretPointerMove, { passive: false });
+      document.addEventListener("pointerup", secretPointerUp, { passive: false });
+      document.addEventListener("pointercancel", secretPointerCancel, { passive: false });
+    }
+
+    function secretPointerMove(e) {
+      if (!secretDragState) return;
+      e.preventDefault();
+      const dx = e.clientX - secretDragState.startX;
+      const dy = e.clientY - secretDragState.startY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (!secretDragState.active || dist < 8) return;
+      secretDragState.moved = true;
+      if (!secretDragState.ghost) {
+        const cell = secretRecipe.board[secretDragState.idx];
+        const def = cell ? SECRET_LEVELS[cell.level - 1] : null;
+        const ghost = document.createElement("div");
+        ghost.className = "secret-drag-ghost";
+        ghost.textContent = def ? def.icon : "";
+        document.body.appendChild(ghost);
+        secretDragState.ghost = ghost;
+      }
+      secretDragState.ghost.style.left = e.clientX + "px";
+      secretDragState.ghost.style.top = e.clientY + "px";
+
+      document.querySelectorAll(".secret-cell.secret-drop-hover").forEach(el => el.classList.remove("secret-drop-hover"));
+      const target = document.elementFromPoint(e.clientX, e.clientY);
+      const btn = target ? target.closest(".secret-cell") : null;
+      if (btn && btn.dataset && btn.dataset.secretIndex !== undefined) btn.classList.add("secret-drop-hover");
+    }
+
+    function secretPointerUp(e) {
+      if (!secretDragState) return;
+      e.preventDefault();
+      const state = secretDragState;
+      secretCleanupPointer();
+      if (state.ghost) state.ghost.remove();
+      document.querySelectorAll(".secret-cell.secret-drop-hover").forEach(el => el.classList.remove("secret-drop-hover"));
+      if (!state.moved) {
+        secretCellClick(state.idx);
+        return;
+      }
+      const target = document.elementFromPoint(e.clientX, e.clientY);
+      const btn = target ? target.closest(".secret-cell") : null;
+      if (!btn || !btn.dataset || btn.dataset.secretIndex === undefined) {
+        refreshSecretScreen();
+        return;
+      }
+      const to = Number(btn.dataset.secretIndex);
+      if (!Number.isInteger(to)) {
+        refreshSecretScreen();
+        return;
+      }
+      secretDropItem(state.idx, to);
+    }
+
+    function secretPointerCancel() {
+      if (secretDragState && secretDragState.ghost) secretDragState.ghost.remove();
+      document.querySelectorAll(".secret-cell.secret-drop-hover").forEach(el => el.classList.remove("secret-drop-hover"));
+      secretCleanupPointer();
+      refreshSecretScreen();
+    }
+
+    function secretCleanupPointer() {
+      document.removeEventListener("pointermove", secretPointerMove);
+      document.removeEventListener("pointerup", secretPointerUp);
+      document.removeEventListener("pointercancel", secretPointerCancel);
+      secretDragState = null;
+    }
+
+    function secretDropItem(from, to) {
+      normalizeSecretRecipe();
+      if (from === to) {
+        secretRecipe.selected = from;
+        saveSecretRecipe();
+        refreshSecretScreen();
+        return;
+      }
+      const moving = secretRecipe.board[from];
+      const target = secretRecipe.board[to];
+      if (!moving || moving.locked) {
+        refreshSecretScreen();
+        return;
+      }
+      if (!target) {
+        secretRecipe.board[to] = moving;
+        secretRecipe.board[from] = null;
+        secretRecipe.selected = to;
+        saveSecretRecipe();
+        refreshSecretScreen();
+        return;
+      }
+      if (moving.level !== target.level || moving.level >= 12 || (moving.locked && target.locked)) {
+        setMsg("Secret Recipe needs two same-level items. One can be locked.");
+        playSound("error");
+        secretRecipe.selected = null;
+        saveSecretRecipe();
+        refreshSecretScreen();
+        return;
+      }
+      const newLevel = Math.min(12, moving.level + 1);
+      secretRecipe.board[to] = { level: newLevel, locked: false };
+      secretRecipe.board[from] = null;
+      secretRecipe.selected = to;
+      secretRecipe.maxReached = Math.max(secretRecipe.maxReached, newLevel);
+      setMsg("Secret Recipe Lv." + newLevel + " created!");
+      playSound("merge");
+      grantSecretReward(newLevel);
+      saveSecretRecipe();
+      updateAll();
+      refreshSecretScreen();
+    }
+
+    renderSecretScreen = function() {
+      normalizeSecretRecipe();
+      const screen = ensureSecretScreen();
+      const best = secretRecipe.maxReached || 1;
+      const progress = SECRET_LEVELS.map((x, idx) => `<div class="secret-step ${idx + 1 <= best ? "done" : ""}"><div>${x.icon}</div><div>Lv.${idx + 1}</div></div>`).join("");
+      const boardHtml = secretRecipe.board.map((cell, idx) => {
+        if (!cell) return `<button class="secret-cell empty" type="button" data-secret-index="${idx}" onpointerdown="secretPointerDown(event, ${idx})"><span style="font-size:15px;opacity:.58">+</span></button>`;
+        const def = SECRET_LEVELS[cell.level - 1] || SECRET_LEVELS[0];
+        return `<button class="secret-cell ${cell.locked ? "locked" : ""} ${secretRecipe.selected === idx ? "selected" : ""}" type="button" data-secret-index="${idx}" onpointerdown="secretPointerDown(event, ${idx})">
+          <span class="secret-icon">${def.icon}</span>
+          ${cell.locked ? `<span class="secret-vines">🌿</span>` : ""}
+          <span class="secret-lvl">Lv.${cell.level}</span>
+        </button>`;
+      }).join("");
+
+      screen.innerHTML = `
+        <div class="secret-screen-inner">
+          <div class="secret-full-top">
+            <button class="secret-back-btn" onclick="closeSecretScreen()">←</button>
+            <div class="secret-full-title">📖 Secret Recipe</div>
+            <div class="secret-full-moves">🧩 ${secretRecipe.moves}</div>
+          </div>
+          <div class="secret-full-card">
+            <div class="secret-progress">${progress}</div>
+            <div class="secret-full-note"><b>Tap or drag:</b> Itemları sürükleyerek taşıyabilir, aynı level item/vine üstüne bırakarak merge yapabilirsin.</div>
+          </div>
+          <div class="secret-full-card">
+            <div class="secret-full-board">${boardHtml}</div>
+            <div class="secret-full-actions">
+              <button class="green-btn" onclick="secretSpawnItem(); refreshSecretScreen();">Use 1 Move</button>
+              <button class="orange-btn" onclick="secretRecipe.selected=null; saveSecretRecipe(); refreshSecretScreen();">Cancel Select</button>
+            </div>
+            <div class="secret-full-note">Alt 3 satır boş. Kapalı düzen: Lv4 aralıklı → Lv4 full → Lv6 full → Lv8 full.</div>
+          </div>
+        </div>`;
+    };
+
+    function shopCard(icon, name, desc, buttonText, buttonClass, onclick, disabled) {
+      return `
+        <div class="shop-card ${disabled ? "locked" : ""}">
+          <div class="shop-icon">${icon}</div>
+          <div class="shop-name">${name}</div>
+          <div class="shop-desc">${desc}</div>
+          <button class="shop-buy-btn ${buttonClass}" onclick="${onclick}; refreshOpenSheet();" ${disabled ? "disabled" : ""}>${buttonText}</button>
+        </div>`;
+    }
+
+    function machineShopCard(type) {
+      const def = machineDefs[type];
+      if (unlockedMachines[type]) {
+        return `
+          <div class="shop-card owned">
+            <div class="shop-icon">${machineImageHTML(type, "info-machine-img")}</div>
+            <div class="shop-name">${def.name}</div>
+            <div class="shop-desc">Owned and ready on board.</div>
+            <button class="shop-buy-btn shop-buy-green" disabled>Owned ✓</button>
+          </div>`;
+      }
+      const rankOk = fameRank >= def.unlockRank;
+      const gemOk = gems >= def.cost;
+      const disabled = !(rankOk && gemOk);
+      const need = rankOk ? `${def.cost} 💎` : fameRanks[def.unlockRank].name;
+      return `
+        <div class="shop-card ${disabled ? "locked" : ""}">
+          <div class="shop-icon">${machineImageHTML(type, "info-machine-img")}</div>
+          <div class="shop-name">${def.name}</div>
+          <div class="shop-desc">Requires: ${need}</div>
+          <button class="shop-buy-btn shop-buy-orange" onclick="unlockMachine('${type}'); refreshOpenSheet();" ${disabled ? "disabled" : ""}>Unlock ${def.cost} 💎</button>
+        </div>`;
+    }
+
+    renderShopPanel = function() {
+      return `
+        <div class="shop-app">
+          <div class="shop-wallet">
+            <div class="shop-wallet-title">🛒 Cafe Shop</div>
+            <div class="shop-wallet-row">
+              <div class="shop-wallet-pill">🪙<br>${coins}</div>
+              <div class="shop-wallet-pill">💎<br>${gems}</div>
+              <div class="shop-wallet-pill">🔧<br>${parts}</div>
+              <div class="shop-wallet-pill">⚡<br>${energy}/${maxEnergy}</div>
+            </div>
+          </div>
+
+          <div class="shop-section">
+            <div class="shop-section-head"><div class="shop-section-title">⚡ Energy</div><div class="shop-section-sub">Keep playing</div></div>
+            <div class="shop-grid">
+              ${shopCard("⚡", "+10 Energy", "Small refill for short play.", "6 💎", "shop-buy-green", "buyEnergyWithGems(10, 6)", gems < 6 || energy >= maxEnergy)}
+              ${shopCard("⚡", "+25 Energy", "Better refill value.", "14 💎", "shop-buy-green", "buyEnergyWithGems(25, 14)", gems < 14 || energy >= maxEnergy)}
+            </div>
+          </div>
+
+          <div class="shop-section">
+            <div class="shop-section-head"><div class="shop-section-title">🪙 Coins</div><div class="shop-section-sub">For upgrades</div></div>
+            <div class="shop-grid">
+              ${shopCard("🪙", "+150 Coins", "Quick coin boost.", "8 💎", "shop-buy-orange", "buyCoinsWithGems(150, 8)", gems < 8)}
+              ${shopCard("🪙", "+500 Coins", "Best coin pack.", "22 💎", "shop-buy-orange", "buyCoinsWithGems(500, 22)", gems < 22)}
+            </div>
+          </div>
+
+          <div class="shop-section">
+            <div class="shop-section-head"><div class="shop-section-title">🔧 Machine Parts</div><div class="shop-section-sub">Upgrade machines</div></div>
+            <div class="shop-grid">
+              ${shopCard("🔧", "+3 Parts", "For early upgrades.", "10 💎", "shop-buy-purple", "buyPartsWithGems(3, 10)", gems < 10)}
+              ${shopCard("🔧", "+8 Parts", "Upgrade pack.", "24 💎", "shop-buy-purple", "buyPartsWithGems(8, 24)", gems < 24)}
+            </div>
+          </div>
+
+          <div class="shop-section">
+            <div class="shop-section-head"><div class="shop-section-title">🏪 Machines</div><div class="shop-section-sub">New item chains</div></div>
+            <div class="shop-grid">
+              ${machineShopCard("bakery")}
+              ${machineShopCard("tea")}
+              ${machineShopCard("juice")}
+              ${machineShopCard("ice")}
+            </div>
+          </div>
+
+          <div class="shop-section">
+            <div class="shop-section-head"><div class="shop-section-title">💎 Testing</div><div class="shop-section-sub">Prototype only</div></div>
+            <div class="shop-grid">
+              ${shopCard("💎", "+25 Gems", "Prototype test pack.", "Free", "shop-buy-blue", "prototypeBuyGems()", false)}
+            </div>
+          </div>
+        </div>`;
+    };
+
+    createCustomers = function() {
+      const previousFirstId = customers[0] && customers[0].profile ? customers[0].profile.id : "";
+      customers.sort((a, b) => Number(isCustomerReady(b)) - Number(isCustomerReady(a)));
+      const newFirstId = customers[0] && customers[0].profile ? customers[0].profile.id : "";
+      customersEl.innerHTML = "";
+      customers.forEach((c, index) => {
+        const ready = isCustomerReady(c);
+        const moves = secretOrderMoveReward(c);
+        const rewardParts = [`<span>🪙 ${getCustomerReward(c)}</span>`, `<span>⭐ +${getCustomerFameReward(c)}</span>`];
+        if (c.givesPart) rewardParts.push(`<span>🔧 +1</span>`);
+        if (moves > 0) rewardParts.push(`<span class="secret-move-reward">🧩 +${moves}</span>`);
+        const card = document.createElement("div");
+        card.className = "customer-card" + (ready ? " ready" : "") + (c.orders.length > 1 ? " multi-order" : " single-order");
+        card.innerHTML = `
+          ${ready ? `<div class="ready-check">✓</div>` : ""}
+          <div class="customer-top">
+            <div class="portrait-ring"><img src="${c.profile.portrait}" alt="${c.profile.name}" draggable="false"></div>
+            <div class="customer-meta"><div class="customer-name">${c.profile.name}</div></div>
+          </div>
+          <div class="order-block">
+            <div class="order-emoji">${orderEmojiText(c.orders)}</div>
+            <div class="order-name">${orderNameText(c.orders)}</div>
+          </div>
+          <div class="reward reward-grid">${rewardParts.join("")}</div>
+          <button class="serve-btn" ${ready ? `onclick="serveCustomer(${index})"` : `disabled`}>Serve</button>
+        `;
+        customersEl.appendChild(card);
+      });
+      if (newFirstId && newFirstId !== previousFirstId && isCustomerReady(customers[0])) {
+        requestAnimationFrame(() => customersEl.scrollTo({ left: 0, behavior: "smooth" }));
+      }
     };
 
 
