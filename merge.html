@@ -8692,6 +8692,162 @@
     })();
 
 
+
+    /* PATCH 165: rollback PNG board backgrounds, keep gameplay/shop/assets */
+    (function patch165RollbackBoardBackgrounds(){
+      const style = document.createElement("style");
+      style.textContent = `
+        /* Main board back to stable original layout */
+        .board-frame.mmc-board-art,
+        .board-frame{
+          background:linear-gradient(180deg,#bc7337,#8c4d27) !important;
+          border-radius:28px !important;
+          padding:12px !important;
+          border:4px solid #6f391b !important;
+          box-shadow:
+            inset 0 4px 8px rgba(255,255,255,0.25),
+            inset 0 -8px 12px rgba(0,0,0,0.18),
+            0 10px 22px rgba(90,56,37,0.25) !important;
+          margin-bottom:12px !important;
+          min-height:auto !important;
+          width:auto !important;
+          display:block !important;
+          overflow:visible !important;
+          background-image:none !important;
+        }
+        .board-frame.mmc-board-art .board-label,
+        .board-frame .board-label{
+          display:block !important;
+          width:fit-content !important;
+          margin:-2px auto 10px !important;
+          background:linear-gradient(180deg,#9a552b,#713717) !important;
+          color:white !important;
+          padding:8px 38px !important;
+          border-radius:12px !important;
+          font-weight:900 !important;
+          letter-spacing:1px !important;
+          box-shadow:inset 0 2px 4px rgba(255,255,255,0.18) !important;
+        }
+        .board-frame.mmc-board-art .board,
+        .board-frame .board{
+          width:auto !important;
+          height:auto !important;
+          display:grid !important;
+          grid-template-columns:repeat(6,1fr) !important;
+          grid-template-rows:none !important;
+          gap:7px !important;
+          background:rgba(90,56,37,0.13) !important;
+          border-radius:20px !important;
+          padding:8px !important;
+          margin:0 !important;
+          border:none !important;
+          box-shadow:none !important;
+        }
+        .board-frame.mmc-board-art .cell,
+        .board-frame .cell{
+          aspect-ratio:1/1 !important;
+          width:auto !important;
+          height:auto !important;
+          background:linear-gradient(180deg,#fff1d9,#f7d5aa) !important;
+          border:2px solid #e4af74 !important;
+          border-radius:14px !important;
+          box-shadow:
+            inset 0 3px 5px rgba(255,255,255,0.6),
+            inset 0 -3px 6px rgba(90,56,37,0.09) !important;
+          overflow:hidden !important;
+        }
+        .board-frame.mmc-board-art .cell.selected,
+        .board-frame .cell.selected{
+          outline:4px solid #ffb703 !important;
+          box-shadow:0 0 16px rgba(255,183,3,0.75) !important;
+          background:linear-gradient(180deg,#fff1d9,#f7d5aa) !important;
+        }
+        .board-frame.mmc-board-art .item img,
+        .board-frame.mmc-board-art .item-img,
+        .board-frame.mmc-board-art .machine-img img{
+          width:88% !important;
+          height:88% !important;
+          object-fit:contain !important;
+          margin:auto !important;
+          display:block !important;
+          filter:drop-shadow(0 3px 4px rgba(90,56,37,.18));
+        }
+        .board-frame.mmc-board-art .machine-img img{
+          width:94% !important;
+          height:94% !important;
+        }
+
+        /* Secret Recipe back to stable grid, no PNG background */
+        .secret-full-card:has(.mmc-secret-board-art){
+          background:rgba(255,255,255,.86) !important;
+          border:2px solid #f4cf9c !important;
+          box-shadow:0 8px 18px rgba(90,56,37,.10) !important;
+          padding:10px !important;
+          border-radius:26px !important;
+        }
+        .secret-full-board.mmc-secret-board-art,
+        .secret-full-board{
+          width:auto !important;
+          height:auto !important;
+          display:grid !important;
+          grid-template-columns:repeat(8,minmax(0,1fr)) !important;
+          grid-template-rows:none !important;
+          gap:5px !important;
+          background:rgba(90,56,37,.13) !important;
+          background-image:none !important;
+          border:3px solid #d69456 !important;
+          border-radius:22px !important;
+          padding:7px !important;
+          box-shadow:none !important;
+          margin:0 !important;
+          overflow:visible !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell,
+        .secret-full-board .secret-cell{
+          width:100% !important;
+          height:auto !important;
+          aspect-ratio:1/1 !important;
+          border-radius:13px !important;
+          border:2px solid #e4af74 !important;
+          background:linear-gradient(180deg,#fff4df,#f6d3a5) !important;
+          box-shadow:none !important;
+          overflow:hidden !important;
+          padding:0 !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell.locked,
+        .secret-full-board .secret-cell.locked{
+          background:linear-gradient(180deg,#d9c8a9,#9f845c) !important;
+          border-color:#7e684b !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell.empty,
+        .secret-full-board .secret-cell.empty{
+          background:rgba(255,255,255,.45) !important;
+          border-style:dashed !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell.selected,
+        .secret-full-board .secret-cell.selected{
+          outline:4px solid #ffb703 !important;
+          box-shadow:0 0 14px rgba(255,183,3,.7) !important;
+        }
+        .secret-art-icon{
+          width:100% !important;
+          height:100% !important;
+          padding:4px !important;
+        }
+        .secret-art-icon img{
+          width:82% !important;
+          height:82% !important;
+          object-fit:contain !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell.locked .secret-art-icon img{
+          width:88% !important;
+          height:88% !important;
+        }
+      `;
+      document.head.appendChild(style);
+    })();
+
+
     document.addEventListener("dragstart", e => e.preventDefault());
 
     const hadSave = loadGame();
