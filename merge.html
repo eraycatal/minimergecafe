@@ -8848,6 +8848,176 @@
     })();
 
 
+
+    /* PATCH 166: Storage + 50-step Cafe Route with mini challenges */
+    const MMC_STORAGE_KEY = "miniMergeCafeStorage_v1";
+    const MMC_ROUTE_KEY = "miniMergeCafeRoute_v1";
+    const MMC_ROUTE_COSTS = [0,100,150,220,300,400,520,650,750,800,900,1050,1200,1350,1500,1650,1750,1850,1950,2000,2200,2400,2600,2800,3000,3200,3400,3600,3700,3800,4000,4200,4400,4600,4800,5100,5400,5600,5800,6000,6200,6400,6600,6800,7000,7200,7400,7600,7800,8000];
+    const MMC_ROUTE_GAMES = ["memory","rush","cable","sort"];
+    let storageState = { slots: 1, items: [] };
+    let cafeRoute = { unlocked: 1, completed: 0, activeStep: null, rewardsClaimed: {} };
+    let routeGame = null;
+
+    function shuffleArray(a){const x=a.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}return x;}
+    function routeStepCost(step){return MMC_ROUTE_COSTS[step-1]||8000;}
+    function routeGameType(step){return MMC_ROUTE_GAMES[(step-1)%MMC_ROUTE_GAMES.length];}
+    function routeGameLabel(t){return {memory:"Recipe Memory",rush:"Order Rush",cable:"Cable Fix",sort:"Tray Sort"}[t]||"Mini Task";}
+    function routeTimeForStep(step){return step<=10?35:step<=20?42:step<=30?50:60;}
+    function routeMistakesForStep(step){return 2;}
+    function routeZoneName(step){return step<=10?"Morning Street":step<=20?"Bakery Lane":step<=30?"Cozy Garden":step<=40?"City Cafe Road":"Golden District";}
+    function routeRewardType(step){if([10,20,30,40,50].includes(step))return"big";if([5,15,25,35,45].includes(step))return"small";return"none";}
+    function routeRewardForStep(step){
+      return {5:{energy:15},10:{energy:30,fame:100,gems:1},15:{parts:1},20:{energy:40,gems:2,parts:2},25:{energy:25},30:{energy:50,fame:150,gems:3},35:{parts:2},40:{energy:60,gems:4,parts:3},45:{gems:3},50:{energy:100,fame:500,gems:8,parts:5}}[step]||null;
+    }
+    function routeStepTitle(step){
+      const names=["Welcome Brew","Coffee Corner","Bakery Start","Tray Practice","Small Gift Stop","Morning Orders","Wire Counter","Sweet Shelf","Memory Cup","Morning Gift Box","Bakery Door","Quick Latte","Cable Bench","Cookie Sort","Small Gift Stop","Rush Hour","Machine Wire","Tea Tray","Recipe Cards","Bakery Gift Box","Garden Entry","Cozy Cups","Garden Cable","Fresh Sort","Small Gift Stop","Order Line","Garden Repair","Herb Tray","Recipe Recall","Garden Gift Box","City Corner","City Rush","Counter Cable","Big Tray","Small Gift Stop","Late Orders","City Repair","Dessert Sort","Recipe Stack","City Gift Box","Golden Gate","VIP Orders","Golden Wire","Luxury Sort","Small Gift Stop","Final Rush","Master Cable","Grand Tray","Recipe Master","Final Gift Box"];
+      return names[step-1]||("Step "+step);
+    }
+
+    function mmcLoadStorage(){
+      try{const raw=localStorage.getItem(MMC_STORAGE_KEY);if(raw)storageState=JSON.parse(raw);}catch(e){}
+      storageState.slots=Math.max(1,Math.min(6,Number(storageState.slots)||1));
+      if(!Array.isArray(storageState.items))storageState.items=[];
+      storageState.items=storageState.items.slice(0,storageState.slots).map(x=>{if(x===null||x===undefined)return null;const id=Number(x);return Number.isInteger(id)&&items[id]?id:null;});
+      while(storageState.items.length<storageState.slots)storageState.items.push(null);
+      mmcSaveStorage();
+    }
+    function mmcSaveStorage(){try{localStorage.setItem(MMC_STORAGE_KEY,JSON.stringify(storageState));}catch(e){}}
+    function mmcStorageNextCost(){return [0,0,500,900,1400,2200,3500][storageState.slots+1]||null;}
+    function mmcBuyStorageSlot(){
+      mmcLoadStorage();
+      if(storageState.slots>=6){setMsg("Storage is already max.");playSound("error");return;}
+      const cost=mmcStorageNextCost();
+      if(coins<cost){setMsg("Need "+cost+" coins for the next storage slot.");playSound("error");return;}
+      coins-=cost;storageState.slots++;storageState.items.push(null);mmcSaveStorage();setMsg("Storage slot unlocked!");playSound("upgrade");updateAll();refreshOpenSheet();
+    }
+    function mmcStoreSelectedItem(){
+      mmcLoadStorage();
+      if(selectedIndex===null||!board[selectedIndex]||board[selectedIndex].item===undefined){setMsg("Select a normal item first.");playSound("error");return;}
+      const slot=storageState.items.findIndex(x=>x===null);
+      if(slot<0){setMsg("Storage is full. Unlock more slots in Shop.");playSound("error");openStoragePanel();return;}
+      storageState.items[slot]=board[selectedIndex].item;board[selectedIndex]=null;selectedIndex=null;mmcSaveStorage();setMsg("Item moved to Storage.");playSound("upgrade");updateAll();refreshOpenSheet();
+    }
+    function mmcTakeStorageItem(slot){
+      mmcLoadStorage();
+      const itemId=storageState.items[slot];
+      if(itemId===null||itemId===undefined)return;
+      const empty=board.findIndex(x=>!x);
+      if(empty<0){setMsg("Board is full. Clear a space first.");playSound("error");return;}
+      board[empty]=makeItem(itemId,{});storageState.items[slot]=null;newItemIndex=empty;mmcSaveStorage();setMsg("Storage item returned to board.");playSound("upgrade");updateAll();refreshOpenSheet();
+    }
+    function openStoragePanel(){openSheet("storage",null);}
+    function renderStoragePanel(){
+      mmcLoadStorage();
+      const slots=storageState.items.map((id,idx)=>`<div class="storage-slot">${id===null||id===undefined?`<div class="storage-empty">Empty</div>`:`${itemImageHTML(id,"storage-item-img")}<div class="storage-name">${items[id].name}</div><button class="blue-btn storage-take-btn" onclick="mmcTakeStorageItem(${idx})">Take</button>`}</div>`).join("");
+      const next=mmcStorageNextCost();
+      return `<div class="storage-panel"><div class="panel-card"><h3>Storage</h3><p>Store normal items here to free board space. Machines and Secret Recipe items cannot be stored.</p><button class="green-btn" onclick="mmcStoreSelectedItem()">Store Selected Item</button></div><div class="storage-grid">${slots}</div><div class="panel-card"><h3>Storage Upgrade</h3><p>Slots: <b>${storageState.slots}/6</b></p>${storageState.slots>=6?`<button class="purple-btn" disabled>Max Storage</button>`:`<button class="purple-btn" onclick="mmcBuyStorageSlot()">Unlock Next Slot - ${next} Coins</button>`}</div></div>`;
+    }
+
+    function mmcLoadRoute(){
+      try{const raw=localStorage.getItem(MMC_ROUTE_KEY);if(raw)cafeRoute=JSON.parse(raw);}catch(e){}
+      cafeRoute.unlocked=Math.max(1,Math.min(50,Number(cafeRoute.unlocked)||1));
+      cafeRoute.completed=Math.max(0,Math.min(50,Number(cafeRoute.completed)||0));
+      if(!cafeRoute.rewardsClaimed||typeof cafeRoute.rewardsClaimed!=="object")cafeRoute.rewardsClaimed={};
+      if(cafeRoute.completed>=cafeRoute.unlocked&&cafeRoute.unlocked<50)cafeRoute.unlocked=cafeRoute.completed+1;
+      mmcSaveRoute();
+    }
+    function mmcSaveRoute(){try{localStorage.setItem(MMC_ROUTE_KEY,JSON.stringify(cafeRoute));}catch(e){}}
+    function routeAvailableItemIds(minCount=8){
+      const discovered=items.map((it,idx)=>({it,idx})).filter(x=>x.it&&x.it.level<=(discoveredLevel[x.it.chain]||1)).map(x=>x.idx);
+      const base=discovered.length>=minCount?discovered:items.map((it,idx)=>it?idx:null).filter(x=>x!==null);
+      return shuffleArray(base).slice(0,Math.max(minCount,Math.min(base.length,16)));
+    }
+    function ensureCafeRouteScreen(){
+      let s=document.getElementById("cafeRouteScreen");
+      if(!s){s=document.createElement("div");s.id="cafeRouteScreen";s.className="secret-screen cafe-route-screen";document.body.appendChild(s);}
+      return s;
+    }
+    function openCafeRouteScreen(){closeSheet();if(typeof closeSecretScreen==="function")closeSecretScreen();mmcLoadRoute();routeGame=null;ensureCafeRouteScreen().classList.add("show");renderCafeRouteScreen();}
+    function closeCafeRouteScreen(){const s=document.getElementById("cafeRouteScreen");if(s)s.classList.remove("show");routeGame=null;}
+    function renderCafeRouteScreen(){
+      mmcLoadRoute();
+      const s=ensureCafeRouteScreen();
+      const current=Math.min(50,cafeRoute.completed+1);
+      const nodes=Array.from({length:50},(_,i)=>{const step=i+1,done=step<=cafeRoute.completed,cur=step===current&&cafeRoute.completed<50,locked=step>cafeRoute.unlocked,rt=routeRewardType(step),label=rt==="big"?"🎁":rt==="small"?"✦":step;return `<button class="route-node ${done?"done":""} ${cur?"current":""} ${locked?"locked":""} ${rt}" onclick="selectCafeRouteStep(${step})">${label}</button>`;}).join("");
+      s.innerHTML=`<div class="secret-screen-inner cafe-route-inner"><div class="secret-full-top"><button class="secret-back-btn" onclick="closeCafeRouteScreen()">←</button><div class="secret-full-title">Cafe Route</div><div class="secret-full-moves">${cafeRoute.completed}/50</div></div><div class="route-hero"><div class="route-zone">${routeZoneName(current)}</div><div class="route-main-title">${cafeRoute.completed>=50?"Route Completed!":"Next: Step "+current+" — "+routeStepTitle(current)}</div><div class="route-progress-bar"><div class="route-progress-fill" style="width:${Math.round(cafeRoute.completed/50*100)}%"></div></div><button class="green-btn" onclick="selectCafeRouteStep(${current})" ${cafeRoute.completed>=50?"disabled":""}>${cafeRoute.completed>=50?"Completed":"Play Current Step"}</button></div><div class="route-map">${nodes}</div><div class="route-info-card"><b>Rewards:</b> Small gifts at 5, 15, 25, 35, 45. Big gift boxes at 10, 20, 30, 40, 50.<br><b>Mini games:</b> Recipe Memory, Order Rush, Cable Fix, Tray Sort.</div></div>`;
+    }
+    function selectCafeRouteStep(step){
+      mmcLoadRoute();
+      if(step<=cafeRoute.completed){setMsg("This Cafe Route step is already completed.");return;}
+      if(step>cafeRoute.unlocked){setMsg("Complete previous steps first.");playSound("error");return;}
+      renderRouteStepDetail(step);
+    }
+    function routeRewardText(step){const r=routeRewardForStep(step);if(!r)return"Progress only";return `${r.energy?`+${r.energy} Energy `:""}${r.fame?`+${r.fame} Fame `:""}${r.gems?`+${r.gems} Gems `:""}${r.parts?`+${r.parts} Parts`:""}`;}
+    function renderRouteStepDetail(step){
+      const s=ensureCafeRouteScreen(),cost=routeStepCost(step),type=routeGameType(step),rt=routeRewardType(step),can=step===1||coins>=cost;
+      s.innerHTML=`<div class="secret-screen-inner cafe-route-inner"><div class="secret-full-top"><button class="secret-back-btn" onclick="renderCafeRouteScreen()">←</button><div class="secret-full-title">Step ${step}/50</div><div class="secret-full-moves">${routeZoneName(step)}</div></div><div class="route-hero"><div class="route-zone">${rt==="big"?"Big Gift Box":rt==="small"?"Small Gift":routeGameLabel(type)}</div><div class="route-main-title">${routeStepTitle(step)}</div><div class="route-cost-row"><span>Cost: <b>${step===1?"Free":cost+" Coins"}</b></span><span>Task: <b>${routeGameLabel(type)}</b></span></div><div class="route-cost-row"><span>Time: <b>${routeTimeForStep(step)} sec</b></span><span>Mistakes: <b>${routeMistakesForStep(step)}</b></span></div><div class="route-reward-box ${rt}">${rt==="big"?"🎁 Big Reward: ":rt==="small"?"✦ Small Reward: ":""}${routeRewardText(step)}</div><button class="green-btn" onclick="startCafeRouteStep(${step})" ${can?"":"disabled"}>${can?"Unlock & Play":"Need "+cost+" Coins"}</button></div></div>`;
+    }
+    function startCafeRouteStep(step){
+      mmcLoadRoute();
+      if(step>cafeRoute.unlocked||step<=cafeRoute.completed)return;
+      const cost=routeStepCost(step);
+      if(step>1){if(coins<cost){setMsg("Need "+cost+" coins for this route step.");playSound("error");return;}coins-=cost;}
+      cafeRoute.activeStep=step;mmcSaveRoute();updateAll();startRouteChallenge(step,routeGameType(step));
+    }
+    function startRouteChallenge(step,type){
+      routeGame={step,type,timeLeft:routeTimeForStep(step),mistakesLeft:2,completed:false,failed:false};
+      if(type==="memory")setupMemoryGame();
+      if(type==="rush")setupRushGame();
+      if(type==="cable")setupCableGame();
+      if(type==="sort")setupSortGame();
+      renderRouteGame();
+      if(routeGame.timer)clearInterval(routeGame.timer);
+      routeGame.timer=setInterval(()=>{if(!routeGame||routeGame.completed||routeGame.failed)return;routeGame.timeLeft--;if(routeGame.timeLeft<=0)routeFail("Time is up.");else renderRouteGame();},1000);
+    }
+    function setupMemoryGame(){const ids=routeAvailableItemIds(8).slice(0,8);routeGame.cards=shuffleArray(ids.concat(ids)).map((item,i)=>({item,id:i,open:true,matched:false}));routeGame.selected=[];routeGame.preview=true;setTimeout(()=>{if(!routeGame||routeGame.type!=="memory")return;routeGame.preview=false;routeGame.cards.forEach(c=>{if(!c.matched)c.open=false;});renderRouteGame();},3000);}
+    function setupRushGame(){routeGame.score=0;routeGame.goal=routeGame.step<=20?6:routeGame.step<=40?8:10;nextRushQuestion();}
+    function nextRushQuestion(){const opts=routeAvailableItemIds(4).slice(0,4);routeGame.rush={target:opts[Math.floor(Math.random()*opts.length)],options:shuffleArray(opts)};}
+    function setupCableGame(){const colors=["red","blue","green","yellow"],count=routeGame.step<=20?3:4;routeGame.cables=shuffleArray(colors).slice(0,count).map(c=>({color:c,done:false}));routeGame.sockets=shuffleArray(routeGame.cables.map(c=>c.color));routeGame.selectedCable=null;}
+    function setupSortGame(){const cats=["drink","dessert","bakery"];const pool=items.map((it,idx)=>({it,idx})).filter(x=>x.it&&cats.includes(x.it.chain));routeGame.sortItems=shuffleArray(pool).slice(0,routeGame.step<=20?9:12).map(x=>({item:x.idx,chain:x.it.chain,done:false}));routeGame.sortDone=0;routeGame.sortGoal=routeGame.sortItems.length;routeGame.selectedSortItem=null;}
+    function renderRouteGame(){if(!routeGame)return renderCafeRouteScreen();let body="";if(routeGame.type==="memory")body=renderMemoryGame();if(routeGame.type==="rush")body=renderRushGame();if(routeGame.type==="cable")body=renderCableGame();if(routeGame.type==="sort")body=renderSortGame();ensureCafeRouteScreen().innerHTML=`<div class="secret-screen-inner cafe-route-inner"><div class="secret-full-top"><button class="secret-back-btn" onclick="routeCancelGame()">←</button><div class="secret-full-title">${routeGameLabel(routeGame.type)}</div><div class="secret-full-moves">${routeGame.timeLeft}s</div></div><div class="route-game-head"><div>Step ${routeGame.step}/50</div><div>Mistakes: ${routeGame.mistakesLeft}</div></div>${body}</div>`;}
+    function renderMemoryGame(){return `<div class="route-game-card"><div class="route-game-note">${routeGame.preview?"Memorize the cards...":"Match all pairs. 2 mistakes allowed."}</div><div class="memory-grid">${routeGame.cards.map((c,idx)=>`<button class="memory-card ${c.open||c.matched?"open":""} ${c.matched?"matched":""}" onclick="memoryPick(${idx})">${c.open||c.matched?itemImageHTML(c.item,"memory-item-img"):"?"}</button>`).join("")}</div></div>`;}
+    function memoryPick(idx){if(!routeGame||routeGame.type!=="memory"||routeGame.preview)return;const c=routeGame.cards[idx];if(!c||c.open||c.matched)return;c.open=true;routeGame.selected.push(idx);if(routeGame.selected.length===2){const [a,b]=routeGame.selected,ca=routeGame.cards[a],cb=routeGame.cards[b];if(ca.item===cb.item){ca.matched=cb.matched=true;routeGame.selected=[];if(routeGame.cards.every(x=>x.matched))return routeWin();}else{routeGame.mistakesLeft--;routeGame.selected=[];setTimeout(()=>{if(!routeGame||routeGame.type!=="memory")return;ca.open=false;cb.open=false;if(routeGame.mistakesLeft<0)routeFail("Too many mistakes.");else renderRouteGame();},650);}}renderRouteGame();}
+    function renderRushGame(){return `<div class="route-game-card"><div class="route-game-note">Choose the requested item.</div><div class="rush-target"><div>Customer wants:</div><b>${items[routeGame.rush.target].name}</b></div><div class="rush-options">${routeGame.rush.options.map(id=>`<button class="rush-option" onclick="rushPick(${id})">${itemImageHTML(id,"rush-item-img")}<span>${items[id].name}</span></button>`).join("")}</div><div class="route-game-note">Progress: ${routeGame.score}/${routeGame.goal}</div></div>`;}
+    function rushPick(id){if(id===routeGame.rush.target){routeGame.score++;playSound("merge");if(routeGame.score>=routeGame.goal)return routeWin();nextRushQuestion();}else{routeGame.mistakesLeft--;playSound("error");if(routeGame.mistakesLeft<0)return routeFail("Too many wrong orders.");}renderRouteGame();}
+    function renderCableGame(){return `<div class="route-game-card"><div class="route-game-note">Select a cable, then connect it to the same color socket.</div><div class="cable-area"><div class="cable-row">${routeGame.cables.map((c,i)=>`<button class="cable-btn cable-${c.color} ${c.done?"done":""} ${routeGame.selectedCable===i?"selected":""}" onclick="selectCable(${i})">${c.done?"✓":""}</button>`).join("")}</div><div class="socket-row">${routeGame.sockets.map(c=>`<button class="socket-btn socket-${c}" onclick="selectSocket('${c}')"></button>`).join("")}</div></div></div>`;}
+    function selectCable(i){if(routeGame.cables[i].done)return;routeGame.selectedCable=i;renderRouteGame();}
+    function selectSocket(color){if(routeGame.selectedCable===null||routeGame.selectedCable===undefined)return;const c=routeGame.cables[routeGame.selectedCable];if(c.color===color){c.done=true;routeGame.selectedCable=null;playSound("merge");if(routeGame.cables.every(x=>x.done))return routeWin();}else{routeGame.mistakesLeft--;routeGame.selectedCable=null;playSound("error");if(routeGame.mistakesLeft<0)return routeFail("Too many wrong cables.");}renderRouteGame();}
+    function renderSortGame(){const rem=routeGame.sortItems.filter(x=>!x.done);return `<div class="route-game-card"><div class="route-game-note">Pick an item, then choose the correct tray.</div><div class="sort-items">${rem.map((x,i)=>`<button class="sort-item ${routeGame.selectedSortItem===routeGame.sortItems.indexOf(x)?"selected":""}" onclick="selectSortItem(${i})">${itemImageHTML(x.item,"sort-item-img")}</button>`).join("")||"<b>All sorted!</b>"}</div><div class="sort-trays"><button onclick="sortToTray('drink')">Drinks</button><button onclick="sortToTray('dessert')">Desserts</button><button onclick="sortToTray('bakery')">Bakery</button></div><div class="route-game-note">Sorted: ${routeGame.sortDone}/${routeGame.sortGoal}</div></div>`;}
+    function selectSortItem(visibleIdx){const rem=routeGame.sortItems.filter(x=>!x.done);const picked=rem[visibleIdx];if(!picked)return;routeGame.selectedSortItem=routeGame.sortItems.indexOf(picked);renderRouteGame();}
+    function sortToTray(chain){if(routeGame.selectedSortItem===null||routeGame.selectedSortItem===undefined){setMsg("Select an item first.");return;}const obj=routeGame.sortItems[routeGame.selectedSortItem];if(!obj||obj.done)return;if(obj.chain===chain){obj.done=true;routeGame.sortDone++;routeGame.selectedSortItem=null;playSound("merge");if(routeGame.sortDone>=routeGame.sortGoal)return routeWin();}else{routeGame.mistakesLeft--;routeGame.selectedSortItem=null;playSound("error");if(routeGame.mistakesLeft<0)return routeFail("Wrong tray too many times.");}renderRouteGame();}
+    function routeCancelGame(){if(routeGame&&routeGame.timer)clearInterval(routeGame.timer);routeGame=null;renderCafeRouteScreen();}
+    function routeFail(reason){if(!routeGame)return;if(routeGame.timer)clearInterval(routeGame.timer);const step=routeGame.step;routeGame=null;setMsg(reason+" Try again.");playSound("error");renderRouteStepDetail(step);}
+    function grantRouteReward(step){const r=routeRewardForStep(step);if(!r||cafeRoute.rewardsClaimed[step])return;if(r.energy)energy=Math.min(maxEnergy,energy+r.energy);if(r.fame)famePoints+=r.fame;if(r.gems)gems+=r.gems;if(r.parts)parts+=r.parts;cafeRoute.rewardsClaimed[step]=true;}
+    function routeWin(){if(!routeGame)return;if(routeGame.timer)clearInterval(routeGame.timer);const step=routeGame.step;cafeRoute.completed=Math.max(cafeRoute.completed,step);if(cafeRoute.unlocked<50)cafeRoute.unlocked=Math.max(cafeRoute.unlocked,step+1);cafeRoute.activeStep=null;grantRouteReward(step);mmcSaveRoute();routeGame=null;updateAll();renderRouteComplete(step);}
+    function renderRouteComplete(step){ensureCafeRouteScreen().innerHTML=`<div class="secret-screen-inner cafe-route-inner"><div class="route-complete-card"><div class="route-complete-icon">${routeRewardType(step)==="big"?"🎁":routeRewardType(step)==="small"?"✦":"✓"}</div><div class="rank-title">Step ${step} Completed!</div><div class="rank-name">${routeStepTitle(step)}</div><div class="rank-reward">${routeRewardText(step)}</div><button class="green-btn" onclick="renderCafeRouteScreen()">Continue Route</button></div></div>`;}
+    function mmcPatchRouteButtons(){if(!document.getElementById("cafeRouteHomeBtn")){const hint=document.querySelector(".hint-bubble");if(hint){const w=document.createElement("div");w.className="route-home-wrap";w.innerHTML=`<button id="cafeRouteHomeBtn" class="route-home-btn" onclick="openCafeRouteScreen()"><span>Cafe Route</span><small id="cafeRouteHomeProgress">0/50</small></button><button id="storageHomeBtn" class="storage-home-btn" onclick="openStoragePanel()">Storage</button>`;hint.insertAdjacentElement("afterend",w);}}const p=document.getElementById("cafeRouteHomeProgress");if(p){mmcLoadRoute();p.textContent=cafeRoute.completed+"/50";}}
+    const mmcRefreshOpenSheetOriginal166=refreshOpenSheet;
+    refreshOpenSheet=function(){const sh=document.getElementById("sheet"),type=sh.dataset.type||"goals";if(type==="storage"){document.getElementById("sheetTitle").textContent="Storage";document.getElementById("sheetContent").innerHTML=renderStoragePanel();return;}mmcRefreshOpenSheetOriginal166();};
+    const mmcRenderShopPanelOriginal166=renderShopPanel;
+    renderShopPanel=function(){const base=mmcRenderShopPanelOriginal166();mmcLoadStorage();const next=mmcStorageNextCost();const extra=`<div class="shop-section"><div class="shop-section-head"><div class="shop-section-title">Storage & Route</div><div class="shop-section-sub">Coin goals</div></div><div class="shop-grid"><div class="shop-card ${storageState.slots>=6?"owned":""}"><div class="shop-icon">📦</div><div class="shop-name">Storage Capacity</div><div class="shop-desc">Current slots: ${storageState.slots}/6</div>${storageState.slots>=6?`<button class="shop-buy-btn shop-buy-green" disabled>Max</button>`:`<button class="shop-buy-btn shop-buy-purple" onclick="mmcBuyStorageSlot()">Unlock ${next} Coins</button>`}</div><div class="shop-card"><div class="shop-icon">🧭</div><div class="shop-name">Cafe Route</div><div class="shop-desc">Spend coins to unlock route tasks and milestones.</div><button class="shop-buy-btn shop-buy-blue" onclick="openCafeRouteScreen()">Open Route</button></div></div></div>`;return base.replace("</div>",extra+"</div>");};
+    const mmcUpdateAllOriginal166=updateAll;
+    updateAll=function(){mmcUpdateAllOriginal166();mmcPatchRouteButtons();};
+
+    (function patch166Styles(){
+      const style=document.createElement("style");
+      style.textContent=`
+        .route-home-wrap{display:grid;grid-template-columns:1fr .42fr;gap:8px;margin:0 0 12px}.route-home-btn,.storage-home-btn{border-radius:18px;padding:11px 12px;border:2px solid #f1c27d;background:linear-gradient(180deg,#fff,#fff1d9);color:#5a3825;box-shadow:0 6px 14px rgba(90,56,37,.11);font-weight:900}.route-home-btn{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,#fff6d7,#ffd48c)}.route-home-btn span{font-size:15px}.route-home-btn small{border-radius:999px;padding:4px 8px;background:white;border:1px solid #f1c27d;color:#8a5a2d}.storage-home-btn{font-size:13px}
+        .storage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:10px 0}.storage-slot{min-height:112px;border-radius:18px;background:linear-gradient(180deg,#fff,#fff2dc);border:2px solid #f1c27d;padding:8px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px}.storage-empty{color:#9a7351;font-weight:900;font-size:12px;opacity:.72}.storage-item-img{width:54px;height:54px;object-fit:contain}.storage-name{font-size:10px;font-weight:900;color:#5a3825;line-height:1.1;min-height:22px}.storage-take-btn{padding:5px 8px!important;margin:0!important;font-size:11px!important}
+        .cafe-route-screen{position:fixed;inset:0;background:linear-gradient(180deg,#fff3e8,#ffd8b8);z-index:140;overflow-y:auto;padding:12px;display:none}.cafe-route-screen.show{display:block}.cafe-route-inner{max-width:480px;margin:0 auto 80px}.route-hero,.route-info-card,.route-game-card,.route-complete-card{background:rgba(255,255,255,.9);border:2px solid #f1c27d;border-radius:24px;padding:14px;box-shadow:0 8px 18px rgba(90,56,37,.10);margin-bottom:10px;text-align:center}.route-zone{display:inline-block;background:#fff1d9;border:1px solid #f1c27d;color:#8a5a2d;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:900;margin-bottom:7px}.route-main-title{font-size:18px;font-weight:900;color:#5a3825;margin-bottom:10px}.route-progress-bar{height:14px;background:#f3cfa1;border:2px solid #d69456;border-radius:999px;overflow:hidden;margin:9px 0}.route-progress-fill{height:100%;background:linear-gradient(90deg,#4caf7a,#a9e34b);border-radius:999px}
+        .route-map{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(255,255,255,.62);border:2px solid #f1c27d;border-radius:24px;padding:12px;margin-bottom:10px}.route-node{aspect-ratio:1/1;border-radius:16px;background:linear-gradient(180deg,#fff,#ffe8c3);border:2px solid #e7b875;color:#5a3825;font-size:13px;font-weight:900;box-shadow:0 4px 8px rgba(90,56,37,.08)}.route-node.done{background:linear-gradient(180deg,#dfffd7,#84dc64);border-color:#4caf50}.route-node.current{background:linear-gradient(180deg,#fff5bf,#ffca5c);border-color:#ff9d00;box-shadow:0 0 0 3px rgba(255,183,3,.22)}.route-node.locked{opacity:.5;background:#eadbc7}.route-node.big{font-size:20px;background:linear-gradient(180deg,#ffe8f0,#ffb6d2)}.route-node.small{font-size:18px;background:linear-gradient(180deg,#fff8d1,#ffe089)}
+        .route-info-card{text-align:left;font-size:13px;line-height:1.35;font-weight:800;color:#6b4126}.route-cost-row{display:flex;justify-content:space-between;gap:8px;background:#fff8ef;border:1px solid #f1d3a5;border-radius:14px;padding:8px;font-size:12px;margin:6px 0}.route-reward-box{margin:8px 0;padding:10px;border-radius:16px;background:#fff8ef;border:2px solid #f1d3a5;font-weight:900;color:#5a3825}.route-reward-box.big{background:linear-gradient(180deg,#ffe8f0,#fff8d9);border-color:#ff9fbd}.route-reward-box.small{background:linear-gradient(180deg,#fff8d9,#fff0bd);border-color:#ffd166}.route-game-head{display:flex;justify-content:space-between;gap:8px;background:rgba(255,255,255,.9);border:2px solid #f1c27d;border-radius:18px;padding:10px;margin-bottom:10px;font-weight:900;color:#5a3825}.route-game-note{font-size:13px;font-weight:900;color:#7a4c2b;margin-bottom:10px}
+        .memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.memory-card{aspect-ratio:1/1;border-radius:16px;background:linear-gradient(180deg,#d9b480,#8b5b33);border:2px solid #70421f;color:white;font-size:24px;display:flex;align-items:center;justify-content:center;overflow:hidden}.memory-card.open{background:linear-gradient(180deg,#fff,#fff2dc);border-color:#f1c27d}.memory-card.matched{background:linear-gradient(180deg,#e5ffde,#9be275);border-color:#4caf50}.memory-item-img,.rush-item-img,.sort-item-img{width:80%;height:80%;object-fit:contain}
+        .rush-target{background:#fff8ef;border:2px solid #f1d3a5;border-radius:18px;padding:12px;margin-bottom:10px;color:#5a3825}.rush-options{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.rush-option{min-height:110px;border-radius:18px;background:#fff8ef;border:2px solid #f1c27d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#5a3825;font-size:11px;font-weight:900}
+        .cable-row,.socket-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}.cable-btn,.socket-btn{height:62px;border-radius:18px;border:3px solid rgba(90,56,37,.25);box-shadow:0 5px 10px rgba(90,56,37,.12)}.cable-btn.selected{outline:4px solid #ffb703}.cable-btn.done{opacity:.45}.cable-red,.socket-red{background:#ff5a5f}.cable-blue,.socket-blue{background:#4da3ff}.cable-green,.socket-green{background:#55c76a}.cable-yellow,.socket-yellow{background:#ffd166}
+        .sort-items{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}.sort-item{aspect-ratio:1/1;border-radius:16px;background:#fff8ef;border:2px solid #f1c27d}.sort-item.selected{outline:4px solid #ffb703}.sort-trays{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.sort-trays button{border-radius:16px;padding:14px 6px;background:linear-gradient(180deg,#fff,#ffe0b3);border:2px solid #f1c27d;color:#5a3825;font-weight:900}.route-complete-card{margin-top:80px}.route-complete-icon{font-size:58px;margin-bottom:8px}
+      `;
+      document.head.appendChild(style);
+    })();
+    mmcLoadStorage();
+    mmcLoadRoute();
+
+
     document.addEventListener("dragstart", e => e.preventDefault());
 
     const hadSave = loadGame();
