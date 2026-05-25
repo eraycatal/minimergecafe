@@ -9434,6 +9434,443 @@
       document.head.appendChild(style);
     })();
 
+
+
+    /* PATCH 170 — Premium Today's Orders visual polish
+       Compatible with current merge.html / PATCH 169 style baseline.
+       Safe scope:
+       - Customer/order structure stays the same
+       - Ready green card stays the same
+       - Ready green SERVE button stays the same
+       - Single and double orders are supported
+       - Puzzle + upgrade part can appear together in a 2x2 reward grid
+    */
+    (function patch170PremiumOrders() {
+      const style = document.createElement("style");
+      style.textContent = `
+        .orders-section{
+          position:relative!important;
+          min-height:318px!important;
+          max-height:none!important;
+          padding:12px 8px 12px!important;
+          margin-bottom:12px!important;
+          background:linear-gradient(180deg, rgba(255,252,247,.96), rgba(255,245,233,.96))!important;
+          border:2px solid #efd3af!important;
+          border-radius:30px!important;
+          box-shadow:0 12px 26px rgba(90,56,37,.08), inset 0 0 0 4px rgba(255,255,255,.45)!important;
+          overflow:hidden!important;
+        }
+
+        .orders-section .section-ribbon,
+        .section-ribbon{
+          margin:-4px auto 10px!important;
+          padding:9px 28px!important;
+          min-height:40px!important;
+          line-height:1!important;
+          border-radius:16px!important;
+          background:linear-gradient(180deg,#ff8fa8 0%, #ef6b86 100%)!important;
+          color:#fff!important;
+          border:2px solid rgba(255,255,255,.55)!important;
+          box-shadow:0 8px 18px rgba(239,107,134,.28)!important;
+          font-size:17px!important;
+          font-weight:900!important;
+          letter-spacing:.2px!important;
+          text-shadow:0 1px 2px rgba(0,0,0,.18)!important;
+          width:fit-content!important;
+          max-width:230px!important;
+          white-space:nowrap!important;
+          overflow:hidden!important;
+          text-overflow:ellipsis!important;
+          position:relative!important;
+          z-index:5!important;
+        }
+
+        .customers{
+          display:flex!important;
+          align-items:flex-start!important;
+          gap:9px!important;
+          padding:2px 1px 4px!important;
+          overflow-x:auto!important;
+          overflow-y:hidden!important;
+          scrollbar-width:none!important;
+          scroll-snap-type:x proximity!important;
+          height:auto!important;
+          min-height:248px!important;
+          max-height:none!important;
+        }
+        .customers::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;}
+
+        .orders-section .customer-card{
+          position:relative!important;
+          flex:0 0 138px!important;
+          width:138px!important;
+          min-width:138px!important;
+          max-width:138px!important;
+          min-height:250px!important;
+          height:250px!important;
+          max-height:250px!important;
+          padding:9px 7px 10px!important;
+          margin:0!important;
+          overflow:visible!important;
+          display:grid!important;
+          grid-template-rows:102px 86px 56px 38px!important;
+          justify-items:center!important;
+          align-items:start!important;
+          border:2px solid #f0dcc2!important;
+          border-radius:28px!important;
+          background:radial-gradient(circle at top, rgba(255,255,255,.92), rgba(255,255,255,0) 32%), linear-gradient(180deg, #fffdf9 0%, #fff4e9 100%)!important;
+          box-shadow:0 10px 20px rgba(90,56,37,.08), inset 0 1px 0 rgba(255,255,255,.75)!important;
+          scroll-snap-align:start!important;
+        }
+
+        .orders-section .customer-card.ready{
+          border-color:#b5df8f!important;
+          background:radial-gradient(circle at top, rgba(255,255,255,.95), rgba(255,255,255,0) 32%), linear-gradient(180deg, #fafff7 0%, #eef8e4 100%)!important;
+          box-shadow:0 0 0 3px rgba(111,194,60,.16), 0 12px 22px rgba(90,56,37,.08), inset 0 1px 0 rgba(255,255,255,.85)!important;
+          animation:none!important;
+        }
+
+        .orders-section .ready-check{
+          top:10px!important;
+          right:10px!important;
+          width:28px!important;
+          height:28px!important;
+          border-radius:50%!important;
+          background:linear-gradient(180deg,#8fe13c,#5fb91d)!important;
+          border:2px solid #ffffff!important;
+          color:#fff!important;
+          font-size:15px!important;
+          font-weight:900!important;
+          display:flex!important;
+          align-items:center!important;
+          justify-content:center!important;
+          box-shadow:0 4px 10px rgba(95,185,29,.28)!important;
+          z-index:10!important;
+        }
+
+        .orders-section .customer-top{
+          grid-row:1!important;
+          width:100%!important;
+          height:102px!important;
+          display:flex!important;
+          flex-direction:column!important;
+          align-items:center!important;
+          justify-content:flex-start!important;
+          gap:7px!important;
+          margin:0!important;
+          padding:0!important;
+          text-align:center!important;
+          overflow:visible!important;
+        }
+
+        .orders-section .portrait-ring{
+          width:82px!important;
+          height:82px!important;
+          min-width:82px!important;
+          min-height:82px!important;
+          max-width:82px!important;
+          max-height:82px!important;
+          padding:3px!important;
+          border-radius:24px!important;
+          background:linear-gradient(180deg,#fff0d0,#f0bc76)!important;
+          border:2px solid #f0c98f!important;
+          box-shadow:0 8px 16px rgba(90,56,37,.12)!important;
+          overflow:hidden!important;
+        }
+
+        .orders-section .portrait-ring img{
+          width:100%!important;
+          height:100%!important;
+          object-fit:cover!important;
+          object-position:center top!important;
+          border-radius:20px!important;
+          display:block!important;
+          background:#fff7ef!important;
+        }
+
+        .orders-section .customer-meta{
+          min-width:94px!important;
+          max-width:118px!important;
+          padding:4px 12px!important;
+          border-radius:999px!important;
+          background:linear-gradient(180deg,#fffaf1,#f8ecd9)!important;
+          border:2px solid #ecd6b3!important;
+          box-shadow:0 3px 8px rgba(90,56,37,.06)!important;
+          overflow:hidden!important;
+        }
+
+        .orders-section .customer-card.ready .customer-meta{
+          background:linear-gradient(180deg,#f5ffe8,#eef7dd)!important;
+          border-color:#cde4a5!important;
+        }
+
+        .orders-section .customer-name{
+          height:auto!important;
+          min-height:0!important;
+          max-height:none!important;
+          margin:0!important;
+          font-size:16px!important;
+          line-height:1.1!important;
+          font-weight:900!important;
+          color:#6e3d17!important;
+          text-align:center!important;
+          white-space:nowrap!important;
+          overflow:hidden!important;
+          text-overflow:ellipsis!important;
+        }
+
+        .orders-section .customer-trait,
+        .orders-section .customer-mood,
+        .orders-section .order-label,
+        .orders-section .order-name,
+        .orders-section .order-plus{display:none!important;}
+
+        .orders-section .order-block{
+          grid-row:2!important;
+          position:relative!important;
+          width:122px!important;
+          height:78px!important;
+          min-height:78px!important;
+          max-height:78px!important;
+          margin:0!important;
+          padding:0!important;
+          border:none!important;
+          background:transparent!important;
+          overflow:visible!important;
+          display:flex!important;
+          align-items:center!important;
+          justify-content:center!important;
+        }
+
+        .orders-section .order-block::before{
+          content:""!important;
+          position:absolute!important;
+          inset:0!important;
+          border-radius:999px!important;
+          background:radial-gradient(ellipse at center, #ffffff 0%, #fffdfb 44%, #f6efe8 61%, #ece1d5 72%, #ffffff 82%, #e8dacc 100%)!important;
+          border:2px solid #ead7c0!important;
+          box-shadow:inset 0 2px 0 rgba(255,255,255,.9), inset 0 -3px 8px rgba(90,56,37,.07), 0 8px 14px rgba(90,56,37,.07)!important;
+        }
+
+        .orders-section .order-block::after{
+          content:""!important;
+          position:absolute!important;
+          inset:8px!important;
+          border-radius:999px!important;
+          border:1px solid rgba(219,194,163,.75)!important;
+          pointer-events:none!important;
+        }
+
+        .orders-section .order-emoji{
+          position:relative!important;
+          z-index:1!important;
+          width:100%!important;
+          height:100%!important;
+          display:flex!important;
+          align-items:center!important;
+          justify-content:center!important;
+          gap:8px!important;
+          flex-wrap:nowrap!important;
+          overflow:visible!important;
+          margin:0!important;
+          padding:0!important;
+        }
+
+        .orders-section .order-slot{
+          position:relative!important;
+          display:flex!important;
+          align-items:center!important;
+          justify-content:center!important;
+          flex:0 0 auto!important;
+          background:transparent!important;
+          border:none!important;
+          padding:0!important;
+          overflow:visible!important;
+          border-radius:16px!important;
+        }
+
+        .orders-section .single-order .order-slot{width:60px!important;height:60px!important;min-width:60px!important;max-width:60px!important;}
+        .orders-section .single-order .order-icon-img{width:58px!important;height:58px!important;max-width:58px!important;max-height:58px!important;}
+        .orders-section .multi-order .order-slot{width:44px!important;height:44px!important;min-width:44px!important;max-width:44px!important;}
+        .orders-section .multi-order .order-icon-img{width:42px!important;height:42px!important;max-width:42px!important;max-height:42px!important;}
+
+        .orders-section .order-icon-img{
+          object-fit:contain!important;
+          display:block!important;
+          margin:0!important;
+          filter:drop-shadow(0 4px 4px rgba(90,56,37,.12))!important;
+        }
+
+        .orders-section .single-order .order-item-check{
+          right:-3px!important;top:-3px!important;width:16px!important;height:16px!important;min-width:16px!important;min-height:16px!important;
+          border-radius:50%!important;font-size:9px!important;border:2px solid #fff!important;background:#65c624!important;color:#fff!important;
+          box-shadow:0 2px 6px rgba(101,198,36,.32)!important;z-index:11!important;
+        }
+
+        .orders-section .multi-order .order-item-check{
+          right:-2px!important;top:-2px!important;width:13px!important;height:13px!important;min-width:13px!important;min-height:13px!important;
+          font-size:7px!important;border:1.5px solid #fff!important;background:#65c624!important;color:#fff!important;z-index:11!important;
+        }
+
+        .orders-section .reward.reward-grid{
+          grid-row:3!important;
+          width:122px!important;
+          min-height:50px!important;
+          height:auto!important;
+          max-height:none!important;
+          margin:4px 0 0!important;
+          padding:0!important;
+          display:grid!important;
+          grid-template-columns:repeat(2, minmax(0, 1fr))!important;
+          gap:6px!important;
+          align-content:start!important;
+          justify-items:stretch!important;
+          overflow:visible!important;
+        }
+
+        .orders-section .reward.reward-grid > span{
+          min-height:22px!important;
+          height:22px!important;
+          display:flex!important;
+          align-items:center!important;
+          justify-content:center!important;
+          padding:3px 5px!important;
+          background:linear-gradient(180deg,#fffdf9,#fff4e7)!important;
+          border:1.5px solid #e7d3b8!important;
+          border-radius:14px!important;
+          box-shadow:0 3px 6px rgba(90,56,37,.05)!important;
+          font-size:10px!important;
+          line-height:1!important;
+          font-weight:900!important;
+          color:#6b4126!important;
+          white-space:nowrap!important;
+          overflow:hidden!important;
+          text-overflow:ellipsis!important;
+        }
+
+        .orders-section .reward.reward-grid .reward-icon-line{
+          display:inline-flex!important;
+          align-items:center!important;
+          justify-content:center!important;
+          gap:4px!important;
+          width:100%!important;
+          white-space:nowrap!important;
+        }
+
+        .orders-section .reward.reward-grid .mmc-reward-icon{width:13px!important;height:13px!important;flex:0 0 13px!important;}
+        .orders-section .reward.reward-grid .secret-move-reward{color:#7a43bb!important;background:linear-gradient(180deg,#fdf7ff,#f5ebff)!important;border-color:#dbc0ff!important;}
+        .orders-section .reward.reward-grid.rewards-3 > span:last-child{grid-column:1 / -1!important;justify-self:center!important;width:58%!important;}
+
+        .orders-section .serve-btn{
+          grid-row:4!important;
+          width:122px!important;
+          height:36px!important;
+          min-height:36px!important;
+          max-height:36px!important;
+          margin:4px 0 0!important;
+          padding:2px 8px!important;
+          border-radius:18px!important;
+          font-size:14px!important;
+          font-weight:900!important;
+          letter-spacing:.3px!important;
+          text-transform:uppercase!important;
+          background:linear-gradient(180deg,#ffd57c,#f0a33d)!important;
+          border:2px solid #d4892c!important;
+          color:#7c3f08!important;
+          box-shadow:0 4px 0 #c17722, 0 8px 14px rgba(90,56,37,.09)!important;
+          text-shadow:0 1px 0 rgba(255,255,255,.35)!important;
+          overflow:hidden!important;
+          align-self:start!important;
+          justify-self:center!important;
+          opacity:1!important;
+        }
+
+        .orders-section .serve-btn:active{transform:translateY(2px)!important;box-shadow:0 2px 0 #c17722, 0 5px 10px rgba(90,56,37,.08)!important;}
+
+        .orders-section .serve-btn:disabled{
+          opacity:1!important;
+          cursor:not-allowed!important;
+          color:#8b6540!important;
+          background:linear-gradient(180deg,#f7e5c8,#e7d1b2)!important;
+          border-color:#d7b790!important;
+          box-shadow:0 4px 0 #c6a277, 0 8px 12px rgba(90,56,37,.06)!important;
+          text-shadow:none!important;
+        }
+
+        .orders-section .customer-card.ready .serve-btn{
+          background:linear-gradient(180deg,#9de247,#67be1f)!important;
+          border-color:#4d9b18!important;
+          color:#ffffff!important;
+          text-shadow:0 1px 2px rgba(0,0,0,.18)!important;
+          box-shadow:0 4px 0 #438613, 0 8px 14px rgba(95,185,29,.18)!important;
+          cursor:pointer!important;
+        }
+
+        @media (max-width:380px){
+          .orders-section{min-height:304px!important;padding-left:7px!important;padding-right:7px!important;}
+          .customers{gap:7px!important;}
+          .orders-section .customer-card{flex-basis:132px!important;width:132px!important;min-width:132px!important;max-width:132px!important;min-height:242px!important;height:242px!important;max-height:242px!important;grid-template-rows:98px 82px 54px 36px!important;}
+          .orders-section .portrait-ring{width:78px!important;height:78px!important;min-width:78px!important;min-height:78px!important;}
+          .orders-section .customer-name{font-size:15px!important;}
+          .orders-section .order-block{width:118px!important;height:74px!important;min-height:74px!important;max-height:74px!important;}
+          .orders-section .single-order .order-slot{width:57px!important;height:57px!important;min-width:57px!important;max-width:57px!important;}
+          .orders-section .single-order .order-icon-img{width:55px!important;height:55px!important;max-width:55px!important;max-height:55px!important;}
+          .orders-section .multi-order .order-slot{width:42px!important;height:42px!important;min-width:42px!important;max-width:42px!important;}
+          .orders-section .multi-order .order-icon-img{width:40px!important;height:40px!important;max-width:40px!important;max-height:40px!important;}
+          .orders-section .reward.reward-grid{width:118px!important;gap:5px!important;}
+          .orders-section .reward.reward-grid > span{font-size:9.5px!important;padding:3px 4px!important;}
+          .orders-section .serve-btn{width:118px!important;height:34px!important;min-height:34px!important;max-height:34px!important;font-size:13px!important;}
+        }
+      `;
+      document.head.appendChild(style);
+
+      createCustomers = function() {
+        const previousFirstId = customers[0] && customers[0].profile ? customers[0].profile.id : "";
+        customers.sort((a, b) => Number(isCustomerReady(b)) - Number(isCustomerReady(a)));
+        const newFirstId = customers[0] && customers[0].profile ? customers[0].profile.id : "";
+
+        customersEl.innerHTML = "";
+
+        customers.forEach((c, index) => {
+          const ready = isCustomerReady(c);
+          const moves = secretOrderMoveReward(c);
+          const rewardParts = [
+            mmcRewardIconLine("coin", String(getCustomerReward(c)), "🪙"),
+            mmcRewardIconLine("fameStar", "+" + getCustomerFameReward(c), "⭐")
+          ];
+
+          if (moves > 0) {
+            rewardParts.push(`<span class="secret-move-reward">${mmcRewardIconLine("puzzleMove", "+" + moves, "🧩")}</span>`);
+          }
+
+          if (c.givesPart) {
+            rewardParts.push(mmcRewardIconLine("machineUpgradePart", "+1", "⚙️"));
+          }
+
+          const card = document.createElement("div");
+          card.className = "customer-card" + (ready ? " ready" : "") + (c.orders.length > 1 ? " multi-order" : " single-order");
+          card.innerHTML = `
+            ${ready ? `<div class="ready-check">✓</div>` : ""}
+            <div class="customer-top">
+              <div class="portrait-ring"><img src="${c.profile.portrait}" alt="${c.profile.name}" draggable="false"></div>
+              <div class="customer-meta"><div class="customer-name">${c.profile.name}</div></div>
+            </div>
+            <div class="order-block">
+              <div class="order-emoji">${orderEmojiText(c.orders)}</div>
+              <div class="order-name">${orderNameText(c.orders)}</div>
+            </div>
+            <div class="reward reward-grid rewards-${rewardParts.length}">${rewardParts.join("")}</div>
+            <button class="serve-btn" ${ready ? `onclick="serveCustomer(${index})"` : `disabled`}>SERVE</button>
+          `;
+          customersEl.appendChild(card);
+        });
+
+        if (newFirstId && newFirstId !== previousFirstId && isCustomerReady(customers[0])) {
+          requestAnimationFrame(() => customersEl.scrollTo({ left: 0, behavior: "smooth" }));
+        }
+      };
+    })();
+
     setTimeout(mmcPreloadImages, 350);
 
 
