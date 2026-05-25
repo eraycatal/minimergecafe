@@ -9018,6 +9018,396 @@
     mmcLoadRoute();
 
 
+
+    /* PATCH 167: Route tuning, order rewards, preloading, customer cards */
+    const MMC_ROUTE_STORY_LINES = [
+      "Your cafe feels a little more organized today.",
+      "Customers notice the smoother service.",
+      "The counter team works faster after this step.",
+      "A small improvement makes the cafe feel more alive.",
+      "Your regulars start talking about the better service.",
+      "The morning rush feels easier to handle.",
+      "A tricky repair made the machines feel more reliable.",
+      "The shelves look more prepared for busy orders.",
+      "Your recipe notes are becoming easier to follow.",
+      "A milestone gift brings fresh energy to the cafe.",
+      "The bakery side of the cafe feels warmer.",
+      "Quick orders are handled with more confidence.",
+      "The cable corner is cleaner and safer now.",
+      "The team sorts treats faster than before.",
+      "A small gift keeps the route moving.",
+      "Rush hour feels less stressful now.",
+      "The machines sound smoother after the fix.",
+      "The tea service feels calmer and cleaner.",
+      "Your recipe stack is easier to remember.",
+      "A bigger milestone makes the cafe feel upgraded.",
+      "The garden corner starts feeling cozy.",
+      "Customers stay longer around the new route.",
+      "The repair station is becoming more reliable.",
+      "Fresh items are sorted with better flow.",
+      "A small route gift keeps motivation high.",
+      "Order lines move faster than before.",
+      "The repair work improves the cafe rhythm.",
+      "The herb tray feels fresh and ready.",
+      "Recipe memory is sharper now.",
+      "The garden milestone brings a real boost.",
+      "The city cafe corner opens up.",
+      "Busy orders feel more manageable.",
+      "The counter wiring looks professional.",
+      "Large trays are easier to organize.",
+      "A small gift marks steady progress.",
+      "Late orders are handled with better focus.",
+      "The city repair step improves reliability.",
+      "Dessert sorting feels cleaner.",
+      "The recipe stack feels complete.",
+      "The city milestone makes the cafe stronger.",
+      "The golden route begins.",
+      "VIP customers notice your service.",
+      "The golden wiring is finally under control.",
+      "Luxury trays feel easier to manage.",
+      "A final small gift keeps the push going.",
+      "The last rush tests your whole cafe.",
+      "The master cable fix is complete.",
+      "The grand tray is perfectly organized.",
+      "You mastered the final recipe.",
+      "The Cafe Route is complete. Your cafe feels fully upgraded."
+    ];
+
+    function mmcRouteStoryForStep(step) {
+      return MMC_ROUTE_STORY_LINES[step - 1] || "Your cafe improves after this step.";
+    }
+
+    function mmcPreloadImages() {
+      const urls = new Set();
+      try {
+        items.forEach(it => { if (it && it.img) urls.add(it.img); });
+        Object.values(machineDefs || {}).forEach(m => { if (m && m.img) urls.add(m.img); });
+        [
+          "assets/items/game_icons/coin.png",
+          "assets/items/game_icons/gem.png",
+          "assets/items/game_icons/energy.png",
+          "assets/items/game_icons/fame_star.png",
+          "assets/items/game_icons/puzzle_move.png",
+          "assets/items/game_icons/machine_upgrade_part.png",
+          "assets/items/game_icons/information.png",
+          "assets/items/game_icons/recycle.png",
+          "assets/items/game_icons/hint.png",
+          "assets/items/game_icons/merge_cat.png",
+          "assets/items/app_icons_set/goals.png",
+          "assets/items/app_icons_set/fame.png",
+          "assets/items/app_icons_set/secret.png",
+          "assets/items/app_icons_set/gift.png",
+          "assets/items/app_icons_set/shop.png",
+          "assets/items/app_icons_set/research.png",
+          "assets/items/app_icons_set/machine_upgrade.png"
+        ].forEach(u => urls.add(u));
+        for (let i = 1; i <= 12; i++) {
+          urls.add(`assets/items/secret_recipe_12_final/secret_${i}.png`);
+          urls.add(`assets/items/secret_recipe_locked_final_12/secret_locked_${i}.png`);
+        }
+      } catch(e) {}
+      urls.forEach(u => { const img = new Image(); img.src = u; });
+    }
+
+    function secretOrderMoveReward(c) {
+      if (!c || !Array.isArray(c.orders) || !c.orders.length) return 0;
+      const levels = c.orders.map(i => (items[i] && items[i].level) || 1);
+      const total = levels.reduce((a,b)=>a+b,0);
+      const count = levels.length;
+      if (count === 1) {
+        if (total <= 2) return 0;
+        if (total <= 5) return 1;
+        if (total <= 8) return 2;
+        return 3;
+      }
+      if (total <= 5) return 2;
+      if (total <= 8) return 3;
+      if (total <= 11) return 4;
+      if (total <= 14) return 5;
+      return 6;
+    }
+
+    function setupMemoryGame() {
+      const ids = routeAvailableItemIds(8).slice(0, 8);
+      routeGame.cards = shuffleArray(ids.concat(ids)).map((item, i) => ({ item, id: i, open: true, matched: false }));
+      routeGame.selected = [];
+      routeGame.preview = true;
+      routeGame.mistakesLeft = 3;
+      setTimeout(() => {
+        if (!routeGame || routeGame.type !== "memory") return;
+        routeGame.preview = false;
+        routeGame.cards.forEach(c => { if (!c.matched) c.open = false; });
+        renderRouteGame();
+      }, 5000);
+    }
+
+    function memoryPick(idx) {
+      if (!routeGame || routeGame.type !== "memory" || routeGame.preview) return;
+      const c = routeGame.cards[idx];
+      if (!c || c.open || c.matched) return;
+      c.open = true;
+      routeGame.selected.push(idx);
+      if (routeGame.selected.length === 2) {
+        const [a, b] = routeGame.selected;
+        const ca = routeGame.cards[a], cb = routeGame.cards[b];
+        if (ca.item === cb.item) {
+          ca.matched = true;
+          cb.matched = true;
+          routeGame.selected = [];
+          if (routeGame.cards.every(x => x.matched)) return routeWin();
+        } else {
+          routeGame.mistakesLeft = Math.max(0, routeGame.mistakesLeft - 1);
+          routeGame.selected = [];
+          if (routeGame.mistakesLeft <= 0) {
+            setTimeout(() => routeFail("No mistakes left."), 420);
+            return renderRouteGame();
+          }
+          setTimeout(() => {
+            if (!routeGame || routeGame.type !== "memory") return;
+            ca.open = false;
+            cb.open = false;
+            renderRouteGame();
+          }, 650);
+        }
+      }
+      renderRouteGame();
+    }
+
+    function setupRushGame() {
+      routeGame.score = 0;
+      routeGame.goal = routeGame.step <= 20 ? 6 : routeGame.step <= 40 ? 8 : 10;
+      routeGame.questionTimeMax = 4;
+      routeGame.questionTimeLeft = 4;
+      nextRushQuestion();
+    }
+
+    function nextRushQuestion() {
+      const options = routeAvailableItemIds(4).slice(0, 4);
+      const target = options[Math.floor(Math.random() * options.length)];
+      routeGame.rush = { target, options: shuffleArray(options) };
+      routeGame.questionTimeLeft = routeGame.questionTimeMax || 4;
+    }
+
+    function startRouteChallenge(step, type) {
+      routeGame = {
+        step,
+        type,
+        timeLeft: type === "rush" ? 999 : routeTimeForStep(step),
+        mistakesLeft: type === "memory" ? 3 : routeMistakesForStep(step),
+        completed: false,
+        failed: false
+      };
+
+      if (type === "memory") setupMemoryGame();
+      if (type === "rush") setupRushGame();
+      if (type === "cable") setupCableGame();
+      if (type === "sort") setupSortGame();
+
+      renderRouteGame();
+
+      if (routeGame.timer) clearInterval(routeGame.timer);
+      routeGame.timer = setInterval(() => {
+        if (!routeGame || routeGame.completed || routeGame.failed) return;
+
+        if (routeGame.type === "rush") {
+          routeGame.questionTimeLeft--;
+          if (routeGame.questionTimeLeft <= 0) return routeFail("Order time is up.");
+          renderRouteGame();
+          return;
+        }
+
+        routeGame.timeLeft--;
+        if (routeGame.timeLeft <= 0) routeFail("Time is up.");
+        else renderRouteGame();
+      }, 1000);
+    }
+
+    function renderRouteGame() {
+      if (!routeGame) return renderCafeRouteScreen();
+      let body = "";
+      if (routeGame.type === "memory") body = renderMemoryGame();
+      if (routeGame.type === "rush") body = renderRushGame();
+      if (routeGame.type === "cable") body = renderCableGame();
+      if (routeGame.type === "sort") body = renderSortGame();
+
+      const timeLabel = routeGame.type === "rush" ? `${routeGame.questionTimeLeft}s/order` : `${routeGame.timeLeft}s`;
+      ensureCafeRouteScreen().innerHTML =
+        `<div class="secret-screen-inner cafe-route-inner">
+          <div class="secret-full-top">
+            <button class="secret-back-btn" onclick="routeCancelGame()">←</button>
+            <div class="secret-full-title">${routeGameLabel(routeGame.type)}</div>
+            <div class="secret-full-moves">${timeLabel}</div>
+          </div>
+          <div class="route-game-head">
+            <div>Step ${routeGame.step}/50</div>
+            <div>${routeGame.type === "rush" || routeGame.type === "cable" ? "Time challenge" : "Mistakes: " + routeGame.mistakesLeft}</div>
+          </div>
+          ${body}
+        </div>`;
+    }
+
+    function renderRushGame() {
+      const pct = Math.max(0, Math.min(100, (routeGame.questionTimeLeft / (routeGame.questionTimeMax || 4)) * 100));
+      return `
+        <div class="route-game-card">
+          <div class="route-game-note">Pick the correct item before the order timer ends.</div>
+          <div class="rush-timer-bar"><div style="width:${pct}%"></div></div>
+          <div class="rush-target">
+            <div>Customer wants:</div>
+            <b>${items[routeGame.rush.target].name}</b>
+          </div>
+          <div class="rush-options">
+            ${routeGame.rush.options.map(id => `
+              <button class="rush-option" onclick="rushPick(${id})">${itemImageHTML(id, "rush-item-img")}<span>${items[id].name}</span></button>
+            `).join("")}
+          </div>
+          <div class="route-game-note">Progress: ${routeGame.score}/${routeGame.goal}</div>
+        </div>`;
+    }
+
+    function rushPick(id) {
+      if (!routeGame || routeGame.type !== "rush") return;
+      if (id === routeGame.rush.target) {
+        routeGame.score++;
+        playSound("merge");
+        if (routeGame.score >= routeGame.goal) return routeWin();
+        nextRushQuestion();
+      } else {
+        routeGame.questionTimeLeft = Math.max(1, routeGame.questionTimeLeft - 1);
+        playSound("error");
+      }
+      renderRouteGame();
+    }
+
+    function renderCableGame() {
+      return `
+        <div class="route-game-card">
+          <div class="route-game-note">Drag or tap a cable, then connect it to the same color socket.</div>
+          <div class="cable-play-area">
+            <div class="cable-column">
+              ${routeGame.cables.map((c,i)=>`
+                <button class="wire-cable cable-${c.color} ${c.done?"done":""} ${routeGame.selectedCable===i?"selected":""}" onclick="selectCable(${i})">
+                  <span></span><b>${c.done ? "✓" : ""}</b>
+                </button>`).join("")}
+            </div>
+            <div class="wire-lines">
+              ${routeGame.cables.filter(c=>c.done).map(c=>`<div class="wire-line cable-${c.color}"></div>`).join("")}
+            </div>
+            <div class="socket-column">
+              ${routeGame.sockets.map(c=>`<button class="wire-socket socket-${c}" onclick="selectSocket('${c}')"></button>`).join("")}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function selectSocket(color) {
+      if (routeGame.selectedCable === null || routeGame.selectedCable === undefined) return;
+      const c = routeGame.cables[routeGame.selectedCable];
+      if (c.color === color) {
+        c.done = true;
+        routeGame.selectedCable = null;
+        playSound("merge");
+        if (routeGame.cables.every(x => x.done)) return routeWin();
+      } else {
+        routeGame.timeLeft = Math.max(1, routeGame.timeLeft - 3);
+        routeGame.selectedCable = null;
+        playSound("error");
+      }
+      renderRouteGame();
+    }
+
+    function renderRouteComplete(step) {
+      ensureCafeRouteScreen().innerHTML =
+        `<div class="secret-screen-inner cafe-route-inner">
+          <div class="route-complete-card">
+            <div class="route-complete-icon">${routeRewardType(step) === "big" ? "🎁" : routeRewardType(step) === "small" ? "✦" : "✓"}</div>
+            <div class="rank-title">Step ${step} Completed!</div>
+            <div class="rank-name">${routeStepTitle(step)}</div>
+            <div class="route-story-box">${mmcRouteStoryForStep(step)}</div>
+            <div class="rank-reward">${routeRewardText(step)}</div>
+            <button class="green-btn" onclick="renderCafeRouteScreen()">Continue Route</button>
+          </div>
+        </div>`;
+    }
+
+    const mmcRenderShopPanelBefore167 = renderShopPanel;
+    renderShopPanel = function() {
+      let html = mmcRenderShopPanelBefore167();
+      html = html.replace(/<div class="shop-section">\s*<div class="shop-section-head"><div class="shop-section-title">Storage & Route[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/, "");
+      return html;
+    };
+
+    const mmcCreateCustomersBefore167 = createCustomers;
+    createCustomers = function() {
+      const previousFirstId = customers[0] && customers[0].profile ? customers[0].profile.id : "";
+      customers.sort((a, b) => Number(isCustomerReady(b)) - Number(isCustomerReady(a)));
+      const newFirstId = customers[0] && customers[0].profile ? customers[0].profile.id : "";
+      customersEl.innerHTML = "";
+
+      customers.forEach((c, index) => {
+        const ready = isCustomerReady(c);
+        const moves = secretOrderMoveReward(c);
+        const rewardParts = [
+          `<span class="reward-row">🪙 ${getCustomerReward(c)}</span>`,
+          `<span class="reward-row">⭐ +${getCustomerFameReward(c)}</span>`
+        ];
+        if (c.givesPart) rewardParts.push(`<span class="reward-row">🔧 +1</span>`);
+        if (moves > 0) rewardParts.push(`<span class="reward-row secret-move-reward">🧩 +${moves}</span>`);
+
+        const card = document.createElement("div");
+        card.className = "customer-card customer-card-v167" + (ready ? " ready" : "") + (c.orders.length > 1 ? " multi-order" : " single-order");
+        card.innerHTML = `
+          ${ready ? `<div class="ready-check">✓</div>` : ""}
+          <div class="customer-v167-layout">
+            <div class="portrait-ring"><img src="${c.profile.portrait}" alt="${c.profile.name}" draggable="false"></div>
+            <div class="order-block">
+              <div class="customer-name">${c.profile.name}</div>
+              <div class="order-emoji">${orderEmojiText(c.orders)}</div>
+              <div class="order-name">${orderNameText(c.orders)}</div>
+            </div>
+            <div class="reward reward-grid reward-vertical">${rewardParts.join("")}</div>
+          </div>
+          <button class="serve-btn" ${ready ? `onclick="serveCustomer(${index})"` : `disabled`}>Serve</button>
+        `;
+        customersEl.appendChild(card);
+      });
+
+      if (newFirstId && newFirstId !== previousFirstId && isCustomerReady(customers[0])) {
+        requestAnimationFrame(() => customersEl.scrollTo({ left: 0, behavior: "smooth" }));
+      }
+    };
+
+    (function patch167Styles(){
+      const style = document.createElement("style");
+      style.textContent = `
+        .customer-card-v167{width:245px!important;min-width:245px!important;padding:10px!important}
+        .customer-v167-layout{display:grid;grid-template-columns:54px 1fr 48px;gap:8px;align-items:center;min-height:92px}
+        .customer-card-v167 .portrait-ring{width:52px!important;height:52px!important;margin:0!important}
+        .customer-card-v167 .order-block{min-width:0;padding:0!important;margin:0!important;background:transparent!important;border:none!important}
+        .customer-card-v167 .customer-name{font-size:12px;font-weight:900;color:#5a3825;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .customer-card-v167 .order-emoji{font-size:22px!important;line-height:1.05!important;min-height:25px}
+        .customer-card-v167 .order-name{font-size:10px!important;line-height:1.1!important;min-height:22px}
+        .reward-vertical{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;gap:3px!important;margin:0!important}
+        .reward-vertical .reward-row{font-size:10px;font-weight:900;border-radius:8px;background:rgba(255,255,255,.72);padding:2px 3px;white-space:nowrap;text-align:center}
+        .customer-card-v167 .serve-btn{margin-top:7px}
+        .rush-timer-bar{height:12px;background:#f5cba0;border:2px solid #d69456;border-radius:999px;overflow:hidden;margin-bottom:10px}
+        .rush-timer-bar div{height:100%;background:linear-gradient(90deg,#4caf7a,#ffd166,#ff5a5f);transition:width .18s linear}
+        .cable-play-area{display:grid;grid-template-columns:70px 1fr 70px;gap:10px;align-items:center;min-height:260px}
+        .cable-column,.socket-column{display:flex;flex-direction:column;gap:14px}
+        .wire-cable,.wire-socket{height:48px;border-radius:999px;border:3px solid rgba(90,56,37,.25);position:relative;box-shadow:0 5px 10px rgba(90,56,37,.13)}
+        .wire-cable span{position:absolute;right:-42px;top:50%;width:48px;height:8px;border-radius:999px;background:currentColor;transform:translateY(-50%);box-shadow:0 2px 3px rgba(0,0,0,.18)}
+        .wire-cable.selected{outline:4px solid #ffb703}.wire-cable.done{opacity:.45}
+        .wire-lines{min-height:240px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+        .wire-line{height:8px;border-radius:999px;box-shadow:0 2px 3px rgba(0,0,0,.14)}
+        .cable-red,.socket-red{background:#ff5a5f;color:#ff5a5f}.cable-blue,.socket-blue{background:#4da3ff;color:#4da3ff}.cable-green,.socket-green{background:#55c76a;color:#55c76a}.cable-yellow,.socket-yellow{background:#ffd166;color:#ffd166}
+        .route-story-box{margin:10px 0;padding:12px;border-radius:16px;background:#fff8ef;border:2px solid #f1d3a5;color:#6b4126;font-weight:800;line-height:1.35}
+      `;
+      document.head.appendChild(style);
+    })();
+
+    setTimeout(mmcPreloadImages, 350);
+
+
     document.addEventListener("dragstart", e => e.preventDefault());
 
     const hadSave = loadGame();
