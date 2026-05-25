@@ -8552,6 +8552,146 @@
     })();
 
 
+
+    /* PATCH 164: board visual grid alignment */
+    (function patch164BoardGridAlignment(){
+      const style = document.createElement("style");
+      style.textContent = `
+        /* Main merge board: image loaded, now playable grid is fitted inside the drawn board */
+        .board-frame.mmc-board-art{
+          width:min(456px,100%) !important;
+          min-height:520px !important;
+          display:flex !important;
+          align-items:flex-start !important;
+          justify-content:center !important;
+          background-image:url("assets/items/backgrounds/game_board_vector_transparent.png") !important;
+          background-size:360px 470px !important;
+          background-position:center 22px !important;
+          background-repeat:no-repeat !important;
+          padding:96px 0 0 !important;
+          border:none !important;
+          box-shadow:none !important;
+          overflow:visible !important;
+        }
+        .board-frame.mmc-board-art .board-label{display:none !important;}
+        .board-frame.mmc-board-art .board{
+          width:286px !important;
+          height:286px !important;
+          display:grid !important;
+          grid-template-columns:repeat(6, 1fr) !important;
+          grid-template-rows:repeat(6, 1fr) !important;
+          gap:0 !important;
+          background:transparent !important;
+          border:none !important;
+          box-shadow:none !important;
+          padding:0 !important;
+          margin:0 auto !important;
+        }
+        .board-frame.mmc-board-art .cell{
+          width:100% !important;
+          height:100% !important;
+          min-width:0 !important;
+          min-height:0 !important;
+          aspect-ratio:auto !important;
+          background:transparent !important;
+          border:none !important;
+          box-shadow:none !important;
+          border-radius:10px !important;
+          overflow:visible !important;
+          backdrop-filter:none !important;
+        }
+        .board-frame.mmc-board-art .cell.selected{
+          outline:3px solid rgba(255,180,56,.88) !important;
+          outline-offset:-4px !important;
+          background:rgba(255,219,133,.16) !important;
+        }
+        .board-frame.mmc-board-art .item img,
+        .board-frame.mmc-board-art .item-img,
+        .board-frame.mmc-board-art .machine-img img{
+          width:74% !important;
+          height:74% !important;
+          object-fit:contain !important;
+          margin:auto !important;
+          display:block !important;
+          filter:drop-shadow(0 3px 4px rgba(90,56,37,.18));
+        }
+        .board-frame.mmc-board-art .machine-img img{
+          width:82% !important;
+          height:82% !important;
+        }
+        .board-frame.mmc-board-art .item-name,
+        .board-frame.mmc-board-art .machine-label{display:none !important;}
+
+        /* Secret Recipe board: fit 8x7 grid into the drawn board, not the outer container */
+        .secret-full-card:has(.mmc-secret-board-art){
+          background:transparent !important;
+          border:none !important;
+          box-shadow:none !important;
+          padding:0 !important;
+        }
+        .secret-full-board.mmc-secret-board-art{
+          width:min(430px,100%) !important;
+          height:560px !important;
+          margin:0 auto !important;
+          display:grid !important;
+          grid-template-columns:repeat(8, 1fr) !important;
+          grid-template-rows:repeat(7, 1fr) !important;
+          gap:0 !important;
+          background-image:url("assets/items/backgrounds/game_board_secret_recipe_transparent.png") !important;
+          background-size:100% 100% !important;
+          background-position:center center !important;
+          background-repeat:no-repeat !important;
+          padding:112px 72px 76px !important;
+          border:none !important;
+          box-shadow:none !important;
+          border-radius:28px !important;
+          overflow:visible !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell{
+          width:100% !important;
+          height:100% !important;
+          min-width:0 !important;
+          min-height:0 !important;
+          aspect-ratio:auto !important;
+          background:transparent !important;
+          border:none !important;
+          box-shadow:none !important;
+          border-radius:10px !important;
+          overflow:visible !important;
+          padding:0 !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell.empty{
+          background:transparent !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell.selected{
+          outline:3px solid rgba(255,190,69,.78) !important;
+          outline-offset:-4px !important;
+          background:rgba(255,219,133,.13) !important;
+        }
+        .secret-art-icon{
+          width:100% !important;
+          height:100% !important;
+          padding:4px !important;
+        }
+        .secret-art-icon img{
+          width:76% !important;
+          height:76% !important;
+          object-fit:contain !important;
+          filter:drop-shadow(0 3px 4px rgba(0,0,0,.18));
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell.locked .secret-art-icon img{
+          width:82% !important;
+          height:82% !important;
+        }
+        .secret-empty-plus{
+          opacity:.18 !important;
+          font-size:16px !important;
+        }
+      `;
+      document.head.appendChild(style);
+    })();
+
+
     document.addEventListener("dragstart", e => e.preventDefault());
 
     const hadSave = loadGame();
