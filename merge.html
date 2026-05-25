@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Mini Merge Cafe</title>
+  <!-- MINI_MERGE_UI_FIX_V3_PATCH_161_NEW_BOARD_BACKGROUNDS -->
   <!-- MINI_MERGE_UI_FIX_V3_PATCH_148 -->
 
   <style>
@@ -7760,8 +7761,8 @@
         mergeCat: "assets/items/game_icons/merge_cat.png"
       },
       board: {
-        main: "assets/items/mergeboard.webp",
-        secret: "assets/items/secretbackground.webp"
+        main: "game_board_vector_transparent.png",
+        secret: "game_board_secret_recipe_transparent.png"
       },
       secret(level, locked=false) {
         return locked
@@ -7790,7 +7791,7 @@
         .sheet-header h2.asset-title{display:flex;align-items:center;gap:8px}
 
         .board-frame.mmc-board-art{
-          background-image:url("assets/items/mergeboard.webp") !important;
+          background-image:url("game_board_vector_transparent.png") !important;
           background-size:100% 100% !important;
           background-position:center !important;
           background-repeat:no-repeat !important;
@@ -7878,7 +7879,7 @@
         }
         .secret-progress-dot.done{background:linear-gradient(180deg,#69d84c,#3ba927);border-color:#348e28}
         .secret-full-board.mmc-secret-board-art{
-          background-image:url("assets/items/secretbackground.webp") !important;
+          background-image:url("game_board_secret_recipe_transparent.png") !important;
           background-size:100% 100% !important;
           background-position:center !important;
           background-repeat:no-repeat !important;
@@ -8454,6 +8455,101 @@
       mmcPatchTopStats160();
       mmcPatchStaticButtons160();
     };
+
+
+    /* PATCH 161: new board background files + transparent playable grid alignment */
+    (function patch161BoardBackgrounds(){
+      const style = document.createElement("style");
+      style.textContent = `
+        .board-frame.mmc-board-art{
+          background-image:url("game_board_vector_transparent.png") !important;
+          background-size:100% 100% !important;
+          background-position:center !important;
+          background-repeat:no-repeat !important;
+          border:none !important;
+          box-shadow:none !important;
+          padding:76px 22px 30px !important;
+          border-radius:28px !important;
+          overflow:visible !important;
+        }
+        .board-frame.mmc-board-art .board-label{display:none !important;}
+        .board-frame.mmc-board-art .board{
+          background:transparent !important;
+          border:none !important;
+          box-shadow:none !important;
+          padding:0 !important;
+          gap:6px !important;
+        }
+        .board-frame.mmc-board-art .cell{
+          background:transparent !important;
+          border:none !important;
+          box-shadow:none !important;
+          border-radius:14px !important;
+          overflow:visible !important;
+          backdrop-filter:none !important;
+        }
+        .board-frame.mmc-board-art .cell:hover{transform:none !important;}
+        .board-frame.mmc-board-art .cell.selected{
+          outline:3px solid rgba(255,180,56,.82) !important;
+          outline-offset:-3px !important;
+          background:rgba(255,226,160,.16) !important;
+        }
+        .board-frame.mmc-board-art .cell.pop{animation:pop .35s ease-out;}
+        .board-frame.mmc-board-art .item,
+        .board-frame.mmc-board-art .machine-img,
+        .board-frame.mmc-board-art .asset-wrap{
+          max-width:100% !important;
+          max-height:100% !important;
+        }
+        .board-frame.mmc-board-art .item img,
+        .board-frame.mmc-board-art .item-img,
+        .board-frame.mmc-board-art .machine-img img{
+          width:78% !important;
+          height:78% !important;
+          object-fit:contain !important;
+          margin:auto !important;
+          display:block !important;
+          filter:drop-shadow(0 3px 4px rgba(90,56,37,.18));
+        }
+        .board-frame.mmc-board-art .machine-img img{
+          width:86% !important;
+          height:86% !important;
+        }
+        .board-frame.mmc-board-art .item-name,
+        .board-frame.mmc-board-art .machine-label{
+          display:none !important;
+        }
+        .board-frame.mmc-board-art .badge-ready,
+        .board-frame.mmc-board-art .badge-star,
+        .board-frame.mmc-board-art .badge-lucky{
+          transform:scale(.86);
+          z-index:5;
+        }
+        .secret-full-board.mmc-secret-board-art{
+          background-image:url("game_board_secret_recipe_transparent.png") !important;
+          background-size:100% 100% !important;
+          background-position:center !important;
+          background-repeat:no-repeat !important;
+          padding:96px 23px 34px !important;
+          gap:6px !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell{
+          background:transparent !important;
+          border:none !important;
+          box-shadow:none !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-art-icon{padding:6px !important;}
+        .secret-full-board.mmc-secret-board-art .secret-art-icon img{
+          width:92% !important;
+          height:92% !important;
+          object-fit:contain !important;
+        }
+        .secret-full-board.mmc-secret-board-art .secret-cell.empty{
+          background:transparent !important;
+        }
+      `;
+      document.head.appendChild(style);
+    })();
 
 
     document.addEventListener("dragstart", e => e.preventDefault());
